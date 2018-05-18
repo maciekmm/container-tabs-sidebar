@@ -1,0 +1,101 @@
+body, html {
+    box-sizing: border-box;
+}
+
+#containers {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    background: #333;
+}
+
+.container {
+    list-style: none;
+    line-height: 1.3em;
+    vertical-align: middle;
+    color: #fff;
+    width: 100%;
+}
+
+.container-header {
+    padding: 0.3em;
+    background: #111;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #222 !important;
+    border-bottom-style: solid;
+    border-left-width: 0.5em;
+    border-left-style: solid;
+    width: 100%;
+}
+
+.container-header .container-icon {
+    width: 25px;
+    padding: 2px;
+    margin: 0;
+    filter: grayscale(1) invert(100%);
+}
+
+.container-header:hover {
+    cursor: pointer;
+}
+
+.container-tabs {
+    width: 100%;
+    display: block;
+    padding-inline-start: 5px;
+}
+
+.container-tab {
+    background: #222;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    padding: 5px;
+    border-bottom: 1px solid #333;
+}
+
+.container-tab:hover {
+    cursor: pointer;
+}
+
+.container-tab .favicon {
+    flex-basis: 16px;
+    height: 16px;
+    margin-right: 5px;
+}
+
+.container.collapsed ul {
+    visibility: collapse;
+    height: 0;
+}
+
+.container-actions {
+    display: flex;
+    justify-content: center;
+    margin-left: auto;
+    color: #fff;
+}
+
+.container-actions .container-action {
+    margin: 2px;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+.container-actions .container-action:hover {
+    cursor: pointer;
+    background: #222;
+}
+
+.container-actions .container-action--newtab {
+    font-size: 20px;
+}
+
+.tab-active {
+    background: rgb(21, 107, 187);
+}

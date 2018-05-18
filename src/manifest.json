@@ -1,0 +1,34 @@
+{
+    "sidebar_action": {
+      "default_title": "Container Tabs",
+      "default_panel": "sidebar/sidebar.html",
+      "default_icon": "assets/sidebar-icon.svg",
+      "browser_style": true
+    },
+    "commands": {
+      "_execute_sidebar_action": {
+        "suggested_key": {
+          "default": "F3"
+        },
+        "description": "show sidebar"
+      }
+    },
+    "applications": {
+      "gecko": {
+        "strict_min_version": "54.0a2"
+      }
+    },
+    "icons": {
+      "98": "assets/icon98.png"
+    },
+    "permissions": [
+      "tabs",
+      "contextualIdentities",
+      "cookies"
+    ],
+    "description": "Container sidebar tab management",
+    "homepage_url": "https://github.com/maciekmm/container-tabs-sidebar",
+    "manifest_version": 2,
+    "name": "Container Tabs Sidebar",
+    "version": "0.0.1"
+}

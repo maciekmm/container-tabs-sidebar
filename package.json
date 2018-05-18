@@ -1,0 +1,34 @@
+{
+  "name": "container-tabs-sidebar",
+  "version": "0.0.1",
+  "description": "A firefox addon that show tabs in a tree style structure in a sidebar. Inspired by Tree Style Tabs.",
+  "main": "index.js",
+  "scripts": {
+    "lint:addon": "addons-linter src --self-hosted",
+    "lint": "web-ext lint --source-dir ./src",
+    "build": "npm test && cd src && web-ext build --overwrite-dest",
+    "dev": "web-ext run --source-dir ./src --firefox=nightly"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maciekmm/container-tabs-sidebar.git"
+  },
+  "keywords": [
+    "firefox",
+    "addon",
+    "containers",
+    "container",
+    "tab",
+    "privacy"
+  ],
+  "author": "Maciej Mionskowski",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/maciekmm/container-tabs-sidebar/issues"
+  },
+  "homepage": "https://github.com/maciekmm/container-tabs-sidebar#readme",
+  "devDependencies": {
+    "addons-linter": "^1.0.0",
+    "web-ext": "^2.6.0"
+  }
+}
