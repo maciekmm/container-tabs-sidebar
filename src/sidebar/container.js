@@ -9,18 +9,23 @@ class Container {
     init() {
         this._createElements()
         browser.tabs.onActivated.addListener((activeInfo) => {
+            if(activeInfo.windowId !== ContainerTabsSidebar.WINDOW_ID) return
             if(this.tabs.has(activeInfo.tabId)) {
+                this.collapsed = false
                 this.tabs.get(activeInfo.tabId).activate()
             }
         })
         browser.tabs.onCreated.addListener((newTab) => {
-            if(newTab.cookieStoreId != this.id) return
+            if(newTab.cookieStoreId !== this.id) return
+            if(newTab.windowId !== ContainerTabsSidebar.WINDOW_ID) return
             this.render(true)
         })
         browser.tabs.onRemoved.addListener((tabId, removeInfo) => {
             if(removeInfo.isWindowClosing) return
+            if(removeInfo.windowId !== ContainerTabsSidebar.WINDOW_ID) return
             if(this.tabs.has(tabId)) {
                 this.removeTab(tabId)
+                this.render(false)
             }
         })
         browser.tabs.onMoved.addListener((tabId) => {
@@ -127,7 +132,7 @@ class Container {
 
         const titleElement = this.elements.title
         titleElement.className = 'container-title'
-        titleElement.innerText = this.container.name
+        titleElement.innerText = this.container.name + ' ('+this.tabs.size+')'
 
         if (tabs) {
             browser.tabs.query({
@@ -135,6 +140,7 @@ class Container {
                 cookieStoreId: this.container.cookieStoreId
             }).then((res) => {
                 this.renderTabs(res)
+                this.render(false)
             })
         }
     }
@@ -149,60 +155,6 @@ class Container {
             this.tabs.set(tab.id, tab)
             this.elements.tabsContainer.appendChild(tabElement)
             tab.init()
-        }
-    }
-}
-
-class ContainerTab {
-    constructor(tab, element) {
-        this.tab = tab
-        this.id = tab.id
-        this.element = element
-    }
-
-    init() {
-        this._createElements()
-        this.render()
-        browser.tabs.onUpdated.addListener((id, state, tab) => {
-            this.tab = tab
-            this.render()
-        }, {
-            tabId: this.id,
-            properties: ["title", "favIconUrl"]
-        })
-    }
-
-    destroy() {
-        //browser.tabs.onUpdated.removeListener(this.listeners.update)
-    }
-
-    _createElements() {
-        this.elements = {}
-        this.elements.favicon = document.createElement('img')
-        this.elements.favicon.className = 'favicon'
-        this.element.appendChild(this.elements.favicon)
-
-        this.elements.title = document.createElement('span')
-        this.elements.title.className = 'container-tab-title'
-        this.element.appendChild(this.elements.title)
-
-        this.element.addEventListener("click", () => {
-            browser.tabs.update(this.id, {
-                active: true
-            })
-        })
-    }
-
-    activate() {
-        this.tab.active = true
-        this.render()
-    }
-
-    render() {
-        this.elements.favicon.src = this.tab.favIconUrl
-        this.elements.title.innerText = this.tab.title
-        if(this.tab.active) {
-            this.element.classList.add('tab-active')
         }
     }
 }

@@ -1,12 +1,13 @@
 body, html {
     box-sizing: border-box;
+    background: #333;
 }
 
 #containers {
     width: 100%;
     padding: 0;
     margin: 0;
-    background: #333;
+    height: 100%;
 }
 
 .container {
@@ -61,6 +62,7 @@ body, html {
 
 .container-tab:hover {
     cursor: pointer;
+    background: rgb(24, 24, 24);
 }
 
 .container-tab .favicon {
@@ -70,15 +72,15 @@ body, html {
 }
 
 .container.collapsed ul {
+    display: none;
     visibility: collapse;
-    height: 0;
 }
 
 .container-actions {
     display: flex;
     justify-content: center;
     margin-left: auto;
-    color: #fff;
+    color: #eee;
 }
 
 .container-actions .container-action {
@@ -87,15 +89,25 @@ body, html {
     border-radius: 3px;
 }
 
-.container-actions .container-action:hover {
+.container-actions .container-action:hover, .container-tab-close:hover {
     cursor: pointer;
-    background: #222;
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .container-actions .container-action--newtab {
     font-size: 20px;
 }
 
-.tab-active {
+.tab-active, .tab-active:hover {
     background: rgb(21, 107, 187);
+}
+
+.container-tab-close {
+    padding: 0.1em;
+    margin-right: 0.1em;
+    color: #aaa;
+    font-size: 1.3em;
+    border-radius: 3px;
+    text-align: center;
+    
 }

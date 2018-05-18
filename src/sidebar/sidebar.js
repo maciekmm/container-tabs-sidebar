@@ -1,7 +1,8 @@
 const ContainerTabsSidebar = {
     containers: new Map(),
 
-    init() {
+    init(windowId) {
+        this.WINDOW_ID = windowId
         browser.contextualIdentities.onUpdated.addListener((evt) => {
             const container = this.containers.get(evt.contextualIdentity.cookieStoreId)
             if (container) {
@@ -10,8 +11,8 @@ const ContainerTabsSidebar = {
         })
 
         browser.tabs.onActivated.addListener((activeInfo) => {
-            if(activeInfo.windowId != browser.windows.WINDOW_ID_CURRENT) {
-                //TODO Why doesn't it match ???
+            if(activeInfo.windowId != this.WINDOW_ID) {
+                return
             }
             // This is a bit hacky, TODO: clean this up
             for(let tab of document.getElementsByClassName('tab-active')) {
@@ -25,7 +26,6 @@ const ContainerTabsSidebar = {
 
     refresh() {
         browser.contextualIdentities.query({}).then((res) => {
-            console.log(res)
             this.render([{
                 cookieStoreId: 'firefox-default',
                 name: 'Default',
@@ -51,5 +51,7 @@ const ContainerTabsSidebar = {
 
 
 {
-    ContainerTabsSidebar.init();
+    browser.windows.getCurrent().then((window) => {
+        ContainerTabsSidebar.init(window.id);
+    })
 }
