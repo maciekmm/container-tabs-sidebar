@@ -131,3 +131,10 @@ main {
     border-radius: 3px;
     text-align: center;
 }
+
+.container-tab-dragged-over {
+    border-bottom: 1px solid #eee;
+}
+#pinned-tabs .container-tab-dragged-over {
+    border-right: 1px solid #eee;
+}

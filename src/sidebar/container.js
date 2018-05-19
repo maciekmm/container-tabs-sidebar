@@ -15,7 +15,7 @@ class ContextualIdentityContainer extends AbstractTabContainer {
         super._handleTabActivated(tab)
     }
 
-    _handleTabCreated(tab) {
+    _handleTabCreated(newTab) {
         if(newTab.cookieStoreId !== this.id) return
         if(newTab.windowId !== ContainerTabsSidebar.WINDOW_ID) return
         this.render(true, () => {
@@ -151,6 +151,7 @@ class ContextualIdentityContainer extends AbstractTabContainer {
             const tabElement = document.createElement('li')
             tabElement.classList.add('container-tab')
             tabElement.setAttribute('data-tab-id', firefoxTab.id)
+            tabElement.setAttribute('data-ci-id', this.id)
 
             const tab = new ContainerTab(firefoxTab, tabElement)
             this.tabs.set(tab.id, tab)

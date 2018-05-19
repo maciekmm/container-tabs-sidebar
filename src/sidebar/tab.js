@@ -15,6 +15,59 @@ class ContainerTab {
             tabId: this.id,
             properties: ["title", "favIconUrl"]
         })
+
+        this.element.setAttribute('draggable', true)
+        
+        this.element.addEventListener('dragstart', (e) => {
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', this.id+ '/' + this.tab.cookieStoreId + '/' + this.tab.pinned);
+            this.element.classList.add('container-tab-dragged');
+        })
+
+        this.element.addEventListener('dragover', (e) => {
+            e.preventDefault()
+            const [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('text/plain').split('/')
+            if((this.tab.cookieStoreId != contextualIdentity && !this.tab.pinned) || !e.currentTarget.hasAttribute("data-tab-id")) {
+                e.dataTransfer.dropEffect = 'none'
+                return
+            }
+            e.dataTransfer.dropEffect = 'move'
+            e.currentTarget.classList.add('container-tab-dragged-over')
+            return false
+        })
+
+        this.element.addEventListener('dragleave', (e) => {
+            if(!e.target || !e.target.classList) return
+            e.target.classList.remove('container-tab-dragged-over')
+        })
+        this.element.addEventListener('dragend', (e) => {
+            if(!e.target || !e.target.classList) return
+            e.target.classList.remove('container-tab-dragged-over')
+        })
+
+        this.element.addEventListener('drop', (e) => {
+            let [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('text/plain').split('/')
+            tabId = parseInt(tabId);
+            pinned = pinned != 'false'
+            if((this.tab.cookieStoreId != contextualIdentity && !this.tab.pinned)) {
+                e.dataTransfer.dropEffect = 'none'
+                return
+            }
+            e.target.classList.remove('container-tab-dragged-over')
+            if((!this.tab.pinned && pinned) || (this.tab.pinned && !pinned)) {
+                browser.tabs.update(tabId, {
+                    pinned: !pinned
+                }).then((tab) => {
+                    browser.tabs.move(tabId, {
+                        index: this.tab.index + (!pinned ? 1 : 0)
+                    })
+                })
+            } else {
+                browser.tabs.move(tabId, {
+                    index: this.tab.index
+                })
+            }
+        })
     }
 
     destroy() {

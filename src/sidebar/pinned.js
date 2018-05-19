@@ -61,6 +61,8 @@ class PinnedTabsContainer extends AbstractTabContainer {
             const tabElement = document.createElement('li')
             tabElement.className = 'container-tab'
             tabElement.style.borderBottomColor = container.contextualIdentity.colorCode
+            tabElement.setAttribute('data-tab-id', firefoxTab.id)
+            tabElement.setAttribute('data-ci-id', firefoxTab.cookieStoreId)
 
             const pinnedTab = new PinnedContainerTab(firefoxTab, tabElement)
             pinnedTab.init()

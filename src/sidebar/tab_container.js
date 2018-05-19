@@ -65,7 +65,7 @@ class AbstractTabContainer {
         tab.element.parentNode.removeChild(tab.element)
         this.render(false)
     }
-
+    
     render(updateTabs) {}
     renderTabs(tabs) {}
 }
