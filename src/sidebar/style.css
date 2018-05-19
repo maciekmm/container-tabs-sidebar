@@ -1,13 +1,30 @@
 body, html {
     box-sizing: border-box;
     background: #333;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#pinned-tabs {
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+#pinned-tabs .container-tab {
+    flex-basis: 20px;
+    border-bottom: 3px solid #fff;
+}
+
+main {
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
 }
 
 #containers {
-    width: 100%;
     padding: 0;
     margin: 0;
-    height: 100%;
 }
 
 .container {
@@ -68,7 +85,6 @@ body, html {
 .container-tab .favicon {
     flex-basis: 16px;
     height: 16px;
-    margin-right: 5px;
 }
 
 .container.collapsed ul {
@@ -94,6 +110,11 @@ body, html {
     background: rgba(255, 255, 255, 0.1);
 }
 
+.container-tab-title {
+    margin-left: 0.2em;
+    word-break: break-all;
+}
+
 .container-actions .container-action--newtab {
     font-size: 20px;
 }
@@ -109,5 +130,4 @@ body, html {
     font-size: 1.3em;
     border-radius: 3px;
     text-align: center;
-    
 }

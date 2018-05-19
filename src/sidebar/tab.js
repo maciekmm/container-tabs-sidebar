@@ -50,12 +50,17 @@ class ContainerTab {
     activate() {
         this.tab.active = true
         this.render()
+        this.scrollIntoView()
+    }
+
+    scrollIntoView() {
+        this.element.scrollIntoView({block: "end", behavior: "auto"})
     }
 
     render() {
         let faviconUrl = this.tab.favIconUrl
         if(!faviconUrl) {
-            faviconUrl = "../assets/no-favicon.svg"
+            faviconUrl = ContainerTabsSidebar.FAVICON_FALLBACK
         }
         this.elements.favicon.src = faviconUrl
         this.elements.title.innerText = this.tab.title
