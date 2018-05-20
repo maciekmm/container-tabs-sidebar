@@ -45,6 +45,17 @@ class AbstractTabContainer {
             properties: ["pinned"]
         })
 
+        // Dragging
+        this.element.addEventListener('dragleave', (e) => {
+            if (!e.currentTarget || !e.currentTarget.classList) return
+            e.currentTarget.classList.remove('container-dragged-over')
+        })
+        
+        this.element.addEventListener('dragend', (e) => {
+            if (!e.currentTarget || !e.currentTarget.classList) return
+            e.currentTarget.classList.remove('container-dragged-over')
+        })
+
         this.render(true)
     }
 
@@ -58,6 +69,9 @@ class AbstractTabContainer {
 
     _handleTabPinned(tabId, change, tab) {}
 
+    _handleDragOver(event, tabId, contextualId, pinned) {
+    }
+
     removeTab(tabId) {
         if(!this.tabs.has(tabId)) return
         const tab = this.tabs.get(tabId)
@@ -65,7 +79,7 @@ class AbstractTabContainer {
         tab.element.parentNode.removeChild(tab.element)
         this.render(false)
     }
-    
+
     render(updateTabs) {}
     renderTabs(tabs) {}
 }

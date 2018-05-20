@@ -17,31 +17,33 @@ class ContainerTab {
         })
 
         this.element.setAttribute('draggable', true)
-        
+
         this.element.addEventListener('dragstart', (e) => {
             e.dataTransfer.effectAllowed = 'move';
-            e.dataTransfer.setData('text/plain', this.id+ '/' + this.tab.cookieStoreId + '/' + this.tab.pinned);
+            e.dataTransfer.setData('text/plain', this.id + '/' + this.tab.cookieStoreId + '/' + this.tab.pinned);
             this.element.classList.add('container-tab-dragged');
         })
 
         this.element.addEventListener('dragover', (e) => {
             e.preventDefault()
             const [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('text/plain').split('/')
-            if((this.tab.cookieStoreId != contextualIdentity && !this.tab.pinned) || !e.currentTarget.hasAttribute("data-tab-id")) {
+            if ((this.tab.cookieStoreId != contextualIdentity && !this.tab.pinned) || !e.currentTarget.hasAttribute("data-tab-id")) {
                 e.dataTransfer.dropEffect = 'none'
                 return
             }
+            e.stopPropagation()
             e.dataTransfer.dropEffect = 'move'
             e.currentTarget.classList.add('container-tab-dragged-over')
             return false
         })
 
         this.element.addEventListener('dragleave', (e) => {
-            if(!e.target || !e.target.classList) return
+            if (!e.target || !e.target.classList) return
             e.target.classList.remove('container-tab-dragged-over')
         })
+        
         this.element.addEventListener('dragend', (e) => {
-            if(!e.target || !e.target.classList) return
+            if (!e.target || !e.target.classList) return
             e.target.classList.remove('container-tab-dragged-over')
         })
 
@@ -49,22 +51,33 @@ class ContainerTab {
             let [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('text/plain').split('/')
             tabId = parseInt(tabId);
             pinned = pinned != 'false'
-            if((this.tab.cookieStoreId != contextualIdentity && !this.tab.pinned)) {
+
+            //                                                  allow moving anything to pinned container
+            if ((this.tab.cookieStoreId != contextualIdentity && !this.tab.pinned)) {
                 e.dataTransfer.dropEffect = 'none'
                 return
             }
+            e.stopPropagation()
+
             e.target.classList.remove('container-tab-dragged-over')
-            if((!this.tab.pinned && pinned) || (this.tab.pinned && !pinned)) {
+            //   moving from pinned to not  || moving from not pinned to pinned
+            if ((!this.tab.pinned && pinned) || (this.tab.pinned && !pinned)) {
+                // we need to update the pinned flag as we are moving tabs between pinned and standard containers
                 browser.tabs.update(tabId, {
                     pinned: !pinned
                 }).then((tab) => {
-                    browser.tabs.move(tabId, {
-                        index: this.tab.index + (!pinned ? 1 : 0)
+                    browser.tabs.get(this.tab.id).then((droppedOn) => { // as we pin a tab indexes get shifted by one, thus we need to get new index
+                        browser.tabs.move(tabId, {
+                            windowId: ContainerTabsSidebar.WINDOW_ID,
+                            index: droppedOn.index + 1 
+                        })
                     })
                 })
             } else {
+                // just reorder tabs as the pinned status does not change (action within container)
                 browser.tabs.move(tabId, {
-                    index: this.tab.index
+                    windowId: ContainerTabsSidebar.WINDOW_ID,
+                    index: this.tab.index + 1
                 })
             }
         })
@@ -107,18 +120,26 @@ class ContainerTab {
     }
 
     scrollIntoView() {
-        this.element.scrollIntoView({block: "end", behavior: "auto"})
+        this.element.scrollIntoView({
+            block: "end",
+            behavior: "auto"
+        })
     }
 
     render() {
         let faviconUrl = this.tab.favIconUrl
-        if(!faviconUrl) {
+        if (!faviconUrl) {
             faviconUrl = ContainerTabsSidebar.FAVICON_FALLBACK
         }
         this.elements.favicon.src = faviconUrl
-        this.elements.title.innerText = this.tab.title
-        if(this.tab.active) {
+        this.elements.title.innerText = this.tab.title// + ` - (${this.tab.index})`
+        if (this.tab.active) {
             this.element.classList.add('tab-active')
+        }
+        if (this.tab.pinned) {
+            this.element.classList.add('tab-pinned')
+        } else {
+            this.element.classList.remove('tab-pinned')
         }
     }
 }

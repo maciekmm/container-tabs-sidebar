@@ -1,32 +1,3 @@
-class PinnedContainerTab extends ContainerTab {
-    _createElements() {
-        this.elements = {}
-        this.elements.favicon = document.createElement('img')
-        this.elements.favicon.className = 'favicon'
-        this.element.appendChild(this.elements.favicon)
-
-        this.element.addEventListener("click", () => {
-            browser.tabs.update(this.id, {
-                active: true
-            })
-        })
-    }
-
-    render() {
-        let faviconUrl = this.tab.favIconUrl
-        if(!faviconUrl) {
-            faviconUrl = ContainerTabsSidebar.FAVICON_FALLBACK
-        }
-        this.elements.favicon.src = faviconUrl
-        this.element.title = this.tab.title
-        if(this.tab.active) {
-            this.element.classList.add('tab-active')
-        }
-    }
-
-    scrollIntoView() {}
-}
-
 class PinnedTabsContainer extends AbstractTabContainer {
     _handleTabCreated(newTab) {
         if(!newTab.pinned) return
@@ -64,7 +35,7 @@ class PinnedTabsContainer extends AbstractTabContainer {
             tabElement.setAttribute('data-tab-id', firefoxTab.id)
             tabElement.setAttribute('data-ci-id', firefoxTab.cookieStoreId)
 
-            const pinnedTab = new PinnedContainerTab(firefoxTab, tabElement)
+            const pinnedTab = new ContainerTab(firefoxTab, tabElement)
             pinnedTab.init()
 
             this.element.appendChild(tabElement)

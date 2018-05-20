@@ -7,6 +7,7 @@ body, html {
 
 #pinned-tabs {
     display: flex;
+    flex-wrap: wrap;    
     margin: 0;
     padding: 0;
 }
@@ -132,9 +133,13 @@ main {
     text-align: center;
 }
 
-.container-tab-dragged-over {
+.container-tab-dragged-over, .container-dragged-over {
     border-bottom: 1px solid #eee;
 }
 #pinned-tabs .container-tab-dragged-over {
     border-right: 1px solid #eee;
+}
+
+.tab-pinned :not(.favicon) {
+    display: none;
 }

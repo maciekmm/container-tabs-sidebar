@@ -8,6 +8,47 @@ class ContextualIdentityContainer extends AbstractTabContainer {
     init() {
         this._createElements()
         super.init()
+
+        this.element.addEventListener('drop', (e) => {
+            let [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('text/plain').split('/')
+            tabId = parseInt(tabId);
+            pinned = pinned != 'false'
+
+            if (this.id != contextualIdentity) {
+                e.dataTransfer.dropEffect = 'none'
+                return
+            }
+
+            e.currentTarget.classList.remove('container-dragged-over')
+            //if moved from pinned container
+            if(pinned) {
+                browser.tabs.update(tabId, {
+                    pinned: false,
+                }).then(() => {
+                    browser.tabs.move(tabId, {
+                        windowId: ContainerTabsSidebar.WINDOW_ID,
+                        index: -1 // move to the end
+                    })
+                })
+            } else {
+                browser.tabs.move(tabId, {
+                    windowId: ContainerTabsSidebar.WINDOW_ID,
+                    index: -1 // move to the end
+                })
+            }
+        })
+
+        this.element.addEventListener('dragover', (e) => {
+            e.preventDefault()
+            const [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('text/plain').split('/')
+            if (this.id != contextualIdentity) {
+                e.dataTransfer.dropEffect = 'none'
+                return
+            }
+            e.dataTransfer.dropEffect = 'move'
+            e.currentTarget.classList.add('container-dragged-over')
+            return false
+        })
     }
 
     _handleTabActivated(tab) {
@@ -16,18 +57,18 @@ class ContextualIdentityContainer extends AbstractTabContainer {
     }
 
     _handleTabCreated(newTab) {
-        if(newTab.cookieStoreId !== this.id) return
-        if(newTab.windowId !== ContainerTabsSidebar.WINDOW_ID) return
+        if (newTab.cookieStoreId !== this.id) return
+        if (newTab.windowId !== ContainerTabsSidebar.WINDOW_ID) return
         this.render(true, () => {
             const renderedTab = this.tabs.get(newTab.id)
-            if(renderedTab) {
+            if (renderedTab) {
                 renderedTab.scrollIntoView()
             }
         })
     }
 
     _handleTabPinned(tabId, change, tab) {
-        if(tab.pinned) {
+        if (tab.pinned) {
             this.removeTab(tabId)
         } else {
             this.render(true)
@@ -37,7 +78,7 @@ class ContextualIdentityContainer extends AbstractTabContainer {
     _createElements() {
         this.elements = {}
         this.elements.containerHeader = document.createElement('div')
-        
+
         // favicon
         this.elements.icon = document.createElement('img')
         this.elements.icon.className = 'container-icon'
@@ -76,7 +117,7 @@ class ContextualIdentityContainer extends AbstractTabContainer {
         this.elements.tabsContainer = document.createElement('ul')
         this.elements.tabsContainer.className = 'container-tabs'
         this.element.appendChild(this.elements.tabsContainer)
-        
+
         // collapse/show
         this.elements.containerHeader.addEventListener('click', () => {
             this.collapsed = !this.collapsed
@@ -117,11 +158,11 @@ class ContextualIdentityContainer extends AbstractTabContainer {
         // title
         const titleElement = this.elements.title
         titleElement.className = 'container-title'
-        titleElement.innerText = this.contextualIdentity.name + ' ('+this.tabs.size+')'
+        titleElement.innerText = this.contextualIdentity.name + ' (' + this.tabs.size + ')'
 
         // collapse
         this.elements.collapse.innerText = (this._collapsed ? '▴' : '▾')
-        if(this._collapsed) {
+        if (this._collapsed) {
             this.element.classList.add('collapsed')
         } else {
             this.element.classList.remove('collapsed')
@@ -137,13 +178,14 @@ class ContextualIdentityContainer extends AbstractTabContainer {
                 this.render(false, callback)
             })
         } else {
-            if(callback) {
+            if (callback) {
                 callback()
             }
         }
     }
 
     renderTabs(tabs) {
+        //TODO: properly clean listeners and other stuff
         this.elements.tabsContainer.innerHTML = ''
         this.tabs.clear()
 
