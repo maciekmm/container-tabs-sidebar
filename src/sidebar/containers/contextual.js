@@ -20,6 +20,10 @@ class ContextualIdentityContainer extends AbstractTabContainer {
             }
 
             e.currentTarget.classList.remove('container-dragged-over')
+            let index = -1
+            if(this.tabs.size > 0) {
+                index = this.tabs.values().next().value.tab.index
+            }
             //if moved from pinned container
             if(pinned) {
                 browser.tabs.update(tabId, {
@@ -27,13 +31,13 @@ class ContextualIdentityContainer extends AbstractTabContainer {
                 }).then(() => {
                     browser.tabs.move(tabId, {
                         windowId: ContainerTabsSidebar.WINDOW_ID,
-                        index: -1 // move to the end
+                        index: index // move to the front
                     })
                 })
             } else {
                 browser.tabs.move(tabId, {
                     windowId: ContainerTabsSidebar.WINDOW_ID,
-                    index: -1 // move to the end
+                    index: index // move to the end
                 })
             }
         })
@@ -78,6 +82,7 @@ class ContextualIdentityContainer extends AbstractTabContainer {
     _createElements() {
         this.elements = {}
         this.elements.containerHeader = document.createElement('div')
+        this.elements.containerHeader.className = 'container-header'
 
         // favicon
         this.elements.icon = document.createElement('img')
@@ -149,7 +154,6 @@ class ContextualIdentityContainer extends AbstractTabContainer {
     render(updateTabs, callback) {
         // styling (border according to container config)
         const containerHeader = this.elements.containerHeader
-        containerHeader.className = 'container-header'
         containerHeader.style.borderColor = this.contextualIdentity.colorCode
 
         // favicon

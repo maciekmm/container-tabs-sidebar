@@ -133,8 +133,8 @@ main {
     text-align: center;
 }
 
-.container-tab-dragged-over, .container-dragged-over {
-    border-bottom: 1px solid #eee;
+.container-tab-dragged-over, .container-dragged-over .container-header {
+    border-bottom: 1px solid #eee !important;
 }
 #pinned-tabs .container-tab-dragged-over {
     border-right: 1px solid #eee;
