@@ -6,6 +6,11 @@ html {
     overflow: hidden;
 }
 
+a, a:link, a:visited {
+    color: inherit;
+    text-decoration: none;
+}
+
 #pinned-tabs {
     display: flex;
     flex-wrap: wrap;
@@ -31,10 +36,13 @@ main {
 
 .container {
     width: 100%;
-    list-style: none;
     line-height: 1.3em;
     vertical-align: middle;
     color: #fff;
+}
+
+li {
+    list-style: none;
 }
 
 .container-header {
@@ -120,7 +128,8 @@ main {
 }
 
 .tab-active,
-.tab-active:hover {
+.tab-active:hover,
+.context-menu-element:hover {
     background: rgb(21, 107, 187);
 }
 
@@ -144,4 +153,39 @@ main {
 
 .tab-pinned :not(.favicon) {
     display: none;
+}
+
+/* Context Menus */
+#context-menu {
+    position: absolute;
+    background: #333;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    border: 1px solid #111;
+    color: #fff;
+}
+
+#context-menu li {
+    width: 100%;
+    display: block;
+    padding: 5px 10px;
+    border-bottom: 1px solid #222;
+}
+
+.context-menu-element:hover {
+    cursor: pointer;
+}
+
+#context-menu:empty {
+    display: none;
+}
+
+#context-menu-overlay {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
 }

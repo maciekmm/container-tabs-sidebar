@@ -179,32 +179,13 @@ class ContextualIdentityContainer extends AbstractTabContainer {
                 cookieStoreId: this.id,
                 pinned: false
             }).then((res) => {
-                this.renderTabs(res)
+                this.renderTabs(this.elements.tabsContainer, res)
                 this.render(false, callback)
             })
         } else {
             if (callback) {
                 callback()
             }
-        }
-    }
-
-    renderTabs(tabs) {
-        //TODO: properly clean listeners and other stuff
-        this.elements.tabsContainer.innerHTML = ''
-        this.tabs.clear()
-
-        for (let firefoxTab of tabs) {
-            const tabElement = document.createElement('li')
-            tabElement.classList.add('container-tab')
-            tabElement.setAttribute('data-tab-id', firefoxTab.id)
-            tabElement.setAttribute('data-ci-id', this.id)
-
-            const tab = new ContainerTab(firefoxTab, tabElement)
-            this.tabs.set(tab.id, tab)
-            tab.init()
-
-            this.elements.tabsContainer.appendChild(tabElement)
         }
     }
 }

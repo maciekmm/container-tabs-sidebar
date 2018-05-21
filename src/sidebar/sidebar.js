@@ -5,9 +5,13 @@ const ContainerTabsSidebar = {
     containers: new Map(),
     pinnedTabs: new PinnedTabsContainer(document.getElementById('pinned-tabs')),
 
+    // There exists a browser.windows.WINDOW_ID_CURRENT, but it yields some negative value
+    // It's impossible to compare with ids some events are providing in callbacks, therefore
+    // we get the current window id by browser.windows.getCurrent and set the appropriate property
     init(windowId) {
         this.WINDOW_ID = windowId
     
+        // containers
         browser.contextualIdentities.onUpdated.addListener((evt) => {
             const container = this.containers.get(evt.contextualIdentity.cookieStoreId)
             if (container) {
@@ -15,20 +19,12 @@ const ContainerTabsSidebar = {
             }
         })
 
-        browser.tabs.onActivated.addListener((activeInfo) => {
-            if(activeInfo.windowId != this.WINDOW_ID) {
-                return
-            }
+        ContextMenuManager.init()
 
-            // This is a bit hacky, TODO: clean this up
-            for(let tab of document.getElementsByClassName('tab-active')) {
-                if(tab.getAttribute('data-tab-id') != activeInfo.tabId) {
-                    tab.classList.remove('tab-active')
-                }
-            };
-        });
         this.refresh()
+        //this.showContextMenu(new ContextMenu({}, [{label: 'Test', action: null}]), 10, 10)
     },
+
 
     refresh() {
         browser.contextualIdentities.query({}).then((res) => {
@@ -43,11 +39,11 @@ const ContainerTabsSidebar = {
     },
 
     render(containers) {
-        const containersList = document.getElementById("containers")
+        const containersList = document.getElementById('containers')
         for (let firefoxContainer of containers) {
             const containerParent = document.createElement('li')
-            containerParent.classList.add("container")
-            containerParent.id = "container-tabs-" + firefoxContainer.cookieStoreId
+            containerParent.classList.add('container')
+            containerParent.id = 'container-tabs-' + firefoxContainer.cookieStoreId
 
             const container = new ContextualIdentityContainer(firefoxContainer, containerParent);
             container.init(firefoxContainer)

@@ -18,28 +18,8 @@ class PinnedTabsContainer extends AbstractTabContainer {
                 currentWindow: true,
                 pinned: true
             }).then((res) => {
-                this.renderTabs(res)
+                this.renderTabs(this.element, res)
             })
-        }
-    }
-
-    renderTabs(tabs) {
-        this.element.innerHTML = ''
-        this.tabs.clear()
-        for(let firefoxTab of tabs) {
-            const container = ContainerTabsSidebar.containers.get(firefoxTab.cookieStoreId)
-
-            const tabElement = document.createElement('li')
-            tabElement.className = 'container-tab'
-            tabElement.style.borderBottomColor = container.contextualIdentity.colorCode
-            tabElement.setAttribute('data-tab-id', firefoxTab.id)
-            tabElement.setAttribute('data-ci-id', firefoxTab.cookieStoreId)
-
-            const pinnedTab = new ContainerTab(firefoxTab, tabElement)
-            pinnedTab.init()
-
-            this.element.appendChild(tabElement)
-            this.tabs.set(firefoxTab.id, pinnedTab)
         }
     }
 }
