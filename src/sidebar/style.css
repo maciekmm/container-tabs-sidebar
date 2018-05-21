@@ -1,4 +1,5 @@
-body, html {
+body,
+html {
     box-sizing: border-box;
     background: #333;
     height: 100vh;
@@ -7,7 +8,7 @@ body, html {
 
 #pinned-tabs {
     display: flex;
-    flex-wrap: wrap;    
+    flex-wrap: wrap;
     margin: 0;
     padding: 0;
 }
@@ -29,26 +30,23 @@ main {
 }
 
 .container {
+    width: 100%;
     list-style: none;
     line-height: 1.3em;
     vertical-align: middle;
     color: #fff;
-    width: 100%;
 }
 
 .container-header {
+    width: 100%;
     padding: 0.3em;
     background: #111;
     display: flex;
     align-items: center;
     align-content: center;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    border-bottom-color: #222 !important;
-    border-bottom-style: solid;
+    border-bottom: 1px solid #222;
     border-left-width: 0.5em;
     border-left-style: solid;
-    width: 100%;
 }
 
 .container-header .container-icon {
@@ -106,7 +104,8 @@ main {
     border-radius: 3px;
 }
 
-.container-actions .container-action:hover, .container-tab-close:hover {
+.container-actions .container-action:hover,
+.container-tab-close:hover {
     cursor: pointer;
     background: rgba(255, 255, 255, 0.1);
 }
@@ -120,7 +119,8 @@ main {
     font-size: 20px;
 }
 
-.tab-active, .tab-active:hover {
+.tab-active,
+.tab-active:hover {
     background: rgb(21, 107, 187);
 }
 
@@ -133,9 +133,11 @@ main {
     text-align: center;
 }
 
-.container-tab-dragged-over, .container-dragged-over .container-header {
+.container-tab-dragged-over,
+.container-dragged-over .container-header {
     border-bottom: 1px solid #eee !important;
 }
+
 #pinned-tabs .container-tab-dragged-over {
     border-right: 1px solid #eee;
 }

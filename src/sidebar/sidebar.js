@@ -1,7 +1,9 @@
+const FAVICON_LOADING = 'chrome://global/skin/icons/loading.png'
+const FAVICON_FALLBACK = '../assets/no-favicon.svg'
+
 const ContainerTabsSidebar = {
-    FAVICON_FALLBACK: '../assets/no-favicon.svg',
     containers: new Map(),
-    pinnedTabs: new PinnedTabsContainer(document.getElementById("pinned-tabs")),
+    pinnedTabs: new PinnedTabsContainer(document.getElementById('pinned-tabs')),
 
     init(windowId) {
         this.WINDOW_ID = windowId
@@ -20,7 +22,7 @@ const ContainerTabsSidebar = {
 
             // This is a bit hacky, TODO: clean this up
             for(let tab of document.getElementsByClassName('tab-active')) {
-                if(tab.getAttribute("data-tab-id") != activeInfo.tabId) {
+                if(tab.getAttribute('data-tab-id') != activeInfo.tabId) {
                     tab.classList.remove('tab-active')
                 }
             };

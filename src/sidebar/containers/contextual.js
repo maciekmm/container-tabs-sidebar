@@ -24,6 +24,7 @@ class ContextualIdentityContainer extends AbstractTabContainer {
             if(this.tabs.size > 0) {
                 index = this.tabs.values().next().value.tab.index
             }
+
             //if moved from pinned container
             if(pinned) {
                 browser.tabs.update(tabId, {
@@ -154,7 +155,7 @@ class ContextualIdentityContainer extends AbstractTabContainer {
     render(updateTabs, callback) {
         // styling (border according to container config)
         const containerHeader = this.elements.containerHeader
-        containerHeader.style.borderColor = this.contextualIdentity.colorCode
+        containerHeader.style.borderLeftColor = this.contextualIdentity.colorCode
 
         // favicon
         this.elements.icon.src = this.contextualIdentity.iconUrl
