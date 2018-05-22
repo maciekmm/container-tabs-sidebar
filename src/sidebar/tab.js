@@ -26,6 +26,11 @@ class ContainerTab {
             }
 
             const contextMenu = new ContextMenu(this)
+
+            contextMenu.addOption('Close tab', () => {
+                browser.tabs.remove(this.id)
+            })
+
             contextMenu.addOption('Reload tab', () => {
                 browser.tabs.reload(this.id)
             })
