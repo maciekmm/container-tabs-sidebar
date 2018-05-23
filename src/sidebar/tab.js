@@ -134,6 +134,9 @@ class ContainerTab {
 
         this.elements.favicon = document.createElement('img')
         this.elements.favicon.className = 'favicon'
+        this.elements.favicon.addEventListener('error', (e) => {
+            this.elements.favicon.src = FAVICON_FALLBACK
+        })
         this.element.appendChild(this.elements.favicon)
 
         this.elements.title = document.createElement('span')
@@ -195,9 +198,14 @@ class ContainerTab {
         } else if (this.tab.favIconUrl) {
             favIconUrl = this.tab.favIconUrl
         }
+        if(favIconUrl !== this.elements.favicon.src) {
+            this.elements.favicon.src = favIconUrl
+        }
+
         this.element.href = this.tab.url
-        this.elements.favicon.src = favIconUrl
         this.elements.title.innerText = this.tab.title// + ` - (${this.tab.index})`
+        this.element.title = this.tab.title
+
         if (this.tab.active) {
             this.element.classList.add('tab-active')
         } else {
