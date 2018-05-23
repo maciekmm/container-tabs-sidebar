@@ -1,3 +1,6 @@
+const ICON_AUDIBLE = 'chrome://global/skin/media/audioUnmutedButton.svg'
+const ICON_MUTED = 'chrome://global/skin/media/audioMutedButton.svg'
+
 class ContainerTab {
     constructor(tab, element) {
         this.tab = tab
@@ -13,14 +16,14 @@ class ContainerTab {
             this.render()
         }, {
             tabId: this.id,
-            properties: ["title", "favIconUrl", "status", "mutedInfo"]
+            properties: ["title", "favIconUrl", "status", "mutedInfo", "audible"]
         })
 
         this.element.setAttribute('draggable', true)
 
         this.element.addEventListener('contextmenu', (e) => {
             e.preventDefault()
-            if(ContainerTabsSidebar.contextMenu)  {
+            if (ContainerTabsSidebar.contextMenu) {
                 ContainerTabsSidebar.hideContextMenu()
                 return
             }
@@ -73,7 +76,7 @@ class ContainerTab {
             if (!e.target || !e.target.classList) return
             e.target.classList.remove('container-tab-dragged-over')
         })
-        
+
         this.element.addEventListener('dragend', (e) => {
             if (!e.target || !e.target.classList) return
             e.target.classList.remove('container-tab-dragged-over')
@@ -101,7 +104,7 @@ class ContainerTab {
                     browser.tabs.get(this.tab.id).then((droppedOn) => { // as we pin a tab indexes get shifted by one, thus we need to get new index
                         browser.tabs.move(tabId, {
                             windowId: ContainerTabsSidebar.WINDOW_ID,
-                            index: droppedOn.index + 1 
+                            index: droppedOn.index + 1
                         })
                     })
                 })
@@ -141,13 +144,24 @@ class ContainerTab {
 
         this.elements.title = document.createElement('span')
         this.elements.title.className = 'container-tab-title'
-
         this.element.appendChild(this.elements.title)
+
+        this.elements.audible = document.createElement('img')
+        this.elements.audible.className = 'container-tab-action--mute container-tab-action'
+        this.elements.audible.src = ICON_MUTED
+        this.elements.audible.addEventListener('click', (e) => {
+                e.stopPropagation()
+                e.preventDefault()
+                browser.tabs.update(this.id, {
+                    muted: !(this.tab.mutedInfo && this.tab.mutedInfo.muted)
+                })
+            })
+        this.element.appendChild(this.elements.audible)
 
         this.element.addEventListener('click', (event) => {
             // prevent reloading tab
             event.preventDefault()
-            if(event.button == 0) {
+            if (event.button == 0) {
                 browser.tabs.update(this.id, {
                     active: true
                 })
@@ -159,14 +173,14 @@ class ContainerTab {
         this.element.addEventListener('mouseup', (event) => {
             event.stopPropagation()
             event.preventDefault()
-            switch(event.which) {
+            switch (event.which) {
                 case 2: //middle button
                     browser.tabs.remove(this.id)
-                break
+                    break
             }
         })
 
-        if(this.tab.pinned) {
+        if (this.tab.pinned) {
             browser.contextualIdentities.get(this.tab.cookieStoreId).then((ci) => {
                 this.element.style.borderBottomColor = ci.colorCode
             })
@@ -192,18 +206,18 @@ class ContainerTab {
     }
 
     render() {
-        let favIconUrl = FAVICON_FALLBACK 
-        if(this.tab.status === "loading") {
+        let favIconUrl = FAVICON_FALLBACK
+        if (this.tab.status === "loading") {
             favIconUrl = FAVICON_LOADING
         } else if (this.tab.favIconUrl) {
             favIconUrl = this.tab.favIconUrl
         }
-        if(favIconUrl !== this.elements.favicon.src) {
+        if (favIconUrl !== this.elements.favicon.src) {
             this.elements.favicon.src = favIconUrl
         }
 
         this.element.href = this.tab.url
-        this.elements.title.innerText = this.tab.title// + ` - (${this.tab.index})`
+        this.elements.title.innerText = this.tab.title // + ` - (${this.tab.index})`
         this.element.title = this.tab.title
 
         if (this.tab.active) {
@@ -215,6 +229,16 @@ class ContainerTab {
             this.element.classList.add('tab-pinned')
         } else {
             this.element.classList.remove('tab-pinned')
+        }
+        if (this.tab.mutedInfo && this.tab.mutedInfo.muted) {
+            this.elements.audible.src = ICON_MUTED
+        } else if (this.tab.audible) {
+            this.elements.audible.src = ICON_AUDIBLE
+        }
+        if (this.tab.audible || (this.tab.mutedInfo && this.tab.mutedInfo.muted)) {
+            this.elements.audible.classList.add('audible')
+        } else {
+            this.elements.audible.classList.remove('audible')
         }
     }
 }

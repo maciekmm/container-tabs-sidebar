@@ -114,7 +114,7 @@ li {
 }
 
 .container-actions .container-action:hover,
-.container-tab-close:hover {
+.container-tab-close:hover, .container-tab-action:hover {
     cursor: pointer;
     background: rgba(255, 255, 255, 0.1);
 }
@@ -134,7 +134,7 @@ li {
     background: rgb(21, 107, 187);
 }
 
-.container-tab-close {
+.container-tab-close, .container-tab-action {
     padding: 0.1em;
     margin-right: 0.1em;
     color: #aaa;
@@ -142,6 +142,20 @@ li {
     border-radius: 3px;
     text-align: center;
 }
+
+.container-tab-action--mute {
+    margin-left: auto;
+    flex-basis: 24px;
+    min-width: 24px;
+    opacity: 0.8;
+    filter: grayscale(1) invert(100%);
+    display: none;
+}
+
+.audible.container-tab-action--mute {
+    display: initial;
+}
+
 
 .container-tab-dragged-over,
 .container-dragged-over .container-header {
