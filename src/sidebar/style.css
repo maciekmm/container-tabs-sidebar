@@ -91,6 +91,7 @@ li {
 
 .container-tab .favicon {
     flex-basis: 16px;
+    max-width: 16px;
     height: 16px;
 }
 
