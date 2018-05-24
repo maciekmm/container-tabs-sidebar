@@ -35,6 +35,10 @@ const ContextMenuManager = {
         if(x > window.innerWidth/2) {
             cX -= contextMenuElement.offsetWidth
         }
+        
+        if(cX < 0) {
+            cX = 0;
+        }
 
         // above or below
         let cY = y
@@ -44,6 +48,11 @@ const ContextMenuManager = {
 
         contextMenuElement.style.left = cX+'px'
         contextMenuElement.style.top = cY+'px'
+        let maxWidth = x
+        if(x == cX) {
+            maxWidth = window.innerWidth - x 
+        }
+        contextMenuElement.style.maxWidth = (maxWidth + 10) + 'px'
     },
 
     hide() {

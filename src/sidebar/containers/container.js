@@ -76,6 +76,18 @@ class AbstractTabContainer {
 
     _handleDragOver(event, tabId, contextualId, pinned) {}
 
+    /**
+     * Removes all tabs except one
+     * @param {integer} tabId to not remove from this container
+     */
+    closeOthers(tabId) {
+        browser.tabs.remove(Array.from(this.tabs.keys()).filter(key => key != tabId))
+    }
+
+    /**
+     * Removes a tab from DOM, does not remove it from a browser
+     * @param {integer} tabId 
+     */
     removeTab(tabId) {
         if (!this.tabs.has(tabId)) return
         const tab = this.tabs.get(tabId)
@@ -88,7 +100,7 @@ class AbstractTabContainer {
 
     renderTabs(tabContainer, tabs) {
         // clear children
-        while(tabContainer.lastChild) {
+        while (tabContainer.lastChild) {
             tabContainer.removeChild(tabContainer.lastChild)
         }
         this.tabs.clear()

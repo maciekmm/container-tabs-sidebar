@@ -30,10 +30,6 @@ class ContainerTab {
 
             const contextMenu = new ContextMenu(this)
 
-            contextMenu.addOption('Close tab', () => {
-                browser.tabs.remove(this.id)
-            })
-
             contextMenu.addOption('Reload tab', () => {
                 browser.tabs.reload(this.id)
             })
@@ -48,6 +44,24 @@ class ContainerTab {
                 browser.tabs.update(this.id, {
                     pinned: !this.tab.pinned
                 })
+            })
+
+            contextMenu.addOption('Duplicate tab', () => {
+                browser.tabs.duplicate(this.id)
+            })
+
+            contextMenu.addOption('Move tab to new window', () => {
+                browser.windows.create({
+                    tabId: this.id
+                })
+            })
+
+            contextMenu.addOption('Close other tabs', () => {
+                ContainerTabsSidebar.containers.get(this.tab.cookieStoreId).closeOthers(this.id)
+            })
+
+            contextMenu.addOption('Close tab', () => {
+                browser.tabs.remove(this.id)
             })
 
             ContextMenuManager.show(contextMenu, e.clientX, e.clientY)
