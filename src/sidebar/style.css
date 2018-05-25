@@ -166,6 +166,10 @@ li {
     border-right: 1px solid #eee;
 }
 
+#pinned-tabs.container-dragged-over {
+    border-left: 1px solid #eee;
+}
+
 .tab-pinned :not(.favicon) {
     display: none;
 }

@@ -10,7 +10,11 @@ class ContextualIdentityContainer extends AbstractTabContainer {
         super.init()
 
         this.element.addEventListener('drop', (e) => {
-            let [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('text/plain').split('/')
+            e.preventDefault()
+            if (!e.dataTransfer.types.includes('tab/move')) {
+                return
+            }
+            let [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('tab/move').split('/')
             tabId = parseInt(tabId);
             pinned = pinned != 'false'
 
@@ -45,7 +49,10 @@ class ContextualIdentityContainer extends AbstractTabContainer {
 
         this.element.addEventListener('dragover', (e) => {
             e.preventDefault()
-            const [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('text/plain').split('/')
+            if (!e.dataTransfer.types.includes('tab/move')) {
+                return
+            }
+            const [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('tab/move').split('/')
             if (this.id != contextualIdentity) {
                 e.dataTransfer.dropEffect = 'none'
                 return

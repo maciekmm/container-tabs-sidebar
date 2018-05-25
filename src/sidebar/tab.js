@@ -69,13 +69,13 @@ class ContainerTab {
 
         this.element.addEventListener('dragstart', (e) => {
             e.dataTransfer.effectAllowed = 'move';
-            e.dataTransfer.setData('text/plain', this.id + '/' + this.tab.cookieStoreId + '/' + this.tab.pinned);
+            e.dataTransfer.setData('tab/move', this.id + '/' + this.tab.cookieStoreId + '/' + this.tab.pinned);
             this.element.classList.add('container-tab-dragged');
         })
 
         this.element.addEventListener('dragover', (e) => {
             e.preventDefault()
-            const [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('text/plain').split('/')
+            const [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('tab/move').split('/')
             if ((this.tab.cookieStoreId != contextualIdentity && !this.tab.pinned) || !e.currentTarget.hasAttribute("data-tab-id")) {
                 e.dataTransfer.dropEffect = 'none'
                 return
@@ -87,17 +87,24 @@ class ContainerTab {
         })
 
         this.element.addEventListener('dragleave', (e) => {
-            if (!e.target || !e.target.classList) return
+            if (!e.dataTransfer.types.includes('tab/move')) {
+                return
+            }
             e.target.classList.remove('container-tab-dragged-over')
         })
 
         this.element.addEventListener('dragend', (e) => {
-            if (!e.target || !e.target.classList) return
+            if (!e.dataTransfer.types.includes('tab/move')) {
+                return
+            }
             e.target.classList.remove('container-tab-dragged-over')
         })
 
         this.element.addEventListener('drop', (e) => {
-            let [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('text/plain').split('/')
+            if (!e.dataTransfer.types.includes('tab/move')) {
+                return
+            }
+            let [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('tab/move').split('/')
             tabId = parseInt(tabId);
             pinned = pinned != 'false'
 

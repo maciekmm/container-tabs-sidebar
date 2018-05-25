@@ -1,4 +1,9 @@
 {
+    "manifest_version": 2,
+    "name": "Container Tabs Sidebar",
+    "version": "0.0.1",
+    "description": "Container sidebar tab management",
+    "homepage_url": "https://github.com/maciekmm/container-tabs-sidebar",
     "sidebar_action": {
       "default_title": "Container Tabs",
       "default_panel": "sidebar/sidebar.html",
@@ -8,7 +13,7 @@
     "commands": {
       "_execute_sidebar_action": {
         "suggested_key": {
-          "default": "F3"
+          "default": "F2"
         },
         "description": "show sidebar"
       }
@@ -26,10 +31,5 @@
       "tabs",
       "contextualIdentities",
       "cookies"
-    ],
-    "description": "Container sidebar tab management",
-    "homepage_url": "https://github.com/maciekmm/container-tabs-sidebar",
-    "manifest_version": 2,
-    "name": "Container Tabs Sidebar",
-    "version": "0.0.1"
+    ]
 }
