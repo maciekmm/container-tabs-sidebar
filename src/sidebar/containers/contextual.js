@@ -61,6 +61,28 @@ class ContextualIdentityContainer extends AbstractTabContainer {
             e.currentTarget.classList.add('container-dragged-over')
             return false
         })
+
+        this.elements.containerHeader.addEventListener('contextmenu', (e) => {
+            e.preventDefault()
+            if (ContainerTabsSidebar.contextMenu) {
+                ContainerTabsSidebar.hideContextMenu()
+                return
+            }
+
+            const contextMenu = new ContextMenu(this)
+
+            contextMenu.addOption('Reload all', () => {
+                Array.from(this.tabs.keys()).forEach((tabId) => {
+                    browser.tabs.reload(tabId)
+                })
+            })
+
+            contextMenu.addOption('Close all', () => {
+                browser.tabs.remove(Array.from(this.tabs.keys()))
+            })
+
+            ContextMenuManager.show(contextMenu, e.clientX, e.clientY)
+        })
     }
 
     _handleTabActivated(tab) {
