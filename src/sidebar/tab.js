@@ -219,11 +219,17 @@ class ContainerTab {
         this.render()
     }
 
+    /**
+     * Scrolls the tab element into view if it's outside
+     */
     scrollIntoView() {
-        this.element.scrollIntoView({
-            block: "end",
-            behavior: "auto"
-        })
+        const box = this.element.getBoundingClientRect()
+        if(box.bottom < 0 || box.top > window.innerHeight) {
+            this.element.scrollIntoView({
+                block: "end",
+                behavior: "auto"
+            })
+        }
     }
 
     render() {
