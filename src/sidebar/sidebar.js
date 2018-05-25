@@ -3,6 +3,7 @@ const FAVICON_FALLBACK = '../assets/no-favicon.svg'
 
 const ContainerTabsSidebar = {
     containers: new Map(),
+    elements: {},
     pinnedTabs: new PinnedTabsContainer(document.getElementById('pinned-tabs')),
 
     // There exists a browser.windows.WINDOW_ID_CURRENT, but it yields some negative value
@@ -19,12 +20,41 @@ const ContainerTabsSidebar = {
             }
         })
 
+        browser.contextualIdentities.onRemoved.addListener((evt) => {
+            this.removeContextualIdentity(evt.contextualIdentity.cookieStoreId)
+        })
+
+        browser.contextualIdentities.onCreated.addListener((evt) => {
+            this.addContextualIdentity(evt.contextualIdentity)
+        })
+
         ContextMenuManager.init()
 
+        const containersList = document.getElementById('containers')
+        this.elements.containersList = containersList
         this.refresh()
-        //this.showContextMenu(new ContextMenu({}, [{label: 'Test', action: null}]), 10, 10)
     },
 
+
+    /**
+     * Removes a container from DOM, does not remove it from a browser
+     * @param {integer} cookieStoreId - contextual identity id
+     */
+    removeContextualIdentity(cookieStoreId) {
+        if(!this.containers.has(cookieStoreId)) return
+        const container = this.containers.get(cookieStoreId)
+        this.containers.delete(container)
+        container.element.parentNode.removeChild(container.element)
+    },
+
+    /**
+     * Adds contextual identity to DOM
+     * @param {integer}
+     */
+    addContextualIdentity(contextualIdentity) {
+        const ctxId = this.createContainer(contextualIdentity)
+        this.elements.containersList.appendChild(ctxId.element)
+    },
 
     refresh() {
         browser.contextualIdentities.query({}).then((res) => {
@@ -39,17 +69,22 @@ const ContainerTabsSidebar = {
     },
 
     render(containers) {
-        const containersList = document.getElementById('containers')
+        const containersList = this.elements.containersList
         for (let firefoxContainer of containers) {
-            const containerParent = document.createElement('li')
-            containerParent.classList.add('container')
-            containerParent.id = 'container-tabs-' + firefoxContainer.cookieStoreId
-
-            const container = new ContextualIdentityContainer(firefoxContainer, containerParent);
-            container.init(firefoxContainer)
-            containersList.appendChild(containerParent)
-            this.containers.set(firefoxContainer.cookieStoreId, container)
+            const ctxId = this.createContainer(firefoxContainer)
+            containersList.appendChild(ctxId.element)
         }
+    },
+
+    createContainer(ctxId) {
+        const containerParent = document.createElement('li')
+        containerParent.classList.add('container')
+        containerParent.id = 'container-tabs-' + ctxId.cookieStoreId
+
+        const container = new ContextualIdentityContainer(ctxId, containerParent)
+        container.init(ctxId)
+        this.containers.set(ctxId.cookieStoreId, container)
+        return container
     },
 }
 
