@@ -16,10 +16,20 @@ a, a:link, a:visited {
     flex-wrap: wrap;
     margin: 0;
     padding: 0;
+    min-height: 29px;
+}
+
+#pinned-tabs:empty::after {
+    content: 'Drag a tab here to pin it!';
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    color: #555;
+    line-height: 29px;
 }
 
 #pinned-tabs .container-tab {
-    flex-basis: 20px;
+    flex-basis: 20x;
     border-bottom: 3px solid #fff;
 }
 

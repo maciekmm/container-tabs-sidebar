@@ -8,7 +8,7 @@ const ContainerTabsSidebar = {
 
     // There exists a browser.windows.WINDOW_ID_CURRENT, but it yields some negative value
     // It's impossible to compare with ids some events are providing in callbacks, therefore
-    // we get the current window id by browser.windows.getCurrent and set the appropriate property
+    // you should get the current window id by browser.windows.getCurrent and provide the value to this function
     init(windowId) {
         this.WINDOW_ID = windowId
     
@@ -32,7 +32,16 @@ const ContainerTabsSidebar = {
 
         const containersList = document.getElementById('containers')
         this.elements.containersList = containersList
-        this.refresh()
+
+        browser.contextualIdentities.query({}).then((res) => {
+            this.render([{
+                cookieStoreId: 'firefox-default',
+                name: 'Default',
+                iconUrl: 'resource://usercontext-content/briefcase.svg',
+                colorCode: '#ffffff'
+            }, ...res]);
+            this.pinnedTabs.init()
+        })
     },
 
 
@@ -54,18 +63,6 @@ const ContainerTabsSidebar = {
     addContextualIdentity(contextualIdentity) {
         const ctxId = this.createContainer(contextualIdentity)
         this.elements.containersList.appendChild(ctxId.element)
-    },
-
-    refresh() {
-        browser.contextualIdentities.query({}).then((res) => {
-            this.render([{
-                cookieStoreId: 'firefox-default',
-                name: 'Default',
-                iconUrl: 'resource://usercontext-content/briefcase.svg',
-                colorCode: '#ffffff'
-            }, ...res]);
-            this.pinnedTabs.init()
-        })
     },
 
     render(containers) {
