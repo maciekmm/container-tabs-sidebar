@@ -11,19 +11,19 @@ class ContainerTab {
     init() {
         this._createElements()
         this.render()
-        browser.tabs.onUpdated.addListener((id, state, tab) => {
+
+        browser.tabs.onUpdated.addListener((id, change, tab) => {
+            if(tab.id !== this.id) return
+            if(!["title", "favIconUrl", "status", "mutedInfo", "audible"].some(prop => Object.keys(change).includes(prop))) return
             this.tab = tab
             this.render()
-        }, {
-            tabId: this.id,
-            properties: ["title", "favIconUrl", "status", "mutedInfo", "audible"]
         })
 
         this.element.setAttribute('draggable', true)
 
         this.element.addEventListener('contextmenu', (e) => {
             e.preventDefault()
-            if (ContainerTabsSidebar.contextMenu) {
+            if (CntainerTabsSidebar.contextMenu) {
                 ContainerTabsSidebar.hideContextMenu()
                 return
             }
@@ -90,6 +90,7 @@ class ContainerTab {
             if (!e.dataTransfer.types.includes('tab/move')) {
                 return
             }
+            if(!target || !target.classList) return 
             e.target.classList.remove('container-tab-dragged-over')
         })
 

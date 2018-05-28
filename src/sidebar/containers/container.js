@@ -39,9 +39,9 @@ class AbstractTabContainer {
         })
 
         browser.tabs.onUpdated.addListener((tabId, change, tab) => {
-            this._handleTabPinned(tabId, change, tab)
-        }, {
-            properties: ["pinned"]
+            if('pinned' in change) { 
+                this._handleTabPinned(tabId, change, tab)
+            }
         })
 
         // Dragging
