@@ -23,7 +23,7 @@ class ContainerTab {
 
         this.element.addEventListener('contextmenu', (e) => {
             e.preventDefault()
-            if (CntainerTabsSidebar.contextMenu) {
+            if (ContainerTabsSidebar.contextMenu) {
                 ContainerTabsSidebar.hideContextMenu()
                 return
             }
