@@ -149,14 +149,17 @@ li {
     margin-right: 0.1em;
     color: #aaa;
     font-size: 1.3em;
+    display: flex;
+    align-items: center;
     border-radius: 3px;
+    align-self: stretch;
     text-align: center;
 }
 
 .container-tab-action--mute {
     margin-left: auto;
-    flex-basis: 24px;
-    min-width: 24px;
+    flex-basis: 18px;
+    min-width: 18px;
     opacity: 0.8;
     filter: grayscale(1) invert(100%);
     display: none;
