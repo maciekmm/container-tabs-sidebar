@@ -10,6 +10,13 @@
       "default_icon": "assets/sidebar-icon.svg",
       "browser_style": true
     },
+    "browser_action": {
+      "default_icon": "assets/sidebar-icon.svg",
+      "default_title": "Open ContainerTabsSidebar"
+    },
+    "background": {
+      "scripts": ["action_button.js"]
+    },
     "commands": {
       "_execute_sidebar_action": {
         "suggested_key": {
