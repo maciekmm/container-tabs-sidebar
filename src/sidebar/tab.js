@@ -90,7 +90,7 @@ class ContainerTab {
             if (!e.dataTransfer.types.includes('tab/move')) {
                 return
             }
-            if(!target || !target.classList) return 
+            if(!e.target || !e.target.classList) return 
             e.target.classList.remove('container-tab-dragged-over')
         })
 

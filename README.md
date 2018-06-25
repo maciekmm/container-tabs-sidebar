@@ -50,6 +50,10 @@ In order to hide sidebar header you need to append the `userChrome.css` with the
 
 Note that the namespace directive only has to appear once in that file.
 
+|Before|After|
+|----|---|
+|![Before hiding](./assets/before-header.png) | ![After hiding](./assets/after-header.png)
+
 ### Hiding tab bar
 
 In order to hide tab bar you need to append the `userChrome.css` with the following code:
@@ -63,8 +67,4 @@ In order to hide tab bar you need to append the `userChrome.css` with the follow
 ```
 
 Note that the namespace directive only has to appear once in that file.
-
-|Before|After|
-|----|---|
-|![Before hiding](./assets/before-header.png) | ![After hiding](./assets/after-header.png)
 
