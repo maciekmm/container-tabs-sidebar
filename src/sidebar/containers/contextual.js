@@ -19,31 +19,45 @@ class ContextualIdentityContainer extends AbstractTabContainer {
             pinned = pinned != 'false'
 
             if (this.id != contextualIdentity) {
-                e.dataTransfer.dropEffect = 'none'
-                return
-            }
-
-            e.currentTarget.classList.remove('container-dragged-over')
-            let index = -1
-            if(this.tabs.size > 0) {
-                index = this.tabs.values().next().value.tab.index
-            }
-
-            //if moved from pinned container
-            if(pinned) {
-                browser.tabs.update(tabId, {
-                    pinned: false,
-                }).then(() => {
-                    browser.tabs.move(tabId, {
-                        windowId: ContainerTabsSidebar.WINDOW_ID,
-                        index: index // move to the front
+                // moving tabs between containers
+                browser.tabs.get(tabId).then((tab) => {
+                    let tabInfo = {
+                        // pinned: tab.pinned,
+                        openInReaderMode: tab.isInReaderMode,
+                        cookieStoreId: this.id
+                    }
+                    // firefox treats about:newtab as privileged url, but not setting the url allows us to create that page
+                    if(tab.url !== 'about:newtab') {
+                        tabInfo.url = tab.url
+                    }
+                    browser.tabs.create(tabInfo).then((tab) => {
+                        browser.tabs.remove(tabId)
                     })
                 })
+                // contextual identity changed
             } else {
-                browser.tabs.move(tabId, {
-                    windowId: ContainerTabsSidebar.WINDOW_ID,
-                    index: index // move to the end
-                })
+                e.currentTarget.classList.remove('container-dragged-over')
+                let index = -1
+                if(this.tabs.size > 0) {
+                    index = this.tabs.values().next().value.tab.index
+                }
+
+                //if moved from pinned container
+                if(pinned) {
+                    browser.tabs.update(tabId, {
+                        pinned: false,
+                    }).then(() => {
+                        browser.tabs.move(tabId, {
+                            windowId: ContainerTabsSidebar.WINDOW_ID,
+                            index: index // move to the front
+                        })
+                    })
+                } else {
+                    browser.tabs.move(tabId, {
+                        windowId: ContainerTabsSidebar.WINDOW_ID,
+                        index: index // move to the end
+                    })
+                }
             }
         })
 
@@ -54,7 +68,7 @@ class ContextualIdentityContainer extends AbstractTabContainer {
             }
             const [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('tab/move').split('/')
             if (this.id != contextualIdentity) {
-                e.dataTransfer.dropEffect = 'none'
+                e.dataTransfer.dropEffect = 'move'
                 return
             }
             e.dataTransfer.dropEffect = 'move'

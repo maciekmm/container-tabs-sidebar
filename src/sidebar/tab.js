@@ -183,6 +183,7 @@ class ContainerTab {
         this.element.addEventListener('click', (event) => {
             // prevent reloading tab
             event.preventDefault()
+            event.stopPropagation()
             if (event.button == 0) {
                 browser.tabs.update(this.id, {
                     active: true
@@ -190,13 +191,13 @@ class ContainerTab {
             }
         })
 
-        // use mouseup because click does not fire for middle button
+        // use mousedown because click does not fire for middle button
         // we would have to have an 'a' element in order for it to work
-        this.element.addEventListener('mouseup', (event) => {
-            event.stopPropagation()
-            event.preventDefault()
+        this.element.addEventListener('mousedown', (event) => {
             switch (event.which) {
                 case 2: //middle button
+                    event.stopPropagation()
+                    event.preventDefault()
                     browser.tabs.remove(this.id)
                     break
             }
