@@ -92,6 +92,9 @@ li {
     align-content: center;
     padding: 5px;
     border-bottom: 1px solid #333;
+
+    border-left-width: 0.2em;
+    border-left-style: solid;
 }
 
 .container-tab:hover {
