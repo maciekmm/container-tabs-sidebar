@@ -30,7 +30,7 @@ a, a:link, a:visited {
 
 #pinned-tabs .container-tab {
     flex-basis: 20x;
-    border-bottom: 3px solid #fff;
+    border-bottom: 0.2em solid #fff;
 }
 
 main {
