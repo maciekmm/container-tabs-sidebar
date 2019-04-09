@@ -132,6 +132,9 @@ li {
 .container-tab-title {
     margin-left: 0.2em;
     word-break: break-all;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .container-actions .container-action--newtab {
