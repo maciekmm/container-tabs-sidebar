@@ -203,11 +203,13 @@ class ContainerTab {
             }
         })
 
-        if (this.tab.pinned) {
-            browser.contextualIdentities.get(this.tab.cookieStoreId).then((ci) => {
+        browser.contextualIdentities.get(this.tab.cookieStoreId).then((ci) => {
+			if (this.tab.pinned) {
                 this.element.style.borderBottomColor = ci.colorCode
-            })
-        }
+            } else {
+                this.element.style.borderLeftColor = ci.colorCode
+			}
+		})
     }
 
     activate() {
