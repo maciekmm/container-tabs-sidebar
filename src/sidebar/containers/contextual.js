@@ -9,6 +9,65 @@ class ContextualIdentityContainer extends AbstractTabContainer {
         this._createElements()
         super.init()
 
+        this.element.setAttribute('draggable', true)
+
+		this.element.addEventListener('dragstart', (e) => {
+			if(!e.target.classList.contains('container'))
+				return
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('container/move', this.id);
+            this.element.classList.add('container-hdr-dragged');
+        })
+
+        this.element.addEventListener('dragover', (e) => {
+             if (!e.dataTransfer.types.includes('container/move')) {
+                return
+            }
+			e.preventDefault()
+            e.stopPropagation()
+            e.dataTransfer.dropEffect = 'move'
+
+			// Mark the last tab if there are any, or the container header if empty
+			if (e.currentTarget.lastChild && e.currentTarget.lastChild.lastChild && !this.collapsed)
+				e.currentTarget.lastChild.lastChild.classList.add('container-dragged-over')
+			else
+				e.currentTarget.classList.add('container-dragged-over')
+
+            return false
+        })
+
+        this.element.addEventListener('drop', (e) => {
+			if (!e.dataTransfer.types.includes('container/move')) {
+				return
+            }
+
+            e.stopPropagation()
+
+			let targetCont = e.target
+			while (!targetCont.classList.contains('container'))
+				targetCont = targetCont.parentNode
+			let containers = targetCont.parentNode
+
+            targetCont.classList.remove('container-dragged-over')
+			if (targetCont.lastChild && targetCont.lastChild.lastChild)
+				targetCont.lastChild.lastChild.classList.remove('container-dragged-over')
+
+			let sourceElnt = containers.getElementsByClassName('container-hdr-dragged')[0]
+			sourceElnt.classList.remove('container-hdr-dragged')
+
+			// If we are dropping after ourselves, just ignore
+			if (targetCont == sourceElnt)
+				return false
+
+			// Also skip if we dropped on top of the previous container
+			if(targetCont.nextSibling == sourceElnt)
+				return
+
+			const oldChild = containers.removeChild(sourceElnt);
+			targetCont.parentNode.insertBefore(oldChild, targetCont.nextSibling);
+
+        })
+
         this.element.addEventListener('drop', (e) => {
             e.preventDefault()
             if (!e.dataTransfer.types.includes('tab/move')) {
@@ -17,6 +76,7 @@ class ContextualIdentityContainer extends AbstractTabContainer {
             let [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('tab/move').split('/')
             tabId = parseInt(tabId);
             pinned = pinned != 'false'
+            e.currentTarget.classList.remove('tab-dragged-over')
 
             if (this.id != contextualIdentity) {
                 // moving tabs between containers
@@ -36,7 +96,6 @@ class ContextualIdentityContainer extends AbstractTabContainer {
                 })
                 // contextual identity changed
             } else {
-                e.currentTarget.classList.remove('container-dragged-over')
                 let index = -1
                 if(this.tabs.size > 0) {
                     index = this.tabs.values().next().value.tab.index
@@ -62,17 +121,20 @@ class ContextualIdentityContainer extends AbstractTabContainer {
         })
 
         this.element.addEventListener('dragover', (e) => {
-            e.preventDefault()
             if (!e.dataTransfer.types.includes('tab/move')) {
                 return
             }
-            const [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('tab/move').split('/')
-            if (this.id != contextualIdentity) {
-                e.dataTransfer.dropEffect = 'move'
-                return
-            }
-            e.dataTransfer.dropEffect = 'move'
-            e.currentTarget.classList.add('container-dragged-over')
+            e.preventDefault()
+            let [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('tab/move').split('/')
+			pinned = pinned != 'false'
+            if ((this.id != contextualIdentity && pinned)) {
+				e.dataTransfer.dropEffect = 'none'
+				return
+			}
+
+			e.dataTransfer.dropEffect = 'move'
+            e.currentTarget.classList.add('tab-dragged-over')
+
             return false
         })
 

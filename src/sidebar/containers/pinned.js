@@ -2,13 +2,16 @@ class PinnedTabsContainer extends AbstractTabContainer {
 
     init() {
         super.init()
-        
+
         this.element.addEventListener('drop', (e) => {
-            let [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('tab/move').split('/')
+             if (!e.dataTransfer.types.includes('tab/move')) {
+                return
+            }
+           let [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('tab/move').split('/')
             tabId = parseInt(tabId);
             pinned = pinned != 'false'
 
-            e.currentTarget.classList.remove('container-dragged-over')
+            e.currentTarget.classList.remove('tab-dragged-over')
             let index = -1
             if(this.tabs.size > 0) {
                 index = this.tabs.values().next().value.tab.index
@@ -33,13 +36,41 @@ class PinnedTabsContainer extends AbstractTabContainer {
         })
 
         this.element.addEventListener('dragover', (e) => {
-            e.preventDefault()
             if (!e.dataTransfer.types.includes('tab/move')) {
                 return
             }
+            e.preventDefault()
             const [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('tab/move').split('/')
             e.dataTransfer.dropEffect = 'move'
-            e.currentTarget.classList.add('container-dragged-over')
+            e.currentTarget.classList.add('tab-dragged-over')
+            return false
+        })
+
+        this.element.addEventListener('drop', (e) => {
+             if (!e.dataTransfer.types.includes('container/move')) {
+                return
+            }
+			e.currentTarget.classList.remove('container-dragged-over')
+			let containers = document.getElementById('containers')
+			let sourceElnt = containers.getElementsByClassName('container-hdr-dragged')[0]
+			sourceElnt.classList.remove('container-hdr-dragged')
+
+			// Skip moving the first container in the first position
+			if (containers.firstChild == sourceElnt)
+				return
+
+			const oldChild = containers.removeChild(sourceElnt);
+			containers.insertBefore(oldChild, containers.firstChild);
+
+        })
+
+        this.element.addEventListener('dragover', (e) => {
+            if (!e.dataTransfer.types.includes('container/move')) {
+                return
+            }
+			e.preventDefault()
+            e.dataTransfer.dropEffect = 'move'
+			e.currentTarget.classList.add('container-dragged-over')
             return false
         })
     }

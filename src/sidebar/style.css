@@ -170,16 +170,19 @@ li {
 }
 
 
-.container-tab-dragged-over,
-.container-dragged-over .container-header {
+.container-dragged-over .container-header,
+.container-dragged-over .container-tab,
+.tab-dragged-over.container-tab,
+.tab-dragged-over .container-header
+ {
     border-bottom: 1px solid #eee !important;
 }
 
-#pinned-tabs .container-tab-dragged-over {
-    border-right: 1px solid #eee;
+#pinned-tabs.container-dragged-over {
+    border-bottom: 1px solid #eee;
 }
 
-#pinned-tabs.container-dragged-over {
+#pinned-tabs.tab-dragged-over {
     border-left: 1px solid #eee;
 }
 

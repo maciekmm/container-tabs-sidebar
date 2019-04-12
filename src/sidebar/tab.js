@@ -74,15 +74,22 @@ class ContainerTab {
         })
 
         this.element.addEventListener('dragover', (e) => {
-            e.preventDefault()
-            const [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('tab/move').split('/')
-            if ((this.tab.cookieStoreId != contextualIdentity && !this.tab.pinned) || !e.currentTarget.hasAttribute("data-tab-id")) {
-                e.dataTransfer.dropEffect = 'none'
+             if (!e.dataTransfer.types.includes('tab/move')) {
                 return
             }
+			e.preventDefault()
             e.stopPropagation()
+
+            let [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('tab/move').split('/')
+			pinned = pinned != 'false'
+
+            if (this.tab.cookieStoreId != contextualIdentity && !this.tab.pinned && pinned) {
+				e.dataTransfer.dropEffect = 'none'
+				return
+			}
+
             e.dataTransfer.dropEffect = 'move'
-            e.currentTarget.classList.add('container-tab-dragged-over')
+            e.currentTarget.classList.add('tab-dragged-over')
             return false
         })
 
@@ -91,52 +98,74 @@ class ContainerTab {
                 return
             }
             if(!e.target || !e.target.classList) return 
-            e.target.classList.remove('container-tab-dragged-over')
+            e.target.classList.remove('tab-dragged-over')
         })
 
         this.element.addEventListener('dragend', (e) => {
             if (!e.dataTransfer.types.includes('tab/move')) {
                 return
             }
-            e.target.classList.remove('container-tab-dragged-over')
+            e.target.classList.remove('tab-dragged-over')
         })
 
         this.element.addEventListener('drop', (e) => {
             if (!e.dataTransfer.types.includes('tab/move')) {
                 return
             }
+            e.stopPropagation()
+
             let [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('tab/move').split('/')
             tabId = parseInt(tabId);
             pinned = pinned != 'false'
 
-            //                                                  allow moving anything to pinned container
-            if ((this.tab.cookieStoreId != contextualIdentity && !this.tab.pinned)) {
-                e.dataTransfer.dropEffect = 'none'
-                return
-            }
-            e.stopPropagation()
 
-            e.target.classList.remove('container-tab-dragged-over')
-            //   moving from pinned to not  || moving from not pinned to pinned
-            if ((!this.tab.pinned && pinned) || (this.tab.pinned && !pinned)) {
+            e.target.classList.remove('tab-dragged-over')
+
+			//   moving from pinned to not  || moving from not pinned to pinned
+			if ((!this.tab.pinned && pinned) || (this.tab.pinned && !pinned)) {
                 // we need to update the pinned flag as we are moving tabs between pinned and standard containers
                 browser.tabs.update(tabId, {
                     pinned: !pinned
                 }).then((tab) => {
-                    browser.tabs.get(this.tab.id).then((droppedOn) => { // as we pin a tab indexes get shifted by one, thus we need to get new index
+                    browser.tabs.get(this.tab.id).then((droppedOn) => {
+						// as we pin a tab indexes get shifted by one, thus we need to get new index
                         browser.tabs.move(tabId, {
                             windowId: ContainerTabsSidebar.WINDOW_ID,
                             index: droppedOn.index + 1
                         })
                     })
                 })
-            } else {
-                // just reorder tabs as the pinned status does not change (action within container)
-                browser.tabs.move(tabId, {
-                    windowId: ContainerTabsSidebar.WINDOW_ID,
-                    index: this.tab.index + 1
-                })
-            }
+
+            } else if (this.tab.cookieStoreId != contextualIdentity) {
+                  browser.tabs.get(tabId).then((tab) => {
+					  let tabInfo = {
+                          pinned: this.tab.pinned,
+                          openInReaderMode: tab.isInReaderMode,
+                          cookieStoreId: this.tab.cookieStoreId,
+						  index: this.tab.index + 1
+                      }
+                      // firefox treats about:newtab as privileged url,
+					  // but not setting the url allows us to create that page
+                      if(tab.url !== 'about:newtab') {
+                          tabInfo.url = tab.url
+                      }
+                      browser.tabs.create(tabInfo).then((tab) => {
+                          browser.tabs.remove(tabId)
+						  tabId = tab.id
+
+                      })
+				  })
+				// No need to fall through reordering as we opened the new tab in the right place
+				return
+				// contextual identity changed
+			}
+
+
+            // just reorder tabs
+            browser.tabs.move(tabId, {
+                windowId: ContainerTabsSidebar.WINDOW_ID,
+                index: this.tab.index + 1
+            })
         })
 
     }

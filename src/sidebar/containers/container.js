@@ -48,12 +48,20 @@ class AbstractTabContainer {
         this.element.addEventListener('dragleave', (e) => {
             if (!e.currentTarget || !e.currentTarget.classList) return
             e.currentTarget.classList.remove('container-dragged-over')
-        })
+            e.currentTarget.classList.remove('tab-dragged-over')
+
+			if (e.currentTarget.lastChild && e.currentTarget.lastChild.lastChild)
+				e.currentTarget.lastChild.lastChild.classList.remove('container-dragged-over')
+		})
 
         this.element.addEventListener('dragend', (e) => {
             if (!e.currentTarget || !e.currentTarget.classList) return
             e.currentTarget.classList.remove('container-dragged-over')
-        })
+            e.currentTarget.classList.remove('tab-dragged-over')
+
+			if (e.currentTarget.lastChild && e.currentTarget.lastChild.lastChild)
+				e.currentTarget.lastChild.lastChild.classList.remove('container-dragged-over')
+		})
 
         this.render(true)
     }
