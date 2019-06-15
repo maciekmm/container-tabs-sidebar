@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Container Tabs Sidebar",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "description": "Container sidebar tab management",
     "homepage_url": "https://github.com/maciekmm/container-tabs-sidebar",
     "sidebar_action": {
