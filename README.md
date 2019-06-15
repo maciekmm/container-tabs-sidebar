@@ -36,6 +36,8 @@ Action button for opening the sidebar should be implemented in future releases.
 Quote from [Customize with userChrome.css on developer.mozilla.org](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Tutorial/Modifying_the_Default_Skin#Customize_with_userChrome.css)
 >If you place a file called 'userChrome.css' in a directory called 'chrome' inside your user profile directory, you can override settings without changing the archives themselves. This directory should be created when you create a profile and some examples placed there. The file 'userContent.css' customizes Web pages, whereas 'userChrome.css' customizes chrome files.
 
+**Warning:** Starting with Firefox 69 you have to enable *toolkit.legacyUserProfileCustomizations.stylesheets* in *about:config* in order to use modifications listed below.
+
 ### Hiding sidebar header
 
 In order to hide sidebar header you need to append the `userChrome.css` with the following code:
