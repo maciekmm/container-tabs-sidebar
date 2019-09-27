@@ -6,17 +6,20 @@ class ContainerTab {
         this.tab = tab
         this.id = tab.id
         this.element = element
+        this._listeners = {}
     }
 
     init() {
         this._createElements()
         this.render()
 
-        browser.tabs.onUpdated.addListener((id, change, tab) => {
-            if(tab.id !== this.id) return
-            if(!["title", "favIconUrl", "status", "mutedInfo", "audible"].some(prop => Object.keys(change).includes(prop))) return
+        browser.tabs.onUpdated.addListener(this._listeners.update = (id, change, tab) => {
             this.tab = tab
             this.render()
+        }, {
+            tabId: this.id,
+            windowId: ContainerTabsSidebar.WINDOW_ID,
+            properties: ["title", "favIconUrl", "status", "mutedInfo", "audible"]
         })
 
         this.element.setAttribute('draggable', true)
@@ -90,7 +93,7 @@ class ContainerTab {
             if (!e.dataTransfer.types.includes('tab/move')) {
                 return
             }
-            if(!e.target || !e.target.classList) return 
+            if (!e.target || !e.target.classList) return
             e.target.classList.remove('container-tab-dragged-over')
         })
 
@@ -142,7 +145,7 @@ class ContainerTab {
     }
 
     destroy() {
-        //browser.tabs.onUpdated.removeListener(this.listeners.update)
+        browser.tabs.onUpdated.removeListener(this._listeners.update)
     }
 
     _createElements() {
@@ -172,12 +175,12 @@ class ContainerTab {
         this.elements.audible.className = 'container-tab-action--mute container-tab-action'
         this.elements.audible.src = ICON_MUTED
         this.elements.audible.addEventListener('click', (e) => {
-                e.stopPropagation()
-                e.preventDefault()
-                browser.tabs.update(this.id, {
-                    muted: !(this.tab.mutedInfo && this.tab.mutedInfo.muted)
-                })
+            e.stopPropagation()
+            e.preventDefault()
+            browser.tabs.update(this.id, {
+                muted: !(this.tab.mutedInfo && this.tab.mutedInfo.muted)
             })
+        })
         this.element.appendChild(this.elements.audible)
 
         this.element.addEventListener('click', (event) => {
@@ -211,12 +214,14 @@ class ContainerTab {
     }
 
     activate() {
+        if (this.tab.active) return
         this.tab.active = true
         this.render()
         this.scrollIntoView()
     }
 
     deactivate() {
+        if (!this.tab.active) return
         this.tab.active = false
         this.render()
     }
@@ -226,7 +231,7 @@ class ContainerTab {
      */
     scrollIntoView() {
         const box = this.element.getBoundingClientRect()
-        if(box.bottom < 0 || box.top > window.innerHeight) {
+        if (box.bottom < 0 || box.top > window.innerHeight) {
             this.element.scrollIntoView({
                 block: "end",
                 behavior: "auto"

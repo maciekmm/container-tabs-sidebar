@@ -8,7 +8,7 @@
     "lint": "web-ext lint --source-dir ./src",
     "build": "npm test && cd src && web-ext build --overwrite-dest",
     "package": "rm -rf src/web-ext-artifacts && npm run build && mv src/web-ext-artifacts/container_tabs_sidebar-*.zip addon.xpi",
-    "dev": "web-ext run --source-dir ./src --firefox=nightly"
+    "dev": "web-ext run --source-dir ./src"
   },
   "repository": {
     "type": "git",
@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/maciekmm/container-tabs-sidebar#readme",
   "devDependencies": {
-    "addons-linter": "^1.0.0",
-    "web-ext": "^2.6.0"
+    "addons-linter": "^1.14.0",
+    "web-ext": "^3.1.1"
   }
 }
