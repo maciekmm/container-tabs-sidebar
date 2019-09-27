@@ -15,7 +15,7 @@
       "default_title": "Open ContainerTabsSidebar"
     },
     "background": {
-      "scripts": ["action_button.js"]
+      "scripts": ["constants.js", "background/action_button.js"]
     },
     "commands": {
       "_execute_sidebar_action": {
