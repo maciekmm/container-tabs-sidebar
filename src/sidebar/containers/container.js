@@ -91,6 +91,7 @@ class AbstractTabContainer {
     removeTab(tabId) {
         if (!this.tabs.has(tabId)) return
         const tab = this.tabs.get(tabId)
+        tab.destroy()
         this.tabs.delete(tabId)
         tab.element.parentNode.parentNode.removeChild(tab.element.parentNode)
         this.render(false)
@@ -103,6 +104,9 @@ class AbstractTabContainer {
         while (tabContainer.lastChild) {
             tabContainer.removeChild(tabContainer.lastChild)
         }
+        this.tabs.forEach((tab) => {
+            tab.destroy()
+        })
         this.tabs.clear()
 
         for (let firefoxTab of tabs) {

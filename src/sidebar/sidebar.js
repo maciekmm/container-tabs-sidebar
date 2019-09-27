@@ -11,6 +11,12 @@ const ContainerTabsSidebar = {
     // you should get the current window id by browser.windows.getCurrent and provide the value to this function
     init(windowId) {
         this.WINDOW_ID = windowId
+
+        // for tracking sidebar open state
+        browser.runtime.connect({name: INTERNAL_MESSAGING_PORT_NAME}).postMessage({
+            windowId: windowId,
+            opened: true
+        })
     
         // containers
         browser.contextualIdentities.onUpdated.addListener((evt) => {

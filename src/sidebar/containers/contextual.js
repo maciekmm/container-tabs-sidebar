@@ -3,6 +3,7 @@ class ContextualIdentityContainer extends AbstractTabContainer {
         super(element)
         this.contextualIdentity = contextualIdentity
         this.id = contextualIdentity.cookieStoreId
+        this._collapsed = false
     }
 
     init() {
@@ -184,6 +185,7 @@ class ContextualIdentityContainer extends AbstractTabContainer {
     }
 
     set collapsed(val) {
+        if(this._collapsed === val) return
         this._collapsed = val
         this.render(false)
     }
