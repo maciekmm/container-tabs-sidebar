@@ -1,6 +1,6 @@
 {
   "name": "container-tabs-sidebar",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A firefox addon that show tabs in a tree style structure in a sidebar. Inspired by Tree Style Tabs.",
   "main": "index.js",
   "scripts": {
