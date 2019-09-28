@@ -120,26 +120,33 @@ class ContainerTab {
             e.stopPropagation()
 
             e.target.classList.remove('container-tab-dragged-over')
-            //   moving from pinned to not  || moving from not pinned to pinned
-            if ((!this.tab.pinned && pinned) || (this.tab.pinned && !pinned)) {
-                // we need to update the pinned flag as we are moving tabs between pinned and standard containers
-                browser.tabs.update(tabId, {
-                    pinned: !pinned
-                }).then((tab) => {
-                    browser.tabs.get(this.tab.id).then((droppedOn) => { // as we pin a tab indexes get shifted by one, thus we need to get new index
-                        browser.tabs.move(tabId, {
-                            windowId: ContainerTabsSidebar.WINDOW_ID,
-                            index: droppedOn.index + 1
+
+            browser.tabs.get(tabId).then(tab => {
+                // if we move tab upwards the tab will be placed before, if we move it after it will be placed correctly,
+                // we need to compensate for that
+                let compensation = tab.index > this.tab.index ? 1 : 0;
+                //   moving from pinned to not  || moving from not pinned to pinned
+                if ((!this.tab.pinned && pinned) || (this.tab.pinned && !pinned)) {
+                    // we need to update the pinned flag as we are moving tabs between pinned and standard containers
+                    browser.tabs.update(tabId, {
+                        pinned: !pinned
+                    }).then((tab) => {
+                        browser.tabs.get(this.tab.id).then((droppedOn) => { // as we pin a tab indexes get shifted by one, thus we need to get new index
+                            if(tab.index == this.tab.index + 1) return
+    browser.tabs.move(tabId, {
+                                windowId: ContainerTabsSidebar.WINDOW_ID,
+                                index: droppedOn.index + compensation
+                            })
                         })
                     })
-                })
-            } else {
-                // just reorder tabs as the pinned status does not change (action within container)
-                browser.tabs.move(tabId, {
-                    windowId: ContainerTabsSidebar.WINDOW_ID,
-                    index: this.tab.index + 1
-                })
-            }
+                } else {
+                    // just reorder tabs as the pinned status does not change (action within container)
+                    browser.tabs.move(tabId, {
+                        windowId: ContainerTabsSidebar.WINDOW_ID,
+                        index: this.tab.index + compensation
+                    })
+                }
+            })
         })
 
     }
@@ -251,7 +258,7 @@ class ContainerTab {
         }
 
         this.element.href = this.tab.url
-        this.elements.title.innerText = this.tab.title // + ` - (${this.tab.index})`
+        this.elements.title.innerText = this.tab.title //+ ` - (${this.tab.index})`
         this.element.title = this.tab.title
 
         if (this.tab.active) {
