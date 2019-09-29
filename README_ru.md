@@ -1,4 +1,4 @@
-- [Английский](.README.md)
+- [Английский](./README.md)
 - Русский
 
 # Container Tabs Sidebar
