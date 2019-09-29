@@ -1,0 +1,76 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    background: #fefefe;
+    color: #333;
+    padding: 5px;
+}
+
+fieldset {
+    border: 1px solid #eee;
+    width: 80%;
+    background: #fff;
+    margin: 0 auto;
+    outline: 0;
+    padding: 0;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.05);
+    border-radius: 5px;
+}
+
+fieldset > * {
+    padding: 10px 10px 0 10px;
+}
+
+h2 {
+    margin: 0;
+    padding: 10px;
+    color: #aaa;
+    width: 100%;
+    font-weight: 400;
+    border-bottom: 1px solid #eee;
+}
+
+form footer {
+    width: 100%;
+    background: #eee;
+    text-align: right;
+}
+
+input[type="submit"], input[type="reset"] {
+    background: none;
+    border: 0;
+    outline: 0;
+    padding: 5px;
+    border-radius: 5px;
+    min-width: 100px;
+    text-align: center;
+}
+
+form div * {
+    vertical-align: middle;
+}
+
+input[type="submit"] {
+    background: rgba(0, 167, 0, 0.656);
+    color: #eee;
+}
+
+.item {
+    display: inline-flex;
+    justify-content: middle;
+    align-content: center;
+    align-items: center;
+    justify-items: center;
+}
+
+.item label {
+    margin-left: 5px;
+}
+
+.item p {
+    padding: 0;
+    margin: 0;
+    color: #999;
+}

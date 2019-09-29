@@ -1,42 +1,48 @@
 {
-    "manifest_version": 2,
-    "name": "Container Tabs Sidebar",
-    "version": "0.0.7",
-    "description": "Container sidebar tab management",
-    "homepage_url": "https://github.com/maciekmm/container-tabs-sidebar",
-    "sidebar_action": {
-      "default_title": "Container Tabs",
-      "default_panel": "sidebar/sidebar.html",
-      "default_icon": "assets/sidebar-icon.svg",
-      "browser_style": true
-    },
-    "browser_action": {
-      "default_icon": "assets/sidebar-icon.svg",
-      "default_title": "Open ContainerTabsSidebar"
-    },
-    "background": {
-      "scripts": ["constants.js", "background/action_button.js"]
-    },
-    "commands": {
-      "_execute_sidebar_action": {
-        "suggested_key": {
-          "default": "F2"
-        },
-        "description": "show sidebar"
-      }
-    },
-    "applications": {
-      "gecko": {
-        "id": "containertabssidebar@maciekmm.net",
-        "strict_min_version": "57.0"
-      }
-    },
-    "icons": {
-      "98": "assets/icon98.png"
-    },
-    "permissions": [
-      "tabs",
-      "contextualIdentities",
-      "cookies"
-    ]
+  "manifest_version": 2,
+  "name": "Container Tabs Sidebar",
+  "version": "0.0.7",
+  "description": "Container sidebar tab management",
+  "homepage_url": "https://github.com/maciekmm/container-tabs-sidebar",
+  "sidebar_action": {
+    "default_title": "Container Tabs",
+    "default_panel": "sidebar/sidebar.html",
+    "default_icon": "assets/sidebar-icon.svg",
+    "browser_style": true
+  },
+  "browser_action": {
+    "default_icon": "assets/sidebar-icon.svg",
+    "default_title": "Open ContainerTabsSidebar"
+  },
+  "background": {
+    "scripts": ["constants.js", "background/action_button.js"]
+  },
+  "options_ui": {
+    "page": "options/options.html",
+    "browser_style": true
+  },
+  "commands": {
+    "_execute_sidebar_action": {
+      "suggested_key": {
+        "default": "F2"
+      },
+      "description": "show sidebar"
+    }
+  },
+  "applications": {
+    "gecko": {
+      "id": "containertabssidebar@maciekmm.net",
+      "strict_min_version": "57.0"
+    }
+  },
+  "icons": {
+    "98": "assets/icon98.png"
+  },
+  "permissions": [
+    "tabs",
+    "contextualIdentities",
+    "cookies",
+    "menus",
+    "menus.overrideContext"
+  ]
 }

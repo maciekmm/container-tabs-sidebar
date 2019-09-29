@@ -12,6 +12,7 @@ class ContainerTab {
     init() {
         this._createElements()
         this.render()
+          
 
         browser.tabs.onUpdated.addListener(this._listeners.update = (id, change, tab) => {
             this.tab = tab
@@ -23,7 +24,6 @@ class ContainerTab {
         })
 
         this.element.setAttribute('draggable', true)
-
         this.element.addEventListener('contextmenu', (e) => {
             e.preventDefault()
             if (ContainerTabsSidebar.contextMenu) {
