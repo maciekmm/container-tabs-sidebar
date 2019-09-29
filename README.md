@@ -1,3 +1,6 @@
+- English
+- [Russian](./README_ru.md)
+
 # Container Tabs Sidebar
 
 A firefox addon that shows currently opened tabs in a sidebar grouped by a container.
