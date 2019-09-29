@@ -1,46 +1,51 @@
+- Английский
+- Русский
+
 # Container Tabs Sidebar
 
-A firefox addon that shows currently opened tabs in a sidebar grouped by a container.
+Расширение для FireFox, позволяющее сгруппировать открытые в браузере вкладки в боковой панели для быстрого и конфортного доступа к ним.
 
 ![Promotional screenshot](./assets/screenshot.png)
 
-## How to use
+## Требования.
 
-In order to use this addon it's recommended to have firefox version >=59 installed. It might work with versions >=54, but there were no tests done with that version. You can download the latest firefox from [firefox.com](https://www.mozilla.org/en-US/firefox/new/)
+Стабильная работа гарантируется на версиях >=59 firefox. Возможна работоспособность с >=54, но тестов не проводилось. 
+Вы можете найти последнюю версию браузера на [firefox.com](https://www.mozilla.org/en-US/firefox/new/)
 
-### Installing from [addons.mozilla.org](https://addons.mozilla.org/)
+### Установить из [оффициального репозитория Mozilla](https://addons.mozilla.org/)
 
-1. Visit [Container Tabs Sidebar on mozilla.org](https://addons.mozilla.org/en-US/firefox/addon/container-tabs-sidebar/?src=github)
-2. Click Add to Firefox button
+1. Посетите [страницу расширения в магазине расширений Firefox](https://addons.mozilla.org/en-US/firefox/addon/container-tabs-sidebar/?src=github)
+2. Установите расширение.
 
-### Manually installing the addon for development purposes
+### Ручная установка расширения для отладки:
+Вы можете вручную установить расширение следующими способами:
 
-#### Debugging via npm:
-1. If you have npm installed, you can execute the following command: `npm run dev` a new firefox window should open.
+#### Через npm:
+1. Если на вашем устройстве пристутствует npm (пакетный менеджер для node.js),
+в корневой директории расширения выполните команду `npm run dev`, откроется окно браузера.
 
-#### Installing as temporary add-on
-1. Clone or download a zip of this repository
-3. Otherwise open `about:debugging`
-4. Click _Load Temporary Add-on_
-5. Select manifest.json inside `src` directory
-5. The addon should load
+#### В качестве временного расширения:
+1. Склонируйте данный репозиторий или скачайте его содержимое в `.zip` архиве.
+2. Откройте `about:debugging`.
+3. Нажмите "установить временное расширение".
+4. Инициализируйте файл Manifest.json из каталога `/src/`
 
-### Opening the sidebar
+### Как использовать
+Боковая панель FireFox открывается нажатием клавиши F12. При возникновении проблем, 
+вызовите через обычную панель закладок ctrl+b --> Закладки.
 
-In order to open the sidebar click __F2__ button on your keyboard. If it doesn't work then open any sidebar (eg. using __Ctrl+b__), and change the sidebar via dropdown menu.
+Реализация кнопки вызова меню расширения планируется в слудующих версиях.
 
-Action button for opening the sidebar should be implemented in future releases.
+## Модификации внешнего вида.
 
-## Appearance modifications
+Создание файла "userChrome.css" в директории `C:\Users\<ваше имя пользователя>\AppData\Roaming\Mozilla\Firefox\Profiles\`
+позволяет изменять внешний вид тех или иных элементов интерфейса fireFox.
 
-Quote from [Customize with userChrome.css on developer.mozilla.org](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Tutorial/Modifying_the_Default_Skin#Customize_with_userChrome.css)
->If you place a file called 'userChrome.css' in a directory called 'chrome' inside your user profile directory, you can override settings without changing the archives themselves. This directory should be created when you create a profile and some examples placed there. The file 'userContent.css' customizes Web pages, whereas 'userChrome.css' customizes chrome files.
+Примеры заданных правил для стилей приведены ниже.
 
-**Warning:** Starting with Firefox 69 you have to enable *toolkit.legacyUserProfileCustomizations.stylesheets* in *about:config* in order to use modifications listed below.
+**Примечание**: начиная с fireFox 69  использование пользовательских стилей возможно только с уcтановленным флагом toolkit.legacyUserProfileCustomizations.stylesheets в about:config
 
-### Hiding sidebar header
-
-In order to hide sidebar header you need to append the `userChrome.css` with the following code:
+### Скрытие заголовка боковой панели
 
 ```css
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
@@ -50,15 +55,13 @@ In order to hide sidebar header you need to append the `userChrome.css` with the
 }
 ```
 
-Обратите внимание, файл модет содержать только одну namespace.
+Обратите внимание, файл модет содержать только директиву namespace.
 
 |До|После|
 |----|---|
 |![Before hiding](./assets/before-header.png) | ![After hiding](./assets/after-header.png)
 
-### Hiding tab bar
-
-In order to hide tab bar you need to append the `userChrome.css` with the following code:
+### Скрытие панели вкладок.
 
 ```css
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
@@ -68,4 +71,4 @@ In order to hide tab bar you need to append the `userChrome.css` with the follow
 }
 ```
 
-Обратите внимание, файл модет содержать только одну namespace.
+Обратите внимание, файл модет содержать только одну директиву namespace.
