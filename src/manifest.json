@@ -43,6 +43,7 @@
     "contextualIdentities",
     "cookies",
     "menus",
-    "menus.overrideContext"
+    "menus.overrideContext",
+    "storage"
   ]
 }

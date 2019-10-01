@@ -1,0 +1,17 @@
+:root {
+    --color-background: #333;
+    --color-text: #eee;
+    --color-accent: #555;
+    --color-hover:rgb(24, 24, 24);
+    --color-focus: rgba(255, 255, 255, 0.116);
+    --color-default-container: #fff;
+    --color-container-background: #111;
+    --color-container-border: #222;
+    --color-tab-background: #222;
+    --color-close: #ccc;
+    --color-icon: #eee;
+}
+
+.container-header .container-icon {
+    filter: grayscale(1) invert();
+}

@@ -14,9 +14,8 @@
             <h2>Options</h2>
             <div class="item browser-style">
                 <select id="theme" name="theme">
-                    <option>Inherit</option>
-                    <option>Dark</option>
-                    <option>Light</option>
+                    <option value="dark">Dark</option>
+                    <option value="light">Light</option>
                 </select>
                 <label for="theme">
                     Theme
@@ -37,13 +36,13 @@
                     <p>Only active container will be visible</p>
                 </label>
             </div>
-            <div class="item browser-style">
+            <!-- <div class="item browser-style">
                 <input type="checkbox" id="show_all_tabs" name="show_all_tabs">
                 <label for="show_all_tabs">
                     Show tabs from all windows
                     <p>Allows switching between windows</p>
                 </label>
-            </div>
+            </div> -->
             <div class="item browser-style">
                 <input type="text" id="shortcut" name="shortcut">
                 <label for="shortcut">
@@ -51,11 +50,13 @@
                 </label>
             </div>
             <footer>
-                <input type="reset" value="Reset">
+                <!-- <input type="reset" value="Reset"> -->
                 <input type="submit" value="Save">
             </footer>
         </fieldset>
     </form>
+    <script src="../settings.js"></script>
+    <script src="options.js"></script>
 </body>
 
 </html>

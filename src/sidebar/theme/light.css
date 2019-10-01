@@ -1,0 +1,17 @@
+:root {
+    --color-background: #e3e4e6;
+    --color-text: rgb(24,25,26);
+    --color-accent: #555;
+    --color-hover: #e3e4e6;
+    --color-focus: rgba(0, 0, 0, 0.1);
+    --color-default-container: #fff;
+    --color-container-background: #ffffff;
+    --color-container-border: #e3e4e6;
+    --color-tab-background: #ececec;
+    --color-close: var(--color-icon);
+    --color-icon: rgba(24, 25, 26, 0.35);
+}
+
+.favicon-fallback {
+    filter: invert();
+}
