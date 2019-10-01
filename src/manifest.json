@@ -15,7 +15,7 @@
     "default_title": "Open ContainerTabsSidebar"
   },
   "background": {
-    "scripts": ["constants.js", "background/action_button.js"]
+    "scripts": ["constants.js", "settings.js", "background/background.js"]
   },
   "options_ui": {
     "page": "options/options.html",
