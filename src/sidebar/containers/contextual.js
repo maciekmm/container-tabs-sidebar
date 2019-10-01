@@ -100,11 +100,13 @@ class ContextualIdentityContainer extends AbstractTabContainer {
         })
     }
 
-    _handleTabActivated(tab) {
-        if (tab.cookieStoreId === this.id) {
+    _handleTabActivated(change) {
+        if (this.tabs.has(change.tabId)) {
             this.collapsed = false
+        } else if(!!ContainerTabsSidebar.config['collapse_container']) {
+            this.collapsed = true
         }
-        super._handleTabActivated(tab)
+        super._handleTabActivated(change)
     }
 
     _handleTabCreated(newTab) {

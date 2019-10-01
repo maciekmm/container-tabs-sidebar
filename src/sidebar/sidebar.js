@@ -9,16 +9,11 @@ const ContainerTabsSidebar = {
     // There exists a browser.windows.WINDOW_ID_CURRENT, but it yields some negative value
     // It's impossible to compare with ids some events are providing in callbacks, therefore
     // you should get the current window id by browser.windows.getCurrent and provide the value to this function
-    init(window) {
+    init(window, config) {
+        this.config = config
         this.WINDOW_ID = window.id
         this.DEFAULT_COOKIE_STORE_ID = !!window.incognito ? 'firefox-private' : 'firefox-default'
 
-        // for tracking sidebar open state
-        browser.runtime.connect({name: INTERNAL_MESSAGING_PORT_NAME}).postMessage({
-            windowId: window.id,
-            opened: true
-        })
-    
         // containers
         browser.contextualIdentities.onUpdated.addListener((evt) => {
             const container = this.containers.get(evt.contextualIdentity.cookieStoreId)
@@ -97,7 +92,19 @@ const ContainerTabsSidebar = {
 }
 
 {
-    browser.windows.getCurrent().then((window) => {
-        ContainerTabsSidebar.init(window);
+    browser.windows.getCurrent().then((current) => {
+        CTSOptions.getConfig().then(config => ContainerTabsSidebar.init(current, config))
+
+        browser.storage.onChanged.addListener(() => {
+            window.location.reload()
+        })
+
+        // for tracking sidebar open state
+        browser.runtime.connect({name: INTERNAL_MESSAGING_PORT_NAME}).postMessage({
+            windowId: current.id,
+            opened: true
+        })
     })
+
+    
 }

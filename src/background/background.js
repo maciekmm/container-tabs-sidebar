@@ -27,3 +27,12 @@ function toggleSidebar(tab) {
 }
 
 browser.browserAction.onClicked.addListener(toggleSidebar)
+
+
+CTSOptions.getConfig().then(settings => {
+    if(!('shortcut' in settings)) return
+    CTSOptions.getSidebarAction().then(action => {
+        action.shortcut = settings['shortcut']
+        return browser.commands.update(action)
+    })
+})

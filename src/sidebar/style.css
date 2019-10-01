@@ -1,9 +1,12 @@
+
+
 body,
 html {
     box-sizing: border-box;
-    background: #333;
-    height: 100vh;
+    background: var(--color-background);
+    color: var(--color-text);
     overflow: hidden;
+    height: 100%;
 }
 
 a, a:link, a:visited {
@@ -24,13 +27,13 @@ a, a:link, a:visited {
     position: absolute;
     width: 100%;
     text-align: center;
-    color: #555;
+    color: var(--color-accent);
     line-height: 29px;
 }
 
 #pinned-tabs .container-tab {
     flex-basis: 20x;
-    border-bottom: 3px solid #fff;
+    border-bottom: 3px solid var(--color-default-container);
 }
 
 main {
@@ -48,7 +51,7 @@ main {
     width: 100%;
     line-height: 1.3em;
     vertical-align: middle;
-    color: #fff;
+    color: var(--color-text);
 }
 
 li {
@@ -58,20 +61,20 @@ li {
 .container-header {
     width: 100%;
     padding: 0.3em;
-    background: #111;
+    background: var(--color-container-background);
     display: flex;
     align-items: center;
     align-content: center;
-    border-bottom: 1px solid #222;
+    border-bottom: 1px solid var(--color-container-border);
     border-left-width: 0.5em;
     border-left-style: solid;
 }
 
 .container-header .container-icon {
-    width: 25px;
-    padding: 2px;
+    width: 30px;
+    padding: 3px 5px;
     margin: 0;
-    filter: grayscale(1) invert(100%);
+    filter: grayscale(1);
 }
 
 .container-header:hover {
@@ -85,18 +88,18 @@ li {
 }
 
 .container-tab {
-    background: #222;
+    background: var(--color-tab-background);
     list-style: none;
     display: flex;
     align-items: center;
     align-content: center;
     padding: 5px;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid var(--color-background);
 }
 
 .container-tab:hover {
     cursor: pointer;
-    background: rgb(24, 24, 24);
+    background: var(--color-hover)
 }
 
 .container-tab .favicon {
@@ -114,7 +117,7 @@ li {
     display: flex;
     justify-content: center;
     margin-left: auto;
-    color: #eee;
+    color: var(--color-text);
 }
 
 .container-actions .container-action {
@@ -131,7 +134,12 @@ li {
 
 .container-tab-title {
     margin-left: 0.2em;
-    word-break: break-all;
+}
+
+.wrap-titles .container-tab-title {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .container-actions .container-action--newtab {
@@ -141,13 +149,13 @@ li {
 .tab-active,
 .tab-active:hover,
 .context-menu-element:hover {
-    background: rgb(21, 107, 187);
+    background: var(--color-focus)
 }
 
 .container-tab-close, .container-tab-action {
     padding: 0.1em;
     margin-right: 0.1em;
-    color: #aaa;
+    color: var(--color-close);
     font-size: 1.3em;
     display: flex;
     align-items: center;
@@ -172,15 +180,15 @@ li {
 
 .container-tab-dragged-over,
 .container-dragged-over .container-header {
-    border-bottom: 1px solid #eee !important;
+    border-bottom: 1px solid var(--color-text) !important;
 }
 
 #pinned-tabs .container-tab-dragged-over {
-    border-right: 1px solid #eee;
+    border-right: 1px solid var(--color-text);
 }
 
 #pinned-tabs.container-dragged-over {
-    border-left: 1px solid #eee;
+    border-left: 1px solid var(--color-text);
 }
 
 .tab-pinned :not(.favicon) {
@@ -190,19 +198,19 @@ li {
 /* Context Menus */
 #context-menu {
     position: absolute;
-    background: #333;
+    background: var(--color-background);
     display: flex;
     flex-direction: column;
     padding: 0;
-    border: 1px solid #111;
-    color: #fff;
+    border: 1px solid var(--color-container-background);
+    color: var(--color-text);
 }
 
 #context-menu li {
     width: 100%;
     display: block;
     padding: 5px 10px;
-    border-bottom: 1px solid #222;
+    border-bottom: 1px solid var(--color-container-border);
 }
 
 .context-menu-element:hover {

@@ -1,5 +1,6 @@
 const ICON_AUDIBLE = 'chrome://global/skin/media/audioUnmutedButton.svg'
 const ICON_MUTED = 'chrome://global/skin/media/audioMutedButton.svg'
+const FAVICON_FALLBACK_CLASS = 'favicon-fallback'
 
 class ContainerTab {
     constructor(tab, element) {
@@ -12,6 +13,7 @@ class ContainerTab {
     init() {
         this._createElements()
         this.render()
+          
 
         browser.tabs.onUpdated.addListener(this._listeners.update = (id, change, tab) => {
             this.tab = tab
@@ -23,7 +25,6 @@ class ContainerTab {
         })
 
         this.element.setAttribute('draggable', true)
-
         this.element.addEventListener('contextmenu', (e) => {
             e.preventDefault()
             if (ContainerTabsSidebar.contextMenu) {
@@ -168,9 +169,10 @@ class ContainerTab {
         })
 
         this.elements.favicon = document.createElement('img')
-        this.elements.favicon.className = 'favicon'
+        this.elements.favicon.classList.add('favicon')
         this.elements.favicon.addEventListener('error', (e) => {
             this.elements.favicon.src = FAVICON_FALLBACK
+            this.elements.favicon.classList.add(FAVICON_FALLBACK_CLASS)
         })
         this.element.appendChild(this.elements.favicon)
 
@@ -252,8 +254,13 @@ class ContainerTab {
             favIconUrl = FAVICON_LOADING
         } else if (this.tab.favIconUrl) {
             favIconUrl = this.tab.favIconUrl
-        }
+        } 
         if (favIconUrl !== this.elements.favicon.src) {
+            if(favIconUrl !== FAVICON_FALLBACK) {
+                this.elements.favicon.classList.remove(FAVICON_FALLBACK_CLASS)
+            } else {
+                this.elements.favicon.classList.add(FAVICON_FALLBACK_CLASS)
+            }
             this.elements.favicon.src = favIconUrl
         }
 
