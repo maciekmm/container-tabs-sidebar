@@ -136,7 +136,7 @@ li {
     margin-left: 0.2em;
 }
 
-.wrap-titles .container-tab-title {
+body:not(.wrap-titles) .container-tab-title {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
