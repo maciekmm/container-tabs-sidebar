@@ -58,6 +58,7 @@ class PinnedTabsContainer extends AbstractTabContainer {
     }
 
     render(updateTabs) {
+        super.render(updateTabs)
         if (updateTabs) {
             browser.tabs.query({
                 currentWindow: true,

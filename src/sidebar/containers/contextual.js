@@ -140,7 +140,13 @@ class ContextualIdentityContainer extends AbstractTabContainer {
 
         // title
         this.elements.title = document.createElement('span')
+        this.elements.title.className = 'container-title'
         this.elements.containerHeader.appendChild(this.elements.title)
+
+        // tab count
+        this.elements.tabCount = document.createElement('span')
+        this.elements.tabCount.className = 'container-tab-count'
+        this.elements.containerHeader.appendChild(this.elements.tabCount)
 
         // actions
         this.elements.actions = document.createElement('div')
@@ -202,6 +208,7 @@ class ContextualIdentityContainer extends AbstractTabContainer {
     }
 
     render(updateTabs, callback) {
+        super.render(updateTabs)
         // styling (border according to container config)
         const containerHeader = this.elements.containerHeader
         containerHeader.style.borderLeftColor = this.contextualIdentity.colorCode
@@ -211,8 +218,10 @@ class ContextualIdentityContainer extends AbstractTabContainer {
 
         // title
         const titleElement = this.elements.title
-        titleElement.className = 'container-title'
-        titleElement.innerText = this.contextualIdentity.name + ' (' + this.tabs.size + ')'
+        titleElement.innerText = this.contextualIdentity.name
+        
+        // tab count
+        this.elements.tabCount.innerText = this.tabs.size
 
         // collapse
         this.elements.collapse.innerText = (this._collapsed ? '▴' : '▾')

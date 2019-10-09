@@ -97,7 +97,9 @@ class AbstractTabContainer {
         this.render(false)
     }
 
-    render(updateTabs) {}
+    render(updateTabs) {
+        this.element.setAttribute('data-tabs-count', this.tabs.size)
+    }
 
     renderTabs(tabContainer, tabs) {
         // clear children

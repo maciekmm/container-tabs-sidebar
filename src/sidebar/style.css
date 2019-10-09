@@ -173,10 +173,21 @@ body:not(.wrap-titles) .container-tab-title {
     display: none;
 }
 
+.container-tab-count {
+    padding-left: 0.5ch;
+}
+
+.container-tab-count::before {
+    content: '(';
+}
+
+.container-tab-count::after {
+    content: ')';
+}
+
 .audible.container-tab-action--mute {
     display: initial;
 }
-
 
 .container-tab-dragged-over,
 .container-dragged-over .container-header {
