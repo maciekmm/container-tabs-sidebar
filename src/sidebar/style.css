@@ -23,7 +23,7 @@ a, a:link, a:visited {
 }
 
 #pinned-tabs:empty::after {
-    content: 'Drag a tab here to pin it!';
+    content: '__MSG_sidebar_dragToPin__';
     position: absolute;
     width: 100%;
     text-align: center;

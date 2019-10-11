@@ -5,42 +5,42 @@
     <meta charset="utf-8">
     <link href="chrome://browser/content/extension.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
-    <title>Container Tabs Sidebar Options</title>
+    <title data-i18n="options_title">Container Tabs Sidebar Options</title>
 </head>
 
 <body class="browser-style">
     <form>
         <fieldset>
-            <h2>Options</h2>
+            <h2 data-i18n="options">Options</h2>
             <div class="item browser-style">
                 <select id="theme" name="theme">
-                    <option value="dark">Dark</option>
-                    <option value="light">Light</option>
+                    <option value="dark" data-i18n="options_theme_dark">Dark</option>
+                    <option value="light" data-i18n="options_theme_light">Light</option>
                 </select>
                 <label for="theme">
-                    Theme
-                    <p>For inherit to work you must select a theme</p>
+                    <span data-i18n="options_theme">Theme</span>
+                    <p data-i18n="options_theme_description">For inherit to work you must select a theme</p>
                 </label>
             </div>
             <div class="item browser-style">
                 <input type="checkbox" id="wrap_titles" name="wrap_titles">
                 <label for="wrap_titles">
-                    Wrap tab titles
-                    <p>Show whole tab title by using multiple lines</p>
+                    <span data-i18n="options_wrapTabTitles">Wrap tab titles</span>
+                    <p data-i18n="options_wrapTabTitles_description">Show whole tab title by using multiple lines</p>
                 </label>
             </div>
             <div class="item browser-style">
                 <input type="checkbox" id="collapse_container" name="collapse_container">
                 <label for="collapse_container">
-                    Collapse containers on tab change
-                    <p>Only active container will be visible</p>
+                    <span data-i18n="options_collapseContainers">Collapse containers on tab change</span>
+                    <p data-i18n="options_collapseContainers_description">Only active container will be visible</p>
                 </label>
             </div>
             <div class="item browser-style">
                 <input type="checkbox" id="hide_empty" name="hide_empty">
                 <label for="hide_empty">
-                    Hide empty containers
-                    <p>Containers with no tabs will not appear</p>
+                    <span data-i18n="options_hideEmptyContainers">Hide empty containers</span>
+                    <p data-i18n="options_hideEmptyContainers_description">Containers with no tabs will not appear</p>
                 </label>
             </div>
             <!-- <div class="item browser-style">
@@ -53,12 +53,13 @@
             <div class="item browser-style">
                 <input type="text" id="shortcut" name="shortcut">
                 <label for="shortcut">
-                    Shortcut
+                    <span data-i18n="options_shortcut">Shortcut</span>
+                    <p data-i18n="options_shortcut_description">Shortcut for opening sidebar</p>
                 </label>
             </div>
             <footer>
                 <!-- <input type="reset" value="Reset"> -->
-                <input type="submit" value="Save">
+                <input type="submit" value="Save" data-i18n="options_save" data-i18n-attr="value">
             </footer>
         </fieldset>
     </form>

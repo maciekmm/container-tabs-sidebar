@@ -28,4 +28,16 @@
             }
         }
     })
+
+    // internalization
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+        let key = el.getAttribute("data-i18n")
+        let message = browser.i18n.getMessage(key)
+        if(!message) {
+            console.warn("no translation key " + key + " found")
+        } else {
+            let attribute = el.hasAttribute("data-i18n-attr") ? el.getAttribute("data-i18n-attr") : "innerText"
+            el[attribute] = message
+        }
+    })
 }

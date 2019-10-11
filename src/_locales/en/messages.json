@@ -1,0 +1,92 @@
+{
+    "description": {
+        "message": "Display your tabs in the sidebar grouped by privacy containers"
+    },
+    "browserAction_title": {
+        "message": "Open ContainerTabsSidebar"
+    },
+    "sidebar_show": {
+        "message": "Show sidebar"
+    },
+    "sidebar_dragToPin": {
+        "message": "Drag a tab here to pin it!"
+    },
+    "sidebar_menu_closeAll": {
+        "message": "Close all"
+    },
+    "sidebar_menu_reloadAll": {
+        "message": "Reload all"
+    },
+    "sidebar_menu_reloadTab": {
+        "message": "Reload tab"
+    },
+    "sidebar_menu_muteTab": {
+        "message": "Mute tab"
+    },
+    "sidebar_menu_unmuteTab": {
+        "message": "Unmute tab"
+    },
+    "sidebar_menu_pinTab": {
+        "message": "Pin tab"
+    },
+    "sidebar_menu_unpinTab": {
+        "message": "Unpin tab"
+    },
+    "sidebar_menu_duplicateTab": {
+        "message": "Duplicate tab"
+    },
+    "sidebar_menu_moveTabToNewWindow": {
+        "message": "Move tab to new window"
+    },
+    "sidebar_menu_closeOtherTabs": {
+        "message": "Close other tabs"
+    },
+    "sidebar_menu_closeTab": {
+        "message": "Close tab"
+    },
+    "options": {
+        "message": "Options"
+    },
+    "options_title": {
+        "message": "Container Tabs Sidebar Options"
+    },
+    "options_theme": {
+        "message": "Theme"
+    },
+    "options_theme_escription": {
+        "message": "For inherit to work you must select a theme"
+    },
+    "options_theme_dark": {
+        "message": "Dark"
+    },
+    "options_theme_light": {
+        "message": "Light"
+    },
+    "options_wrapTabTitles": {
+        "message": "Wrap tab titles"
+    },
+    "options_wrapTabTitles_description": {
+        "message": "Show whole tab title by using multiple lines"
+    },
+    "options_collapseContainers": {
+        "message": "Collapse containers on tab change" 
+    },
+    "options_collapseContainers_description": {
+        "message": "Only active container will be visible"
+    },
+    "options_hideEmptyContainers": {
+        "message": "Hide empty containers"
+    },
+    "options_hideEmptyContainers_description": {
+        "message": "Containers with no tabs will not appear"
+    },
+    "options_shortcut": {
+        "message": "Shortcut"
+    },
+    "options_shortcut_description": {
+        "message": "Shortcut for opening sidebar"
+    },
+    "options_save": {
+        "message": "Save"
+    }
+}

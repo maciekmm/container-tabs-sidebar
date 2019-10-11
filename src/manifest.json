@@ -2,8 +2,9 @@
   "manifest_version": 2,
   "name": "Container Tabs Sidebar",
   "version": "0.0.8",
-  "description": "Container sidebar tab management",
+  "description": "__MSG_description__",
   "homepage_url": "https://github.com/maciekmm/container-tabs-sidebar",
+  "default_locale": "en",
   "sidebar_action": {
     "default_title": "Container Tabs",
     "default_panel": "sidebar/sidebar.html",
@@ -12,7 +13,7 @@
   },
   "browser_action": {
     "default_icon": "assets/sidebar-icon.svg",
-    "default_title": "Open ContainerTabsSidebar"
+    "default_title": "__MSG_browserAction_title__"
   },
   "background": {
     "scripts": ["constants.js", "settings.js", "background/background.js"]
@@ -26,7 +27,7 @@
       "suggested_key": {
         "default": "F2"
       },
-      "description": "show sidebar"
+      "description": "__MSG_sidebar_show__"
     }
   },
   "applications": {

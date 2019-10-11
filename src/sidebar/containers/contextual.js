@@ -86,13 +86,13 @@ class ContextualIdentityContainer extends AbstractTabContainer {
 
             const contextMenu = new ContextMenu(this)
 
-            contextMenu.addOption('Reload all', () => {
+            contextMenu.addOption('sidebar_menu_reloadAll', () => {
                 Array.from(this.tabs.keys()).forEach((tabId) => {
                     browser.tabs.reload(tabId)
                 })
             })
 
-            contextMenu.addOption('Close all', () => {
+            contextMenu.addOption('sidebar_menu_closeAll', () => {
                 browser.tabs.remove(Array.from(this.tabs.keys()))
             })
 
