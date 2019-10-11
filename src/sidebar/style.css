@@ -240,3 +240,7 @@ body:not(.wrap-titles) .container-tab-title {
     height: 100vh;
     pointer-events: none;
 }
+
+.hide-empty [data-tabs-count="0"] {
+    display: none;
+}

@@ -13,4 +13,8 @@ CTSOptions.getConfig().then(config => {
     if(!!config['wrap_titles']) {
         document.body.classList.add('wrap-titles')
     }
+
+    if(!!config['hide_empty']) {
+        document.body.classList.add('hide-empty')
+    }
 })
