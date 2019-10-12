@@ -33,6 +33,7 @@ class ContainerTab {
                 })
                 return
             }
+            e.preventDefault()
             if (ContainerTabsSidebar.contextMenu) {
                 ContainerTabsSidebar.hideContextMenu()
                 return
