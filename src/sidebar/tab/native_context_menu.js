@@ -1,20 +1,13 @@
-const DEFAULT_MENU_ITEM_OPTIONS = {
-     contexts: ["tab"],
-     viewTypes: ["sidebar"],
-     documentUrlPatterns: [SIDEBAR_URL_PATTERN]
-}
-const optionHandlers = new Map()
+import {
+     addOption,
+     DEFAULT_MENU_ITEM_OPTIONS
+} from '../native_context_menu.js'
 
-function addOption(options, handler) {
-     if (!('id' in options)) {
-          throw new Error('item options should include id field')
-     }
-     let item = {
-          ...DEFAULT_MENU_ITEM_OPTIONS,
+function addTabOption(options, handler) {
+     addOption({
+          contexts: ["tab"],
           ...options
-     }
-     optionHandlers.set(item.id, handler)
-     browser.menus.create(item)
+     }, (info, tab) => handler(tab))
 }
 
 function addReopenInContainerOption(container) {
@@ -28,7 +21,7 @@ function addReopenInContainerOption(container) {
                "16": container.iconUrl
           }
      }
-     addOption(itemOptions, tab => {
+     addTabOption(itemOptions, tab => {
           let tabInfo = {
                pinned: tab.pinned,
                openInReaderMode: tab.isInReaderMode,
@@ -63,7 +56,7 @@ async function updateContextualIdentities() {
 }
 
 async function initReopenInContainer() {
-     addOption({
+     addTabOption({
           id: "reopen-in-container",
           title: browser.i18n.getMessage("sidebar_menu_reopenInContainer")
      })
@@ -79,33 +72,28 @@ async function initReopenInContainer() {
      })
 }
 
-async function init() {
-     browser.menus.onClicked.addListener((info, tab) => {
-          if (optionHandlers.has(info.menuItemId)) {
-               optionHandlers.get(info.menuItemId)(tab)
-          }
-     })
+export async function init() {
 
-     addOption({
+     addTabOption({
           id: "reload-tab",
           title: browser.i18n.getMessage("sidebar_menu_reloadTab")
      }, tab => browser.tabs.reload(tab.id))
 
-     addOption({
+     addTabOption({
           id: "mute-tab",
           title: browser.i18n.getMessage("sidebar_menu_muteTab")
      }, tab => browser.tabs.update(tab.id, {
           muted: !(tab.mutedInfo && tab.mutedInfo.muted)
      }))
 
-     addOption({
+     addTabOption({
           id: "pin-tab",
           title: browser.i18n.getMessage("sidebar_menu_pinTab")
      }, tab => browser.tabs.update(tab.id, {
           pinned: !tab.pinned
      }))
 
-     addOption({
+     addTabOption({
           id: "duplicate-tab",
           title: browser.i18n.getMessage("sidebar_menu_duplicateTab")
      }, tab => browser.tabs.duplicate(tab.id))
@@ -117,12 +105,12 @@ async function init() {
 
      await initReopenInContainer()
 
-     addOption({
+     addTabOption({
           id: "close-others",
           title: browser.i18n.getMessage("sidebar_menu_closeOtherTabs")
      }, tab => ContainerTabsSidebar.containers.get(tab.cookieStoreId).closeOthers(tab.id))
 
-     addOption({
+     addTabOption({
           id: "close-tab",
           title: browser.i18n.getMessage("sidebar_menu_closeTab")
      }, tab => browser.tabs.remove(tab.id))
@@ -130,6 +118,9 @@ async function init() {
      var lastMenuInstanceId = 0;
      var nextMenuInstanceId = 1;
      browser.menus.onShown.addListener(async (info, tab) => {
+          if (!info.contexts.includes('tab') || info.viewType != 'sidebar') {
+               return
+          }
           var menuInstanceId = nextMenuInstanceId++;
           lastMenuInstanceId = menuInstanceId;
 
@@ -144,9 +135,11 @@ async function init() {
           await browser.menus.update('pin-tab', {
                title: !tab.pinned ? browser.i18n.getMessage("sidebar_menu_pinTab") : browser.i18n.getMessage('sidebar_menu_unpinTab')
           })
-          await browser.menus.update(`reopen-in-container:${tab.cookieStoreId}`, {
-               visible: false
-          })
+
+          contextualIdentities.forEach(async ci =>
+               await browser.menus.update(`reopen-in-container:${ci.cookieStoreId}`, {
+                    visible: ci.cookieStoreId != tab.cookieStoreId
+               }))
 
           let tabs = await browser.tabs.query({
                cookieStoreId: tab.cookieStoreId,
@@ -161,10 +154,6 @@ async function init() {
      })
 
      browser.menus.onHidden.addListener(async (info, tab) => {
-          contextualIdentities.forEach(async ci =>
-               await browser.menus.update(`reopen-in-container:${ci.cookieStoreId}`, {
-                    visible: true
-               }))
           lastMenuInstanceId = 0;
      })
 }

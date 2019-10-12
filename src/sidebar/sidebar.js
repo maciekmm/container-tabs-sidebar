@@ -82,6 +82,7 @@ const ContainerTabsSidebar = {
         const containerParent = document.createElement('li')
         containerParent.classList.add('container')
         containerParent.id = 'container-tabs-' + ctxId.cookieStoreId
+        containerParent.setAttribute('data-container-id', ctxId.cookieStoreId)
 
         const container = new ContextualIdentityContainer(ctxId, containerParent)
         container.init(ctxId)
