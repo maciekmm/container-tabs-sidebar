@@ -54,4 +54,6 @@ async function init() {
     })
 }
 
-init()
+if(typeof browser.menus.overrideContext == 'function') {
+    init()
+}

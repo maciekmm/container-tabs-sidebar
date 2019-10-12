@@ -138,4 +138,6 @@ export async function init() {
      }, tab => browser.tabs.remove(tab.id))
 }
 
-init()
+if(typeof browser.menus.overrideContext == 'function') {
+    init()
+}
