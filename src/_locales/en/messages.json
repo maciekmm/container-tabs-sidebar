@@ -12,37 +12,43 @@
         "message": "Drag a tab here to pin it!"
     },
     "sidebar_menu_closeAll": {
-        "message": "Close all"
+        "message": "&Close all"
     },
     "sidebar_menu_reloadAll": {
-        "message": "Reload all"
+        "message": "&Reload all"
     },
     "sidebar_menu_reloadTab": {
-        "message": "Reload tab"
+        "message": "&Reload tab"
     },
     "sidebar_menu_muteTab": {
-        "message": "Mute tab"
+        "message": "&Mute tab"
     },
     "sidebar_menu_unmuteTab": {
-        "message": "Unmute tab"
+        "message": "Un&mute tab"
     },
     "sidebar_menu_pinTab": {
-        "message": "Pin tab"
+        "message": "&Pin tab"
     },
     "sidebar_menu_unpinTab": {
-        "message": "Unpin tab"
+        "message": "Un&pin tab"
     },
     "sidebar_menu_duplicateTab": {
-        "message": "Duplicate tab"
+        "message": "&Duplicate tab"
     },
     "sidebar_menu_moveTabToNewWindow": {
-        "message": "Move tab to new window"
+        "message": "Mo&ve tab to new window"
     },
     "sidebar_menu_closeOtherTabs": {
-        "message": "Close other tabs"
+        "message": "Cl&ose other tabs"
     },
     "sidebar_menu_closeTab": {
-        "message": "Close tab"
+        "message": "&Close tab"
+    },
+    "sidebar_menu_reopenInContainer": {
+        "message": "R&eopen in container"
+    },
+    "sidebar_menu_reopenInContainer_noContainer": {
+        "message": "No container"
     },
     "options": {
         "message": "Options"

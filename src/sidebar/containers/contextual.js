@@ -78,6 +78,12 @@ class ContextualIdentityContainer extends AbstractTabContainer {
         })
 
         this.elements.containerHeader.addEventListener('contextmenu', (e) => {
+            if(typeof browser.menus.overrideContext == 'function') {
+                browser.menus.overrideContext({
+                    showDefaults: false
+                })
+                return
+            }
             e.preventDefault()
             if (ContainerTabsSidebar.contextMenu) {
                 ContainerTabsSidebar.hideContextMenu()

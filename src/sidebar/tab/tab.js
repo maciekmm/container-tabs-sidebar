@@ -26,6 +26,13 @@ class ContainerTab {
 
         this.element.setAttribute('draggable', true)
         this.element.addEventListener('contextmenu', (e) => {
+            if(typeof browser.menus.overrideContext == 'function') {
+                browser.menus.overrideContext({
+                    context: 'tab',
+                    tabId: this.id
+                })
+                return
+            }
             e.preventDefault()
             if (ContainerTabsSidebar.contextMenu) {
                 ContainerTabsSidebar.hideContextMenu()
