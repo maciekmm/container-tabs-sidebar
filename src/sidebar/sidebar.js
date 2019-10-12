@@ -12,7 +12,6 @@ const ContainerTabsSidebar = {
     init(window, config) {
         this.config = config
         this.WINDOW_ID = window.id
-        this.DEFAULT_COOKIE_STORE_ID = !!window.incognito ? 'firefox-private' : 'firefox-default'
 
         // containers
         browser.contextualIdentities.onUpdated.addListener((evt) => {
@@ -41,7 +40,7 @@ const ContainerTabsSidebar = {
                 res.length = 0
             }
             this.render([{
-                cookieStoreId: this.DEFAULT_COOKIE_STORE_ID,
+                cookieStoreId: DEFAULT_COOKIE_STORE_ID,
                 name: window.incognito ? 'Incognito' : 'Default',
                 iconUrl: 'resource://usercontext-content/briefcase.svg',
                 colorCode: '#ffffff'

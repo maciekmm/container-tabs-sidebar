@@ -79,7 +79,7 @@ class ContextMenu {
     }
 
     addOption(label, action) {
-        this.options.set(browser.i18n.getMessage(label), action)
+        this.options.set(browser.i18n.getMessage(label).replace('&', ''), action)
     }
 
     render(parent) {
