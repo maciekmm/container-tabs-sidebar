@@ -5,41 +5,51 @@ import {
 
 function addContainerOption(options, handler) {
     addOption({
-        contexts: ["all"],
+        contexts: ["page"],
         ...options
     }, async (info) => {
-        let element = browser.menus.getTargetElement(info.targetElementId)
-        let containerElement = element.closest('.container')
-        if (!containerElement) {
-            return
+        handler(await getContainerTabsFromInfo(info))
+    }, async (info) => {
+        let tabs = await getContainerTabsFromInfo(info)
+        return {
+            visible: !!tabs,
+            enabled: !!tabs && tabs.length > 0
         }
-        let cookieStoreId = containerElement.getAttribute('data-container-id')
-        handler(cookieStoreId)
     })
+}
+
+async function getContainerTabsFromInfo(info) {
+    let element = browser.menus.getTargetElement(info.targetElementId)
+    let containerElement = element.closest('.container')
+    if (!containerElement) {
+        return null
+    }
+    let cookieStoreId = containerElement.getAttribute('data-container-id')
+    return await browser.tabs.query({
+        cookieStoreId: cookieStoreId,
+        windowId: ContainerTabsSidebar.WINDOW_ID,
+        pinned: false
+    })
+}
+
+function isOnContainer(info) {
+    let element = browser.menus.getTargetElement(info.targetElementId)
+    let containerElement = element.closest('.container')
+    return !!containerElement
 }
 
 async function init() {
     addContainerOption({
         id: 'reload-all',
         title: browser.i18n.getMessage('sidebar_menu_reloadAll')
-    }, async (cookieStoreId) => {
-        let tabs = await browser.tabs.query({
-            cookieStoreId: cookieStoreId,
-            windowId: ContainerTabsSidebar.WINDOW_ID,
-            pinned: false
-        })
+    }, async (tabs) => {
         tabs.forEach((tab) => browser.tabs.reload(tab.id))
     })
 
     addContainerOption({
         id: 'close-all',
         title: browser.i18n.getMessage('sidebar_menu_closeAll')
-    }, async (cookieStoreId) => {
-        let tabs = await browser.tabs.query({
-            cookieStoreId: cookieStoreId,
-            windowId: ContainerTabsSidebar.WINDOW_ID,
-            pinned: false
-        })
+    }, async (tabs) => {
         browser.tabs.remove(tabs.map(tab => tab.id))
     })
 }

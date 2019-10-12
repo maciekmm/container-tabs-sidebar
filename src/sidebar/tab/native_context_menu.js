@@ -3,11 +3,11 @@ import {
      DEFAULT_MENU_ITEM_OPTIONS
 } from '../native_context_menu.js'
 
-function addTabOption(options, handler) {
+function addTabOption(options, clickHandler, openHandler) {
      addOption({
           contexts: ["tab"],
           ...options
-     }, (info, tab) => handler(tab))
+     }, (info, tab) => clickHandler(tab), openHandler)
 }
 
 function addReopenInContainerOption(container) {
@@ -34,6 +34,10 @@ function addReopenInContainerOption(container) {
           browser.tabs.create(tabInfo).then(() => {
                browser.tabs.remove(tab.id)
           })
+     }, (info, tab) => {
+          return {
+               visible: container.cookieStoreId != tab.cookieStoreId
+          }
      })
 }
 
@@ -84,14 +88,22 @@ export async function init() {
           title: browser.i18n.getMessage("sidebar_menu_muteTab")
      }, tab => browser.tabs.update(tab.id, {
           muted: !(tab.mutedInfo && tab.mutedInfo.muted)
-     }))
+     }), (info, tab) => {
+          return {
+               title: tab.mutedInfo && tab.mutedInfo.muted ? browser.i18n.getMessage("sidebar_menu_unmuteTab") : browser.i18n.getMessage('sidebar_menu_muteTab')
+          }
+     })
 
      addTabOption({
           id: "pin-tab",
           title: browser.i18n.getMessage("sidebar_menu_pinTab")
      }, tab => browser.tabs.update(tab.id, {
           pinned: !tab.pinned
-     }))
+     }), (info, tab) => {
+          return {
+               title: !tab.pinned ? browser.i18n.getMessage("sidebar_menu_pinTab") : browser.i18n.getMessage('sidebar_menu_unpinTab')
+          }
+     })
 
      addTabOption({
           id: "duplicate-tab",
@@ -106,56 +118,24 @@ export async function init() {
      await initReopenInContainer()
 
      addTabOption({
-          id: "close-others",
-          title: browser.i18n.getMessage("sidebar_menu_closeOtherTabs")
-     }, tab => ContainerTabsSidebar.containers.get(tab.cookieStoreId).closeOthers(tab.id))
+               id: "close-others",
+               title: browser.i18n.getMessage("sidebar_menu_closeOtherTabs")
+          }, tab => ContainerTabsSidebar.containers.get(tab.cookieStoreId).closeOthers(tab.id),
+          async (info, tab) => {
+               let tabs = await browser.tabs.query({
+                    cookieStoreId: tab.cookieStoreId,
+                    windowId: tab.windowId,
+                    pinned: false
+               })
+               return {
+                    enabled: tabs.length > 1
+               }
+          })
 
      addTabOption({
           id: "close-tab",
           title: browser.i18n.getMessage("sidebar_menu_closeTab")
      }, tab => browser.tabs.remove(tab.id))
-
-     var lastMenuInstanceId = 0;
-     var nextMenuInstanceId = 1;
-     browser.menus.onShown.addListener(async (info, tab) => {
-          if (!info.contexts.includes('tab') || info.viewType != 'sidebar') {
-               return
-          }
-          var menuInstanceId = nextMenuInstanceId++;
-          lastMenuInstanceId = menuInstanceId;
-
-          if (menuInstanceId !== lastMenuInstanceId) {
-               return;
-          }
-
-          await browser.menus.update('mute-tab', {
-               title: tab.mutedInfo && tab.mutedInfo.muted ? browser.i18n.getMessage("sidebar_menu_unmuteTab") : browser.i18n.getMessage('sidebar_menu_muteTab')
-          })
-
-          await browser.menus.update('pin-tab', {
-               title: !tab.pinned ? browser.i18n.getMessage("sidebar_menu_pinTab") : browser.i18n.getMessage('sidebar_menu_unpinTab')
-          })
-
-          contextualIdentities.forEach(async ci =>
-               await browser.menus.update(`reopen-in-container:${ci.cookieStoreId}`, {
-                    visible: ci.cookieStoreId != tab.cookieStoreId
-               }))
-
-          let tabs = await browser.tabs.query({
-               cookieStoreId: tab.cookieStoreId,
-               windowId: tab.windowId,
-               pinned: false
-          })
-          await browser.menus.update('close-others', {
-               enabled: tabs.length > 1
-          })
-
-          browser.menus.refresh()
-     })
-
-     browser.menus.onHidden.addListener(async (info, tab) => {
-          lastMenuInstanceId = 0;
-     })
 }
 
 init()
