@@ -12,6 +12,9 @@
             }
         }
         browser.storage.local.set(settings).then(e => {
+            if(typeof browser.commands.update != 'function') {
+                return
+            }
             CTSOptions.getSidebarAction().then(action => {
                 action.shortcut = settings['shortcut']
                 return browser.commands.update(action)
