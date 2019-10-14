@@ -72,6 +72,7 @@ li {
 
 .container-header .container-icon {
     width: 30px;
+    min-width: 25px;
     padding: 3px 5px;
     margin: 0;
     filter: grayscale(1);
@@ -136,7 +137,7 @@ li {
     margin-left: 0.2em;
 }
 
-body:not(.wrap-titles) .container-tab-title {
+body:not(.wrap-titles) .container-tab-title, .container-title {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
