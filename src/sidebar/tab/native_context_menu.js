@@ -118,6 +118,50 @@ export async function init() {
      await initReopenInContainer()
 
      addTabOption({
+          id: "close-tabs-above",
+          title: "Close tabs &above",
+     }, async tab => {
+          let tabs = (await browser.tabs.query({
+               cookieStoreId: tab.cookieStoreId,
+               windowId: tab.windowId,
+               pinned: false
+          })).filter(t => t.index < tab.index)
+          await browser.tabs.remove(tabs.map(t => t.id))
+     }, async (info, tab) => {
+          let tabs = (await browser.tabs.query({
+               cookieStoreId: tab.cookieStoreId,
+               windowId: tab.windowId,
+               pinned: false
+          })).filter(t => t.index < tab.index)
+          return {
+               enabled: tabs.length > 0,
+               visible: !tab.pinned
+          }
+     })
+
+     addTabOption({
+          id: "close-tabs-below",
+          title: "Close tabs &below",
+     }, async tab => {
+          let tabs = (await browser.tabs.query({
+               cookieStoreId: tab.cookieStoreId,
+               windowId: tab.windowId,
+               pinned: false
+          })).filter(t => t.index > tab.index)
+          await browser.tabs.remove(tabs.map(t => t.id))
+     }, async (info, tab) => {
+          let tabs = (await browser.tabs.query({
+               cookieStoreId: tab.cookieStoreId,
+               windowId: tab.windowId,
+               pinned: false
+          })).filter(t => t.index > tab.index)
+          return {
+               enabled: tabs.length > 0,
+               visible: !tab.pinned
+          }
+     })
+
+     addTabOption({
                id: "close-others",
                title: browser.i18n.getMessage("sidebar_menu_closeOtherTabs")
           }, tab => ContainerTabsSidebar.containers.get(tab.cookieStoreId).closeOthers(tab.id),
@@ -128,7 +172,8 @@ export async function init() {
                     pinned: false
                })
                return {
-                    enabled: tabs.length > 1
+                    enabled: tabs.length > 1,
+                    visible: !tab.pinned
                }
           })
 
@@ -138,6 +183,6 @@ export async function init() {
      }, tab => browser.tabs.remove(tab.id))
 }
 
-if(typeof browser.menus.overrideContext == 'function') {
-    init()
+if (typeof browser.menus.overrideContext == 'function') {
+     init()
 }
