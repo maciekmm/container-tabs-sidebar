@@ -1,5 +1,5 @@
 :root {
-    --padding: 0.3em;
+    --padding: 0.4em;
 }
 body,
 html {
@@ -89,7 +89,7 @@ li {
 }
 
 .container-header .container-icon {
-    width: 30px;
+    width: 25px;
     min-width: 25px;
     padding: 0 var(--padding);
     margin: 0;
@@ -156,6 +156,7 @@ li {
 
 .container-tab-title {
     margin-left: 0.2em;
+    flex-basis: 100%;
 }
 
 body:not(.wrap-titles) .container-tab-title, .container-title {
@@ -176,7 +177,6 @@ body:not(.wrap-titles) .container-tab-title, .container-title {
 
 .container-tab-close, .container-tab-action {
     padding: 0.1em;
-    margin-right: 0.1em;
     color: var(--color-close);
     font-size: 1.3em;
     display: flex;

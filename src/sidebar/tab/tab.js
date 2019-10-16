@@ -167,15 +167,6 @@ class ContainerTab {
 
     _createElements() {
         this.elements = {}
-        this.elements.close = document.createElement('span')
-        this.elements.close.className = 'container-tab-close'
-        this.elements.close.innerText = '✕'
-        this.element.appendChild(this.elements.close)
-        this.elements.close.addEventListener('click', (e) => {
-            e.stopPropagation()
-            e.preventDefault()
-            browser.tabs.remove(this.id)
-        })
 
         this.elements.favicon = document.createElement('img')
         this.elements.favicon.classList.add('favicon')
@@ -200,6 +191,16 @@ class ContainerTab {
             })
         })
         this.element.appendChild(this.elements.audible)
+        
+        this.elements.close = document.createElement('span')
+        this.elements.close.className = 'container-tab-close'
+        this.elements.close.innerText = '✕'
+        this.element.appendChild(this.elements.close)
+        this.elements.close.addEventListener('click', (e) => {
+            e.stopPropagation()
+            e.preventDefault()
+            browser.tabs.remove(this.id)
+        })
 
         this.element.addEventListener('click', (event) => {
             // prevent reloading tab
