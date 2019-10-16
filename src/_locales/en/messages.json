@@ -86,6 +86,12 @@
     "options_hideEmptyContainers_description": {
         "message": "Containers with no tabs will not appear"
     },
+    "options_hideEmptyPinned": {
+        "message": "Hide empty pinned tabs header"
+    },
+    "options_hideEmptyPinned_description": {
+        "message": "Pinned tabs header will reappear when dragging tabs"
+    },
     "options_shortcut": {
         "message": "Shortcut"
     },

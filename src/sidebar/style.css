@@ -1,5 +1,6 @@
-
-
+:root {
+    --padding: 0.3em;
+}
 body,
 html {
     box-sizing: border-box;
@@ -19,12 +20,30 @@ a, a:link, a:visited {
     flex-wrap: wrap;
     margin: 0;
     padding: 0;
+    transition: 0.1s ease-in min-height;
+    width: 100%;
+}
+
+#pinned-tabs[data-tabs-count~="0"] {
     min-height: 29px;
+}
+
+body.hide-empty-pinned:not(.tab-dragged) #pinned-tabs[data-tabs-count="0"] {
+    height: 0;
+    min-height: 0;
+}
+
+.tab-dragged #pinned-tabs:empty::after, body:not(.hide-empty-pinned) #pinned-tabs:empty::after {
+    transform: translateY(0);
 }
 
 #pinned-tabs:empty::after {
     content: '__MSG_sidebar_dragToPin__';
+    transition: 0.05s ease-in transform;
     position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateY(-100%);
     width: 100%;
     text-align: center;
     color: var(--color-accent);
@@ -60,12 +79,11 @@ li {
 
 .container-header {
     width: 100%;
-    padding: 0.3em;
+    padding: calc(var(--padding) / 2);
     background: var(--color-container-background);
     display: flex;
     align-items: center;
     align-content: center;
-    border-bottom: 1px solid var(--color-container-border);
     border-left-width: 0.5em;
     border-left-style: solid;
 }
@@ -73,7 +91,7 @@ li {
 .container-header .container-icon {
     width: 30px;
     min-width: 25px;
-    padding: 3px 5px;
+    padding: 0 var(--padding);
     margin: 0;
     filter: grayscale(1);
 }
@@ -94,7 +112,10 @@ li {
     display: flex;
     align-items: center;
     align-content: center;
-    padding: 5px;
+    padding: var(--padding);
+}
+
+.container-tabs li:not(:last-child) .container-tab{ 
     border-bottom: 1px solid var(--color-background);
 }
 

@@ -65,6 +65,7 @@ class PinnedTabsContainer extends AbstractTabContainer {
                 pinned: true
             }).then((res) => {
                 this.renderTabs(this.element, res)
+                this.render(false)
             })
         }
     }

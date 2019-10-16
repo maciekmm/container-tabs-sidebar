@@ -82,6 +82,7 @@ class ContainerTab {
             e.dataTransfer.effectAllowed = 'move';
             e.dataTransfer.setData('tab/move', this.id + '/' + this.tab.cookieStoreId + '/' + this.tab.pinned);
             this.element.classList.add('container-tab-dragged');
+            document.body.classList.add('tab-dragged')
         })
 
         this.element.addEventListener('dragover', (e) => {
@@ -110,6 +111,7 @@ class ContainerTab {
                 return
             }
             e.target.classList.remove('container-tab-dragged-over')
+            document.body.classList.remove('tab-dragged')
         })
 
         this.element.addEventListener('drop', (e) => {

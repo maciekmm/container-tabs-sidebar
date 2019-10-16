@@ -17,4 +17,10 @@ CTSOptions.getConfig().then(config => {
     if(!!config['hide_empty']) {
         document.body.classList.add('hide-empty')
     }
+
+    if(!!config['hide_empty_pinned']) {
+        document.body.classList.add('hide-empty-pinned')
+    }
+}, err => {
+    injectCSS(`theme/${DEFAULT_THEME}.css`)
 })
