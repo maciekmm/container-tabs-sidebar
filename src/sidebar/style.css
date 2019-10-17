@@ -229,7 +229,7 @@ body:not(.wrap-titles) .container-tab-title, .container-title {
 }
 
 .tab-pinned :not(.favicon) {
-    display: none;
+    display: none !important;
 }
 
 /* Context Menus */
