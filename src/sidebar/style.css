@@ -1,5 +1,5 @@
 :root {
-    --padding: 0.33em;
+    --padding: 0.4em;
 }
 body,
 html {
@@ -79,12 +79,12 @@ li {
 
 .container-header {
     width: 100%;
-    padding: calc(var(--padding) / 2);
+    padding: calc(var(--padding) / 3);
     background: var(--color-container-background);
     display: flex;
     align-items: center;
     align-content: center;
-    border-left-width: 0.5em;
+    border-left-width: 0.3em;
     border-left-style: solid;
 }
 
@@ -103,7 +103,7 @@ li {
 .container-tabs {
     width: 100%;
     display: block;
-    padding-inline-start: 5px;
+    padding-inline-start: 0.3em;
 }
 
 .container-tab {
@@ -175,11 +175,15 @@ body:not(.wrap-titles) .container-tab-title, .container-title {
     background: var(--color-focus)
 }
 
+.container-tab:hover .container-tab-close {
+    display: flex;
+}
+
 .container-tab-close, .container-tab-action {
-    padding: 0.1em;
+    padding: 0em;
+    display: none;
     color: var(--color-close);
     font-size: 1.3em;
-    display: flex;
     align-items: center;
     border-radius: 3px;
     align-self: stretch;
