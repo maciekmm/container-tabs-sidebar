@@ -3,114 +3,114 @@
         "message": "Display your tabs in the sidebar grouped by privacy containers"
     },
     "browserAction_title": {
-        "message": "Open ContainerTabsSidebar"
+        "message": "Otwórz ContainerTabsSidebar"
     },
     "containerIncognito": {
-        "message": "Incognito"
+        "message": "Prywatny"
     },
     "containerDefault": {
-        "message": "Default"
+        "message": "Domyślny"
     },
     "sidebar_show": {
-        "message": "Show sidebar"
+        "message": "Pokaż panel boczny"
     },
     "sidebar_dragToPin": {
-        "message": "Drag a tab here to pin it!"
+        "message": "Przeciągnij kartę aby przypiąć!"
     },
     "sidebar_menu_closeAll": {
-        "message": "&Close all"
+        "message": "&Zamknij wszystkie"
     },
     "sidebar_menu_reloadAll": {
-        "message": "&Reload all"
+        "message": "&Przeładuj wszystkie"
     },
     "sidebar_menu_reloadTab": {
-        "message": "&Reload tab"
+        "message": "&Przeładuj kartę"
     },
     "sidebar_menu_muteTab": {
-        "message": "&Mute tab"
+        "message": "&Wycisz kartę"
     },
     "sidebar_menu_unmuteTab": {
-        "message": "Un&mute tab"
+        "message": "&Odcisz kartę"
     },
     "sidebar_menu_pinTab": {
-        "message": "&Pin tab"
+        "message": "&Przypnij kartę"
     },
     "sidebar_menu_unpinTab": {
-        "message": "Un&pin tab"
+        "message": "Ode&pnij kartę"
     },
     "sidebar_menu_duplicateTab": {
-        "message": "&Duplicate tab"
+        "message": "&Duplikuj kartę"
     },
     "sidebar_menu_moveTabToNewWindow": {
-        "message": "Mo&ve tab to new window"
+        "message": "Przenieś kartę do &nowego okna"
     },
     "sidebar_menu_closeOtherTabs": {
-        "message": "Cl&ose other tabs"
+        "message": "Zamknij &inne karty"
     },
     "sidebar_menu_closeTabsAbove": {
-        "message": "Close tabs &above"
+        "message": "Zamknij karty po&wyżej"
     },
     "sidebar_menu_closeTabsBelow": {
-        "message": "Close tabs &below"
+        "message": "Zamknij karty po&niżej"
     },
     "sidebar_menu_closeTab": {
-        "message": "&Close tab"
+        "message": "&Zamknij kartę"
     },
     "sidebar_menu_reopenInContainer": {
-        "message": "R&eopen in container"
+        "message": "&Otwórz w innym kontenerze"
     },
     "sidebar_menu_reopenInContainer_noContainer": {
-        "message": "No container"
+        "message": "&Bez kontenera"
     },
     "options": {
-        "message": "Options"
+        "message": "Opcje"
     },
     "options_title": {
-        "message": "Container Tabs Sidebar Options"
+        "message": "Opcje Container Tabs Sidebar"
     },
     "options_theme": {
-        "message": "Theme"
+        "message": "Skórka"
     },
     "options_theme_description": {
         "message": ""
     },
     "options_theme_dark": {
-        "message": "Dark"
+        "message": "Ciemna"
     },
     "options_theme_light": {
-        "message": "Light"
+        "message": "Jasna"
     },
     "options_wrapTabTitles": {
-        "message": "Wrap tab titles"
+        "message": "Zawijaj tytuły kart"
     },
     "options_wrapTabTitles_description": {
-        "message": "Show whole tab title by using multiple lines"
+        "message": "Pokazuj całe tytuły kart"
     },
     "options_collapseContainers": {
-        "message": "Collapse containers on tab change" 
+        "message": "Zwiń nieaktywne kontenery podczas zmiany karty" 
     },
     "options_collapseContainers_description": {
-        "message": "Only active container will be visible"
+        "message": "Tylko aktywny kontener będzie widoczny"
     },
     "options_hideEmptyContainers": {
-        "message": "Hide empty containers"
+        "message": "Schowaj puste kontenery"
     },
     "options_hideEmptyContainers_description": {
-        "message": "Containers with no tabs will not appear"
+        "message": "Kontenery bez kart nie będą widoczne"
     },
     "options_hideEmptyPinned": {
-        "message": "Hide empty pinned tabs header"
+        "message": "Schowaj obszar przypiętych kart gdy jest pusty"
     },
     "options_hideEmptyPinned_description": {
-        "message": "Pinned tabs header will reappear when dragging tabs"
+        "message": "Obszar przypiętych kart wysunie się gdy przeciągniesz kartę"
     },
     "options_shortcut": {
-        "message": "Shortcut"
+        "message": "Skrót klawiszowy"
     },
     "options_shortcut_description": {
-        "message": "Shortcut for opening sidebar"
+        "message": "Skrót klawiszowy by otworzyć panel boczny"
     },
     "options_save": {
-        "message": "Save"
+        "message": "Zapisz"
     }
 }

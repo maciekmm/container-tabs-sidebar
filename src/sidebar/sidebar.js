@@ -41,7 +41,7 @@ const ContainerTabsSidebar = {
             }
             this.render([{
                 cookieStoreId: DEFAULT_COOKIE_STORE_ID,
-                name: window.incognito ? 'Incognito' : 'Default',
+                name: browser.i18n.getMessage(window.incognito ? 'containerIncognito' : 'containerDefault'),
                 iconUrl: 'resource://usercontext-content/briefcase.svg',
                 colorCode: '#ffffff'
             }, ...res]);
