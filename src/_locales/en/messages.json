@@ -41,6 +41,12 @@
     "sidebar_menu_closeOtherTabs": {
         "message": "Cl&ose other tabs"
     },
+    "sidebar_menu_closeTabsAbove": {
+        "message": "Close tabs &above"
+    },
+    "sidebar_menu_closeTabsBelow": {
+        "message": "Close tabs &below"
+    },
     "sidebar_menu_closeTab": {
         "message": "&Close tab"
     },

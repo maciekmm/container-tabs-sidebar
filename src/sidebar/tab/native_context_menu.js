@@ -119,7 +119,7 @@ export async function init() {
 
      addTabOption({
           id: "close-tabs-above",
-          title: "Close tabs &above",
+          title: browser.i18n.getMessage("sidebar_menu_closeTabsAbove")
      }, async tab => {
           let tabs = (await browser.tabs.query({
                cookieStoreId: tab.cookieStoreId,
@@ -141,7 +141,7 @@ export async function init() {
 
      addTabOption({
           id: "close-tabs-below",
-          title: "Close tabs &below",
+          title: browser.i18n.getMessage("sidebar_menu_closeTabsBelow")
      }, async tab => {
           let tabs = (await browser.tabs.query({
                cookieStoreId: tab.cookieStoreId,
