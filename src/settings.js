@@ -1,6 +1,7 @@
 const CTSOptions = {
     defaults: {
-        theme: 'dark'
+        theme: 'dark',
+        containers: {}
     },
 
     getSidebarAction: function () {
@@ -16,8 +17,13 @@ const CTSOptions = {
         })
     },
 
+    //TODO: reactive store
     getConfig: function () {
         return new Promise((resolve, reject) => {
+            if ('store' in this) {
+                resolve(this.store)
+                return
+            }
             browser.storage.local.get().then(c => {
                 for (let key in this.defaults) {
                     if (!(key in c)) {
@@ -26,10 +32,10 @@ const CTSOptions = {
                 }
                 this.getSidebarAction().then(action => {
                     c['shortcut'] = action.shortcut
-                    resolve(c)
+                    resolve(this.store = c)
                 }, err => {
                     console.error('error occured while getting sidebar actions', err)
-                    resolve(c)
+                    resolve(this.store = c)
                 })
             })
         })

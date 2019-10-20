@@ -1,7 +1,8 @@
 class AbstractTabContainer {
-    constructor(element) {
+    constructor(element, config) {
         this.element = element
         this.tabs = new Map()
+        this._config = config
     }
 
     init() {
