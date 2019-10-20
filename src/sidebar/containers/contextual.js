@@ -1,16 +1,9 @@
 class ContextualIdentityContainer extends AbstractTabContainer {
-    constructor(contextualIdentity, element, config) {
-        super(element, config)
+    constructor(contextualIdentity, element) {
+        super(element)
         this.contextualIdentity = contextualIdentity
         this.id = contextualIdentity.cookieStoreId
-        if(!(this.id in config['containers'])) {
-            config['containers'][this.id] = {collapsed: false}
-        }
-        //FIXME: this is ugly
-        this._containerConfig = new Proxy(config['containers'][this.id], {set: function(o,k,v) {
-            o[k] = v
-            return browser.storage.local.set({containers: config['containers']})
-        }})
+        this._collapsed = false
     }
 
     init() {
@@ -116,7 +109,7 @@ class ContextualIdentityContainer extends AbstractTabContainer {
     _handleTabActivated(change) {
         if (this.tabs.has(change.tabId)) {
             this.collapsed = false
-        } else if(!!this._config['collapse_container']) {
+        } else if(!!ContainerTabsSidebar.config['collapse_container']) {
             this.collapsed = true
         }
         super._handleTabActivated(change)
@@ -206,13 +199,13 @@ class ContextualIdentityContainer extends AbstractTabContainer {
     }
 
     set collapsed(val) {
-        if(this._containerConfig['collapsed'] === val) return
-        this._containerConfig['collapsed'] = val
+        if(this._collapsed === val) return
+        this._collapsed = val
         this.render(false)
     }
 
     get collapsed() {
-        return this._containerConfig['collapsed']
+        return this._collapsed
     }
 
     refresh(contextualIdentity) {
@@ -237,8 +230,8 @@ class ContextualIdentityContainer extends AbstractTabContainer {
         this.elements.tabCount.innerText = this.tabs.size
 
         // collapse
-        this.elements.collapse.innerText = (this.collapsed ? '▴' : '▾')
-        if (this.collapsed) {
+        this.elements.collapse.innerText = (this._collapsed ? '▴' : '▾')
+        if (this._collapsed) {
             this.element.classList.add('collapsed')
         } else {
             this.element.classList.remove('collapsed')
