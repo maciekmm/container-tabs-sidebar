@@ -4,7 +4,6 @@ const FAVICON_FALLBACK = '../assets/no-favicon.svg'
 const ContainerTabsSidebar = {
     containers: new Map(),
     elements: {},
-    pinnedTabs: new PinnedTabsContainer(document.getElementById('pinned-tabs')),
 
     // There exists a browser.windows.WINDOW_ID_CURRENT, but it yields some negative value
     // It's impossible to compare with ids some events are providing in callbacks, therefore
@@ -12,6 +11,7 @@ const ContainerTabsSidebar = {
     init(window, config) {
         this.config = config
         this.WINDOW_ID = window.id
+        this.pinnedTabs = new PinnedTabsContainer(document.getElementById('pinned-tabs'), config)
 
         // containers
         browser.contextualIdentities.onUpdated.addListener((evt) => {
@@ -84,7 +84,7 @@ const ContainerTabsSidebar = {
         containerParent.id = 'container-tabs-' + ctxId.cookieStoreId
         containerParent.setAttribute('data-container-id', ctxId.cookieStoreId)
 
-        const container = new ContextualIdentityContainer(ctxId, containerParent)
+        const container = new ContextualIdentityContainer(ctxId, containerParent, this.config)
         container.init(ctxId)
         this.containers.set(ctxId.cookieStoreId, container)
         return container
@@ -95,7 +95,10 @@ const ContainerTabsSidebar = {
     browser.windows.getCurrent().then((current) => {
         CTSOptions.getConfig().then(config => ContainerTabsSidebar.init(current, config))
 
-        browser.storage.onChanged.addListener(() => {
+        browser.storage.onChanged.addListener((changes) => {
+            if(Object.keys(changes).length == 1 && 'containers' in changes) {
+                return
+            }
             window.location.reload()
         })
 
