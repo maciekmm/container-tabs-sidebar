@@ -1,9 +1,9 @@
 class ContextualIdentityContainer extends AbstractTabContainer {
-    constructor(contextualIdentity, element) {
+    constructor(contextualIdentity, element, sessionStorage) {
         super(element)
         this.contextualIdentity = contextualIdentity
         this.id = contextualIdentity.cookieStoreId
-        this._collapsed = false
+        this._sessionStorage = sessionStorage
     }
 
     init() {
@@ -199,13 +199,13 @@ class ContextualIdentityContainer extends AbstractTabContainer {
     }
 
     set collapsed(val) {
-        if(this._collapsed === val) return
-        this._collapsed = val
+        if(this._sessionStorage['collapsed'] === val) return
+        this._sessionStorage['collapsed'] = val
         this.render(false)
     }
 
     get collapsed() {
-        return this._collapsed
+        return this._sessionStorage['collapsed']
     }
 
     refresh(contextualIdentity) {
@@ -230,8 +230,8 @@ class ContextualIdentityContainer extends AbstractTabContainer {
         this.elements.tabCount.innerText = this.tabs.size
 
         // collapse
-        this.elements.collapse.innerText = (this._collapsed ? '▴' : '▾')
-        if (this._collapsed) {
+        this.elements.collapse.innerText = (this.collapsed ? '▴' : '▾')
+        if (this.collapsed) {
             this.element.classList.add('collapsed')
         } else {
             this.element.classList.remove('collapsed')
