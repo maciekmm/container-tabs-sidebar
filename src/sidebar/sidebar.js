@@ -9,8 +9,9 @@ const ContainerTabsSidebar = {
     // There exists a browser.windows.WINDOW_ID_CURRENT, but it yields some negative value
     // It's impossible to compare with ids some events are providing in callbacks, therefore
     // you should get the current window id by browser.windows.getCurrent and provide the value to this function
-    init(window, config) {
+    init(window, config, sessionStorage) {
         this.config = config
+        this.sessionStorage = sessionStorage
         this.WINDOW_ID = window.id
 
         // containers
@@ -78,33 +79,38 @@ const ContainerTabsSidebar = {
         }
     },
 
-    createContainer(ctxId) {
+    createContainer(ctx) {
         const containerParent = document.createElement('li')
         containerParent.classList.add('container')
-        containerParent.id = 'container-tabs-' + ctxId.cookieStoreId
-        containerParent.setAttribute('data-container-id', ctxId.cookieStoreId)
+        containerParent.id = 'container-tabs-' + ctx.cookieStoreId
+        containerParent.setAttribute('data-container-id', ctx.cookieStoreId)
 
-        const container = new ContextualIdentityContainer(ctxId, containerParent)
-        container.init(ctxId)
-        this.containers.set(ctxId.cookieStoreId, container)
+        if(!this.sessionStorage[ctx.cookieStoreId]) {
+            this.sessionStorage[ctx.cookieStoreId] = {}
+        }
+
+        const container = new ContextualIdentityContainer(ctx, containerParent, this.sessionStorage[ctx.cookieStoreId])
+        container.init(ctx)
+        this.containers.set(ctx.cookieStoreId, container)
         return container
     },
 }
 
-{
-    browser.windows.getCurrent().then((current) => {
-        CTSOptions.getConfig().then(config => ContainerTabsSidebar.init(current, config))
+async function init(){
+    let window = await browser.windows.getCurrent()
+    let config = await CTSOptions.getConfig()
+    let sessionStorage = await CTSOptions.getSessionStorage(window)
+    ContainerTabsSidebar.init(window, config, sessionStorage)
 
-        browser.storage.onChanged.addListener(() => {
-            window.location.reload()
-        })
-
-        // for tracking sidebar open state
-        browser.runtime.connect({name: INTERNAL_MESSAGING_PORT_NAME}).postMessage({
-            windowId: current.id,
-            opened: true
-        })
+    browser.storage.onChanged.addListener(() => {
+        window.location.reload()
     })
 
-    
+    // for tracking sidebar open state
+    browser.runtime.connect({name: INTERNAL_MESSAGING_PORT_NAME}).postMessage({
+        windowId: window.id,
+        opened: true
+    })
 }
+
+init()

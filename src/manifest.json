@@ -45,6 +45,7 @@
     "cookies",
     "menus",
     "menus.overrideContext",
-    "storage"
+    "storage",
+    "sessions"
   ]
 }
