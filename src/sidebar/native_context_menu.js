@@ -46,11 +46,8 @@ function restoreMostRecent(sessionInfos) {
 function restoreTab() {
     browser.sessions.getRecentlyClosed({
             maxResults: 1
-    }).then((sessionInfos) => {
-            restoreMostRecent(sessionInfos)
-            parent.innerHTML = '';
-            parent.className = '';
-        },
+    }).then(
+        (sessionInfos) => restoreMostRecent(sessionInfos),
         (err) => console.error(err)
     );
 };
