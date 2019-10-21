@@ -102,15 +102,15 @@ async function init(){
     let sessionStorage = await CTSOptions.getSessionStorage(window)
     ContainerTabsSidebar.init(window, config, sessionStorage)
 
-    browser.storage.onChanged.addListener(() => {
-        window.location.reload()
-    })
-
     // for tracking sidebar open state
     browser.runtime.connect({name: INTERNAL_MESSAGING_PORT_NAME}).postMessage({
         windowId: window.id,
         opened: true
     })
 }
+
+browser.storage.onChanged.addListener(() => {
+    window.location.reload()
+})
 
 init()
