@@ -41,49 +41,28 @@ function restoreMostRecent(sessionInfos) {
     if (sessionInfo.tab) {
       browser.sessions.restore(sessionInfo.tab.sessionId);
     }
-  }
+}
+
+function restoreTab() {
+    browser.sessions.getRecentlyClosed({
+            maxResults: 1
+    }).then((sessionInfos) => {
+            restoreMostRecent(sessionInfos)
+            parent.innerHTML = '';
+            parent.className = '';
+        },
+        (err) => console.error(err)
+    );
+};
 
 async function init() {
     await browser.menus.removeAll()
+
     browser.menus.onClicked.addListener(async (info, tab) => {
         if (optionHandlers.has(info.menuItemId)) {
             await optionHandlers.get(info.menuItemId).click(info, tab)
         }
     })
-
-    browser.tabs.onRemoved.addListener(() => {
-        const parent = document.getElementById('undo-closed-tab')
-        if (!parent.hasChildNodes()) {
-            parent.className = 'container-tab'
-
-            const undoElement = document.createElement('span')
-            undoElement.className = 'container-tab-title'
-            undoElement.innerText = "Undo closed tab"
-
-            const undoIcon = document.createElement('span')
-            undoIcon.className = 'container-action'
-            undoIcon.innerText = '↶'
-
-            parent.appendChild(undoIcon)
-
-            undoElement.addEventListener('click', (e) => {
-                e.stopPropagation()
-                e.preventDefault()
-                browser.sessions.getRecentlyClosed({
-                      maxResults: 1
-                }).then(
-                    (sessionInfos) => {
-                        restoreMostRecent(sessionInfos)
-                        parent.innerHTML = '';
-                        parent.className = '';
-                    },
-                    (err) => console.error(err)
-                );
-            })
-            
-            parent.appendChild(undoElement)
-        }
-      });
 
     browser.menus.onShown.addListener(async (info, tab) => {
         if (info.viewType != 'sidebar') {
@@ -119,6 +98,16 @@ async function init() {
     browser.menus.onHidden.addListener(async (info, tab) => {
         lastMenuInstanceId = 0;
     })
+
+    browser.tabs.onRemoved.addListener(() => {
+        const item = {
+            id: "undo-tab",
+            title: browser.i18n.getMessage("sidebar_menu_undoClosedTab"),
+            contexts: ["page", "tab"],
+        };
+
+        addOption(item, restoreTab, null);
+    });
 }
 
 if(typeof browser.menus.overrideContext == 'function') {
