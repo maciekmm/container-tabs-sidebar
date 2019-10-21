@@ -13,5 +13,19 @@
 }
 
 .container-header .container-icon {
-    filter: grayscale(1) invert();
+    filter: grayscale(1) invert(1);
+}
+
+.tab-pinned .container-tab-action--mute:hover {
+    filter: grayscale(1) invert(0);
+    background: rgba(255,255,255,0.9) !important;
+    opacity: 1;
+}
+
+:not(.tab-pinned) .container-tab-action--mute:hover {
+    background: rgba(0, 0, 0,0.1);
+}
+
+.container-tab-action--mute {
+    filter: grayscale(1) invert(100%);
 }
