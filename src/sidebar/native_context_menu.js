@@ -40,8 +40,6 @@ function restoreMostRecent(sessionInfos) {
     let sessionInfo = sessionInfos[0];
     if (sessionInfo.tab) {
       browser.sessions.restore(sessionInfo.tab.sessionId);
-    } else {
-      browser.sessions.restore(sessionInfo.window.sessionId);
     }
   }
 
