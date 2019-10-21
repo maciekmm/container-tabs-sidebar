@@ -63,7 +63,7 @@
         "message": "&Bez kontenera"
     },
     "sidebar_menu_undoClosedTab": {
-        "message": "Cofnij zamkniętą kartę"
+        "message": "Przywróć &zamkniętą kartę"
     },
     "options": {
         "message": "Opcje"

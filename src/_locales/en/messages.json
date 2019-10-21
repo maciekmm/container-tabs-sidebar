@@ -63,7 +63,7 @@
         "message": "No container"
     },
     "sidebar_menu_undoClosedTab": {
-        "message": "Undo closed tab"
+        "message": "&Undo close tab"
     },
     "options": {
         "message": "Options"

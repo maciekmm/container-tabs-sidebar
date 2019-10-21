@@ -178,6 +178,27 @@ export async function init() {
           })
 
      addTabOption({
+        id: 'undo-closed-tab',
+        title: browser.i18n.getMessage("sidebar_menu_undoClosedTab"),
+     }, async () => {
+          let sessions = await browser.sessions.getRecentlyClosed({
+               maxResults: 1
+          })
+          if(!sessions.length) return;
+          let sessionInfo = sessions[0]
+          if(sessionInfo.tab) {
+               browser.sessions.restore(sessionInfo.tab.sessionId)
+          }
+     }, async () => {
+          let sessions = await browser.sessions.getRecentlyClosed({
+               maxResults: 1
+          })
+          return {
+               enabled: !!sessions.length && !!sessions[0].tab
+          }
+     })
+
+     addTabOption({
           id: "close-tab",
           title: browser.i18n.getMessage("sidebar_menu_closeTab")
      }, tab => browser.tabs.remove(tab.id))

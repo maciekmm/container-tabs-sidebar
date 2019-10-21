@@ -32,26 +32,6 @@ function includesAny(arr, incl) {
 var lastMenuInstanceId = 0;
 var nextMenuInstanceId = 1;
 
-function restoreMostRecent(sessionInfos) {
-    if (!sessionInfos.length) {
-      console.log("No sessions found")
-      return;
-    }
-    let sessionInfo = sessionInfos[0];
-    if (sessionInfo.tab) {
-      browser.sessions.restore(sessionInfo.tab.sessionId);
-    }
-}
-
-function restoreTab() {
-    browser.sessions.getRecentlyClosed({
-            maxResults: 1
-    }).then(
-        (sessionInfos) => restoreMostRecent(sessionInfos),
-        (err) => console.error(err)
-    );
-};
-
 async function init() {
     await browser.menus.removeAll()
 
@@ -95,16 +75,6 @@ async function init() {
     browser.menus.onHidden.addListener(async (info, tab) => {
         lastMenuInstanceId = 0;
     })
-
-    browser.tabs.onRemoved.addListener(() => {
-        const item = {
-            id: "undo-tab",
-            title: browser.i18n.getMessage("sidebar_menu_undoClosedTab"),
-            contexts: ["page", "tab"],
-        };
-
-        addOption(item, restoreTab, null);
-    });
 }
 
 if(typeof browser.menus.overrideContext == 'function') {
