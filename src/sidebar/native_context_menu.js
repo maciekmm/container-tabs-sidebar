@@ -34,6 +34,7 @@ var nextMenuInstanceId = 1;
 
 async function init() {
     await browser.menus.removeAll()
+
     browser.menus.onClicked.addListener(async (info, tab) => {
         if (optionHandlers.has(info.menuItemId)) {
             await optionHandlers.get(info.menuItemId).click(info, tab)
