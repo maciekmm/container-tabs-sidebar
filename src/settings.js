@@ -2,36 +2,21 @@ const defaults = {
     theme: 'dark'
 }
 
-export function getSidebarAction() {
-    return new Promise((resolve, reject) => {
-        browser.commands.getAll().then(cmds => {
-            let filtered = cmds.filter(e => e.name === "_execute_sidebar_action")
-            if (filtered.length == 1) {
-                resolve(filtered[0])
-                return
-            }
-            reject('no actions found')
-        })
-    })
+export async function getSidebarAction() {
+    return (await browser.commands.getAll())
+        .filter(e => e.name === '_execute_sidebar_action')[0]
 }
 
-export function getConfig() {
-    return new Promise((resolve, reject) => {
-        browser.storage.local.get().then(c => {
-            for (let key in defaults) {
-                if (!(key in c)) {
-                    c[key] = defaults[key]
-                }
-            }
-            getSidebarAction().then(action => {
-                c['shortcut'] = action.shortcut
-                resolve(c)
-            }, err => {
-                console.error('error occured while getting sidebar actions', err)
-                resolve(c)
-            })
-        })
-    })
+export async function getConfig() {
+    let cfg = await browser.storage.local.get()
+    for (let key in defaults) {
+        if (!(key in cfg)) {
+            cfg[key] = defaults[key]
+        }
+    }
+    let sidebarAction = await getSidebarAction()
+    cfg['shortcut'] = sidebarAction.shortcut
+    return cfg
 }
 
 var sessionStorage;

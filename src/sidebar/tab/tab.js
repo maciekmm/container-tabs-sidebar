@@ -18,7 +18,6 @@ export default class ContainerTab {
     init() {
         this._createElements()
         this.render()
-          
 
         browser.tabs.onUpdated.addListener(this._listeners.update = (id, change, tab) => {
             this.tab = tab
