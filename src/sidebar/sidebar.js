@@ -44,6 +44,8 @@ const ContainerTabsSidebar = {
                 cookieStoreId: DEFAULT_COOKIE_STORE_ID,
                 name: browser.i18n.getMessage(window.incognito ? 'containerIncognito' : 'containerDefault'),
                 iconUrl: 'resource://usercontext-content/briefcase.svg',
+                icon: 'briefcase',
+                color: 'white',
                 colorCode: '#ffffff'
             }, ...res]);
             this.pinnedTabs.init()

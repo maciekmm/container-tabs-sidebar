@@ -220,7 +220,8 @@ class ContextualIdentityContainer extends AbstractTabContainer {
         containerHeader.style.borderLeftColor = this.contextualIdentity.colorCode
 
         // favicon
-        this.elements.icon.src = this.contextualIdentity.iconUrl
+        // this.elements.icon.src = this.contextualIdentity.iconUrl
+        this.elements.icon.src = `/assets/contextual-identities/${this.contextualIdentity.icon}.svg#${this.contextualIdentity.color}`
 
         // title
         const titleElement = this.elements.title

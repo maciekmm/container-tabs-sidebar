@@ -12,10 +12,6 @@
     --color-icon: #eee;
 }
 
-.container-header .container-icon {
-    filter: grayscale(1) invert(1);
-}
-
 .tab-pinned .container-tab-action--mute:hover {
     filter: grayscale(1) invert(0);
     background: rgba(255,255,255,0.9) !important;

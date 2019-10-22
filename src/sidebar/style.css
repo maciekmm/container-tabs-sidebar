@@ -91,9 +91,9 @@ li {
 .container-header .container-icon {
     width: 25px;
     min-width: 25px;
-    padding: 0 var(--padding);
+    padding: 0 calc(var(--padding) / 2);
     margin: 0;
-    filter: grayscale(1);
+    /* filter: grayscale(1); */
 }
 
 .container-header:hover {

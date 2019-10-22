@@ -18,7 +18,7 @@ function addReopenInContainerOption(container) {
      }
      if (container.icon) {
           itemOptions.icons = {
-               "16": container.iconUrl
+               "16": `/assets/contextual-identities/${container.icon}.svg#${container.color}`
           }
      }
      addTabOption(itemOptions, tab => {
@@ -50,6 +50,8 @@ async function updateContextualIdentities() {
 
      containers.unshift({
           cookieStoreId: DEFAULT_COOKIE_STORE_ID,
+          icon: 'briefcase',
+          color: 'white',
           name: browser.i18n.getMessage("sidebar_menu_reopenInContainer_noContainer")
      })
 
