@@ -1,3 +1,8 @@
+import {
+    getSidebarAction,
+    getConfig
+} from '../settings.js'
+
 {
     const options = document.querySelectorAll('[name]')
     const form = document.querySelector('form')
@@ -15,14 +20,14 @@
             if(typeof browser.commands.update != 'function') {
                 return
             }
-            CTSOptions.getSidebarAction().then(action => {
+            getSidebarAction().then(action => {
                 action.shortcut = settings['shortcut']
                 return browser.commands.update(action)
             })
         })
     })
 
-    CTSOptions.getConfig().then(c => {
+    getConfig().then(c => {
         for (let option of options) {
             if (option.type.toLowerCase() == 'checkbox') {
                 option.checked = c[option.name]

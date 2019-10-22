@@ -1,10 +1,22 @@
-const FAVICON_LOADING = 'chrome://global/skin/icons/loading.png'
-const FAVICON_FALLBACK = '../assets/no-favicon.svg'
+import {
+    INTERNAL_MESSAGING_PORT_NAME,
+    DEFAULT_COOKIE_STORE_ID
+} from '../constants.js'
+import {
+    getConfig,
+    getSessionStorage
+} from '../settings.js'
+import {
+    loadAppearance
+} from './theme/appearance.js'
+import PinnedTabsContainer from './containers/pinned.js'
+import ContextualIdentityContainer from './containers/contextual.js'
+import {init as initContainerContextMenu} from './contextmenu/container.js'
+import {init as initTabContextMenu} from './contextmenu/tab.js'
 
-const ContainerTabsSidebar = {
+export const ContainerTabsSidebar = {
     containers: new Map(),
     elements: {},
-    pinnedTabs: new PinnedTabsContainer(document.getElementById('pinned-tabs')),
 
     // There exists a browser.windows.WINDOW_ID_CURRENT, but it yields some negative value
     // It's impossible to compare with ids some events are providing in callbacks, therefore
@@ -12,7 +24,10 @@ const ContainerTabsSidebar = {
     init(window, config, sessionStorage) {
         this.config = config
         this.sessionStorage = sessionStorage
-        this.WINDOW_ID = window.id
+        this.window = window
+        this.pinnedTabs = new PinnedTabsContainer(window, document.getElementById('pinned-tabs')),
+
+        loadAppearance(config)
 
         // containers
         browser.contextualIdentities.onUpdated.addListener((evt) => {
@@ -30,7 +45,13 @@ const ContainerTabsSidebar = {
             this.addContextualIdentity(evt.contextualIdentity)
         })
 
-        ContextMenuManager.init()
+
+        if(typeof browser.menus.overrideContext == 'function') {
+            initContainerContextMenu()
+            initTabContextMenu()
+        } else {
+            ContextMenuManager.init()
+        }
 
         const containersList = document.getElementById('containers')
         this.elements.containersList = containersList
@@ -91,7 +112,7 @@ const ContainerTabsSidebar = {
             this.sessionStorage[ctx.cookieStoreId] = {}
         }
 
-        const container = new ContextualIdentityContainer(ctx, containerParent, this.sessionStorage[ctx.cookieStoreId])
+        const container = new ContextualIdentityContainer(this.window, this.config, ctx, containerParent, this.sessionStorage[ctx.cookieStoreId])
         container.init(ctx)
         this.containers.set(ctx.cookieStoreId, container)
         return container
@@ -100,8 +121,8 @@ const ContainerTabsSidebar = {
 
 async function init(){
     let window = await browser.windows.getCurrent()
-    let config = await CTSOptions.getConfig()
-    let sessionStorage = await CTSOptions.getSessionStorage(window)
+    let config = await getConfig()
+    let sessionStorage = await getSessionStorage(window)
     ContainerTabsSidebar.init(window, config, sessionStorage)
 
     // for tracking sidebar open state

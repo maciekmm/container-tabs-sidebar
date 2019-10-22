@@ -1,7 +1,10 @@
 import {
      addOption,
      DEFAULT_MENU_ITEM_OPTIONS
-} from '../native_context_menu.js'
+} from './base.js'
+import {
+     DEFAULT_COOKIE_STORE_ID
+} from '../../constants.js'
 
 function addTabOption(options, clickHandler, openHandler) {
      addOption({
@@ -166,7 +169,14 @@ export async function init() {
      addTabOption({
                id: "close-others",
                title: browser.i18n.getMessage("sidebar_menu_closeOtherTabs")
-          }, tab => ContainerTabsSidebar.containers.get(tab.cookieStoreId).closeOthers(tab.id),
+          }, async tab => {
+               let tabs = await browser.tabs.query({
+                    cookieStoreId: tab.cookieStoreId,
+                    windowId: tab.windowId,
+                    pinned: false
+               })
+               browser.tabs.remove(Array.from(tabs.map(t=>t.id)).filter(key => key != tab.id))
+          }, 
           async (info, tab) => {
                let tabs = await browser.tabs.query({
                     cookieStoreId: tab.cookieStoreId,
@@ -204,8 +214,4 @@ export async function init() {
           id: "close-tab",
           title: browser.i18n.getMessage("sidebar_menu_closeTab")
      }, tab => browser.tabs.remove(tab.id))
-}
-
-if (typeof browser.menus.overrideContext == 'function') {
-     init()
 }

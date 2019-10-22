@@ -1,3 +1,9 @@
+import { INTERNAL_MESSAGING_PORT_NAME } from '../constants.js'
+import {
+    getConfig,
+    getSidebarAction
+} from '../settings.js'
+
 /**
  * In order to detect whether a sidebar is opened without a periodical sidebarAction.isOpen() call we use messaging mechanism.
  * When sidebar closes the connection is closed firing an event at the receiving end. 
@@ -29,10 +35,9 @@ function toggleSidebar(tab) {
 browser.browserAction.onClicked.addListener(toggleSidebar)
 
 
-CTSOptions.getConfig().then(settings => {
-    if(!('shortcut' in settings) || typeof browser.commands.update != 'function') return
-    CTSOptions.getSidebarAction().then(action => {
-        action.shortcut = settings['shortcut']
-        return browser.commands.update(action)
-    })
+getConfig().then(async settings => {
+    if (!('shortcut' in settings) || typeof browser.commands.update != 'function') return
+    let action = await getSidebarAction()
+    action.shortcut = settings['shortcut']
+    return browser.commands.update(action)
 })

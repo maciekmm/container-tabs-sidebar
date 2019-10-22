@@ -7,7 +7,10 @@ function injectCSS(file) {
     document.head.appendChild(link)
 }
 
-CTSOptions.getConfig().then(config => {
+export function loadAppearance(config) {
+    if(!('theme' in config)) {
+        config.theme = DEFAULT_THEME
+    }
     injectCSS('theme/' + config.theme + '.css')
 
     if(!!config['wrap_titles']) {
@@ -21,6 +24,4 @@ CTSOptions.getConfig().then(config => {
     if(!!config['hide_empty_pinned']) {
         document.body.classList.add('hide-empty-pinned')
     }
-}, err => {
-    injectCSS(`theme/${DEFAULT_THEME}.css`)
-})
+}

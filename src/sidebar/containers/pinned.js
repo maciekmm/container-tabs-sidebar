@@ -1,4 +1,6 @@
-class PinnedTabsContainer extends AbstractTabContainer {
+import AbstractTabContainer from './container.js'
+
+export default class PinnedTabsContainer extends AbstractTabContainer {
 
     init() {
         super.init()
@@ -20,13 +22,13 @@ class PinnedTabsContainer extends AbstractTabContainer {
                     pinned: true,
                 }).then(() => {
                     browser.tabs.move(tabId, {
-                        windowId: ContainerTabsSidebar.WINDOW_ID,
+                        windowId: this._window.id,
                         index: index
                     })
                 })
             } else {
                 browser.tabs.move(tabId, {
-                    windowId: ContainerTabsSidebar.WINDOW_ID,
+                    windowId: this._window.id,
                     index: index
                 })
             }

@@ -1,25 +1,28 @@
-class AbstractTabContainer {
-    constructor(element) {
+import ContainerTab from '../tab/tab.js'
+
+export default class AbstractTabContainer {
+    constructor(window, element) {
         this.element = element
+        this._window = window
         this.tabs = new Map()
     }
 
     init() {
         browser.tabs.onActivated.addListener((activeInfo) => {
-            if (activeInfo.windowId !== ContainerTabsSidebar.WINDOW_ID) return
-
+            if (activeInfo.windowId !== this._window.id) return
+            
             this._handleTabActivated(activeInfo)
         })
 
         browser.tabs.onCreated.addListener((newTab) => {
-            if (newTab.windowId !== ContainerTabsSidebar.WINDOW_ID) return
+            if (newTab.windowId !== this._window.id) return
 
             this._handleTabCreated(newTab)
         })
 
         browser.tabs.onRemoved.addListener((tabId, removeInfo) => {
             if (removeInfo.isWindowClosing) return
-            if (removeInfo.windowId !== ContainerTabsSidebar.WINDOW_ID) return
+            if (removeInfo.windowId !== this._window.id) return
             if (!this.tabs.has(tabId)) return
             this.removeTab(tabId)
         })
@@ -30,7 +33,7 @@ class AbstractTabContainer {
         })
 
         browser.tabs.onAttached.addListener((tabId, attachInfo) => {
-            if (attachInfo.newWindowId !== ContainerTabsSidebar.WINDOW_ID) {
+            if (attachInfo.newWindowId !== this._window.id) {
                 if (!this.tabs.has(tabId)) return
                 this.removeTab(tabId)
             } else {
@@ -118,7 +121,7 @@ class AbstractTabContainer {
             tabElement.setAttribute('data-tab-id', firefoxTab.id)
             tabElement.setAttribute('data-ci-id', firefoxTab.cookieStoreId)
 
-            const tab = new ContainerTab(firefoxTab, tabElement)
+            const tab = new ContainerTab(this._window, this, firefoxTab, tabElement)
             this.tabs.set(tab.id, tab)
             tab.init()
 

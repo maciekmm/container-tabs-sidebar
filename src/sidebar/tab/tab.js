@@ -1,12 +1,17 @@
+import ContextMenuManager from '../context_menu.js'
 const ICON_AUDIBLE = 'chrome://global/skin/media/audioUnmutedButton.svg'
 const ICON_MUTED = 'chrome://global/skin/media/audioMutedButton.svg'
+const FAVICON_LOADING = 'chrome://global/skin/icons/loading.png'
+const FAVICON_FALLBACK = '../assets/no-favicon.svg'
 const FAVICON_FALLBACK_CLASS = 'favicon-fallback'
 
-class ContainerTab {
-    constructor(tab, element) {
+export default class ContainerTab {
+    constructor(window, container, tab, element) {
         this.tab = tab
         this.id = tab.id
         this.element = element
+        this._container = container
+        this._window = window
         this._listeners = {}
     }
 
@@ -20,7 +25,7 @@ class ContainerTab {
             this.render()
         }, {
             tabId: this.id,
-            windowId: ContainerTabsSidebar.WINDOW_ID,
+            windowId: this._window.id,
             properties: ["title", "favIconUrl", "status", "mutedInfo", "audible"]
         })
 
@@ -34,8 +39,8 @@ class ContainerTab {
                 return
             }
             e.preventDefault()
-            if (ContainerTabsSidebar.contextMenu) {
-                ContainerTabsSidebar.hideContextMenu()
+            if (ContextMenuManager.contextMenu) {
+                ContextMenuManager.hide()
                 return
             }
 
@@ -68,7 +73,7 @@ class ContainerTab {
             })
 
             contextMenu.addOption('sidebar_menu_closeOtherTabs', () => {
-                ContainerTabsSidebar.containers.get(this.tab.cookieStoreId).closeOthers(this.id)
+                this._container.closeOthers(this.id)
             })
 
             contextMenu.addOption('sidebar_menu_closeTab', () => {
@@ -144,7 +149,7 @@ class ContainerTab {
                         browser.tabs.get(this.tab.id).then((droppedOn) => { // as we pin a tab indexes get shifted by one, thus we need to get new index
                             if(tab.index == this.tab.index + 1) return
     browser.tabs.move(tabId, {
-                                windowId: ContainerTabsSidebar.WINDOW_ID,
+                                windowId: this._window.id,
                                 index: droppedOn.index + compensation
                             })
                         })
@@ -152,7 +157,7 @@ class ContainerTab {
                 } else {
                     // just reorder tabs as the pinned status does not change (action within container)
                     browser.tabs.move(tabId, {
-                        windowId: ContainerTabsSidebar.WINDOW_ID,
+                        windowId: this._window.id,
                         index: this.tab.index + compensation
                     })
                 }

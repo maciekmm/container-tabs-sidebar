@@ -1,8 +1,12 @@
-class ContextualIdentityContainer extends AbstractTabContainer {
-    constructor(contextualIdentity, element, sessionStorage) {
-        super(element)
+import AbstractTabContainer from './container.js'
+import ContextMenuManager from '../context_menu.js'
+
+export default class ContextualIdentityContainer extends AbstractTabContainer {
+    constructor(window, config, contextualIdentity, element, sessionStorage) {
+        super(window, element)
         this.contextualIdentity = contextualIdentity
         this.id = contextualIdentity.cookieStoreId
+        this._config = config
         this._sessionStorage = sessionStorage
     }
 
@@ -49,13 +53,13 @@ class ContextualIdentityContainer extends AbstractTabContainer {
                         pinned: false,
                     }).then(() => {
                         browser.tabs.move(tabId, {
-                            windowId: ContainerTabsSidebar.WINDOW_ID,
+                            windowId: this._window.id,
                             index: index // move to the front
                         })
                     })
                 } else {
                     browser.tabs.move(tabId, {
-                        windowId: ContainerTabsSidebar.WINDOW_ID,
+                        windowId: this._window.id,
                         index: index // move to the end
                     })
                 }
@@ -85,8 +89,8 @@ class ContextualIdentityContainer extends AbstractTabContainer {
                 return
             }
             e.preventDefault()
-            if (ContainerTabsSidebar.contextMenu) {
-                ContainerTabsSidebar.hideContextMenu()
+            if (ContextMenuManager.contextMenu) {
+                ContextMenuManager.hide()
                 return
             }
 
@@ -109,7 +113,7 @@ class ContextualIdentityContainer extends AbstractTabContainer {
     _handleTabActivated(change) {
         if (this.tabs.has(change.tabId)) {
             this.collapsed = false
-        } else if(!!ContainerTabsSidebar.config['collapse_container']) {
+        } else if(!!this._config['collapse_container']) {
             this.collapsed = true
         }
         super._handleTabActivated(change)
@@ -117,7 +121,7 @@ class ContextualIdentityContainer extends AbstractTabContainer {
 
     _handleTabCreated(newTab) {
         if (newTab.cookieStoreId !== this.id) return
-        if (newTab.windowId !== ContainerTabsSidebar.WINDOW_ID) return
+        if (newTab.windowId !== this._window.id) return
         this.render(true, () => {
             const renderedTab = this.tabs.get(newTab.id)
             if (renderedTab) {

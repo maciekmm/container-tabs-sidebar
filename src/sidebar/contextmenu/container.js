@@ -1,7 +1,6 @@
 import {
     addOption,
-    DEFAULT_MENU_ITEM_OPTIONS
-} from '../native_context_menu.js'
+} from './base.js'
 
 function addContainerOption(options, handler) {
     addOption({
@@ -20,14 +19,18 @@ function addContainerOption(options, handler) {
 
 async function getContainerTabsFromInfo(info) {
     let element = browser.menus.getTargetElement(info.targetElementId)
+    if(!element) {
+        return null
+    }
     let containerElement = element.closest('.container')
     if (!containerElement) {
         return null
     }
     let cookieStoreId = containerElement.getAttribute('data-container-id')
+    let window = await browser.windows.getCurrent()
     return await browser.tabs.query({
         cookieStoreId: cookieStoreId,
-        windowId: ContainerTabsSidebar.WINDOW_ID,
+        windowId: window.id,
         pinned: false
     })
 }
@@ -38,7 +41,7 @@ function isOnContainer(info) {
     return !!containerElement
 }
 
-async function init() {
+export async function init() {
     addContainerOption({
         id: 'reload-all',
         title: browser.i18n.getMessage('sidebar_menu_reloadAll')
@@ -52,8 +55,4 @@ async function init() {
     }, async (tabs) => {
         browser.tabs.remove(tabs.map(tab => tab.id))
     })
-}
-
-if(typeof browser.menus.overrideContext == 'function') {
-    init()
 }

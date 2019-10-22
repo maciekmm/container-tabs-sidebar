@@ -70,7 +70,7 @@ const ContextMenuManager = {
     }
 }
 
-class ContextMenu {
+export class ContextMenu {
     constructor(context, options = []) {
         this.options = new Map()
         for(let option of options) {
@@ -95,3 +95,5 @@ class ContextMenu {
         })
     }
 }
+
+export default ContextMenuManager
