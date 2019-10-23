@@ -195,9 +195,9 @@ body:not(.wrap-titles) .container-tab-title, .container-title {
 .container-tab-action--mute {
     margin-left: auto;
     opacity: 0.7;
-    flex-basis: 18px;
-    min-width: 18px;
-    height: 18px;
+    flex-basis: 16px;
+    min-width: 16px;
+    height: 16px;
     display: none;
 }
 
