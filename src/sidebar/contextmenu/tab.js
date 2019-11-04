@@ -123,6 +123,13 @@ export async function init() {
      await initReopenInContainer()
 
      addTabOption({
+          id: 'move-to-new-window',
+          title: browser.i18n.getMessage("sidebar_menu_moveTabToNewWindow")
+     }, tab => browser.windows.create({
+          tabId: tab.id
+     }))
+
+     addTabOption({
           id: "close-tabs-above",
           title: browser.i18n.getMessage("sidebar_menu_closeTabsAbove")
      }, async tab => {
@@ -167,16 +174,16 @@ export async function init() {
      })
 
      addTabOption({
-               id: "close-others",
-               title: browser.i18n.getMessage("sidebar_menu_closeOtherTabs")
-          }, async tab => {
-               let tabs = await browser.tabs.query({
-                    cookieStoreId: tab.cookieStoreId,
-                    windowId: tab.windowId,
-                    pinned: false
-               })
-               browser.tabs.remove(Array.from(tabs.map(t=>t.id)).filter(key => key != tab.id))
-          }, 
+          id: "close-others",
+          title: browser.i18n.getMessage("sidebar_menu_closeOtherTabs")
+     }, async tab => {
+          let tabs = await browser.tabs.query({
+               cookieStoreId: tab.cookieStoreId,
+               windowId: tab.windowId,
+               pinned: false
+          })
+          browser.tabs.remove(Array.from(tabs.map(t => t.id)).filter(key => key != tab.id))
+     },
           async (info, tab) => {
                let tabs = await browser.tabs.query({
                     cookieStoreId: tab.cookieStoreId,
@@ -190,15 +197,15 @@ export async function init() {
           })
 
      addTabOption({
-        id: 'undo-closed-tab',
-        title: browser.i18n.getMessage("sidebar_menu_undoClosedTab"),
+          id: 'undo-closed-tab',
+          title: browser.i18n.getMessage("sidebar_menu_undoClosedTab"),
      }, async () => {
           let sessions = await browser.sessions.getRecentlyClosed({
                maxResults: 1
           })
-          if(!sessions.length) return;
+          if (!sessions.length) return;
           let sessionInfo = sessions[0]
-          if(sessionInfo.tab) {
+          if (sessionInfo.tab) {
                browser.sessions.restore(sessionInfo.tab.sessionId)
           }
      }, async () => {
