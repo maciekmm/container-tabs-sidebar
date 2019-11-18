@@ -75,7 +75,7 @@
         "message": "Theme"
     },
     "options_theme_description": {
-        "message": ""
+        "message": "Customise the color scheme"
     },
     "options_theme_dark": {
         "message": "Dark"
@@ -106,6 +106,9 @@
     },
     "options_hideEmptyPinned_description": {
         "message": "Pinned tabs header will reappear when dragging tabs"
+    },
+    "options_css_description": {
+        "message": "Inject custom CSS for customisation"
     },
     "options_shortcut": {
         "message": "Shortcut"

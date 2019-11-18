@@ -113,6 +113,9 @@
     "options_shortcut_description": {
         "message": "Skrót klawiszowy by otworzyć panel boczny"
     },
+    "options_css_description": {
+        "message": "Wstrzyknij dodatkowe style"
+    },
     "options_save": {
         "message": "Zapisz"
     }

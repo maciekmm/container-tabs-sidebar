@@ -29,6 +29,9 @@ import {
 
     getConfig().then(c => {
         for (let option of options) {
+            if(!c[option.name]) {
+                continue
+            }
             if (option.type.toLowerCase() == 'checkbox') {
                 option.checked = c[option.name]
             } else {
