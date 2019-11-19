@@ -2,9 +2,6 @@ import {
      addOption,
      DEFAULT_MENU_ITEM_OPTIONS
 } from './base.js'
-import {
-     DEFAULT_COOKIE_STORE_ID
-} from '../../constants.js'
 
 function addTabOption(options, clickHandler, openHandler) {
      addOption({
@@ -50,9 +47,10 @@ async function updateContextualIdentities() {
      contextualIdentities.clear()
 
      let containers = await browser.contextualIdentities.query({})
+     let window = await browser.windows.getCurrent()
 
      containers.unshift({
-          cookieStoreId: DEFAULT_COOKIE_STORE_ID,
+          cookieStoreId: !!window.incognito ? 'firefox-private' : 'firefox-default',
           icon: 'briefcase',
           color: 'white',
           name: browser.i18n.getMessage("sidebar_menu_reopenInContainer_noContainer")

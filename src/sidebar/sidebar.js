@@ -1,6 +1,5 @@
 import {
-    INTERNAL_MESSAGING_PORT_NAME,
-    DEFAULT_COOKIE_STORE_ID
+    INTERNAL_MESSAGING_PORT_NAME
 } from '../constants.js'
 import {
     getConfig,
@@ -62,7 +61,7 @@ export const ContainerTabsSidebar = {
                 res.length = 0
             }
             this.render([{
-                cookieStoreId: DEFAULT_COOKIE_STORE_ID,
+                cookieStoreId: !!window.incognito ? 'firefox-private' : 'firefox-default',
                 name: browser.i18n.getMessage(window.incognito ? 'containerIncognito' : 'containerDefault'),
                 iconUrl: 'resource://usercontext-content/briefcase.svg',
                 icon: 'briefcase',
