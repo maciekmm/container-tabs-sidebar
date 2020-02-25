@@ -71,6 +71,9 @@
     "options_title": {
         "message": "Container Tabs Sidebar Options"
     },
+    "options_containerConfiguration": {
+        "message": "In order to configure containers type <i>about:preferences</i> in the address bar."
+    },
     "options_theme": {
         "message": "Theme"
     },

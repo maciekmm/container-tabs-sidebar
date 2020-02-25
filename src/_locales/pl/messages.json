@@ -71,6 +71,9 @@
     "options_title": {
         "message": "Opcje Container Tabs Sidebar"
     },
+    "options_containerConfiguration": {
+        "message": "W celu konfiguracji kontenerów wpisz <i>about:preferences</i> w pasku adresu."
+    },
     "options_theme": {
         "message": "Skórka"
     },
