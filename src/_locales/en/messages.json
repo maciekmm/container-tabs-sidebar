@@ -107,6 +107,12 @@
     "options_hideEmptyPinned_description": {
         "message": "Pinned tabs header will reappear when dragging tabs"
     },
+    "options_focusTabsInOrder": {
+        "message": "Focus tabs in container order"
+    },
+    "options_focusTabsInOrder_description": {
+        "message": "Closing current tab will focus the one above"
+    },
     "options_css_description": {
         "message": "Inject custom CSS for customisation"
     },

@@ -56,7 +56,6 @@ function proxyToPOJO(proxy) {
 
 export async function getSessionStorage(window) {
     if (!!sessionStorage) {
-        console.log("test")
         return sessionStorage
     }
     let storage = await browser.sessions.getWindowValue(window.id, 'containers')

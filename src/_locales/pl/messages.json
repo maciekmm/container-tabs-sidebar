@@ -107,6 +107,12 @@
     "options_hideEmptyPinned_description": {
         "message": "Obszar przypiętych kart wysunie się gdy przeciągniesz kartę"
     },
+    "options_focusTabsInOrder": {
+        "message": "Włączaj karty w kolejności"
+    },
+    "options_focusTabsInOrder_description": {
+        "message": "Zamknięcie obecnej karty włączy kartę wyżej w kontenerze"
+    },
     "options_shortcut": {
         "message": "Skrót klawiszowy"
     },

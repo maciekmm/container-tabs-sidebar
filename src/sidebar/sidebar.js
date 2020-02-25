@@ -24,7 +24,7 @@ export const ContainerTabsSidebar = {
         this.config = config
         this.sessionStorage = sessionStorage
         this.window = window
-        this.pinnedTabs = new PinnedTabsContainer(window, document.getElementById('pinned-tabs')),
+        this.pinnedTabs = new PinnedTabsContainer(window, document.getElementById('pinned-tabs'), config),
 
         loadAppearance(config)
 

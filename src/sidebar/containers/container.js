@@ -1,16 +1,17 @@
 import ContainerTab from '../tab/tab.js'
 
 export default class AbstractTabContainer {
-    constructor(window, element) {
+    constructor(window, element, config) {
+        this._config = config
         this.element = element
         this._window = window
         this.tabs = new Map()
+        // this.lastActive = -1
     }
 
     init() {
         browser.tabs.onActivated.addListener((activeInfo) => {
             if (activeInfo.windowId !== this._window.id) return
-            
             this._handleTabActivated(activeInfo)
         })
 
@@ -62,6 +63,8 @@ export default class AbstractTabContainer {
     }
 
     _handleTabActivated(activeInfo) {
+        // browser.tabs.moveInSuccession([activeInfo.tabId], this.lastActive)
+        // this.lastActive = activeInfo.tabId
         this.tabs.forEach((tab, tabId) => {
             if (tabId == activeInfo.tabId) {
                 tab.activate()
@@ -69,6 +72,7 @@ export default class AbstractTabContainer {
                 tab.deactivate()
             }
         })
+        this.lastActive = activeInfo.tabId
     }
 
     _handleTabCreated(newTab) {
@@ -127,6 +131,12 @@ export default class AbstractTabContainer {
 
             parent.appendChild(tabElement)
             tabContainer.appendChild(parent)
+        }
+        // when closing a tab, focus one above
+        if (!!this._config['focus_tabs_in_order'] && tabs.length > 1) { 
+            browser.tabs.moveInSuccession(tabs.map(tab=>tab.id).reverse())
+            // if closing the first one, focus the second one
+            browser.tabs.update(tabs[0].id, {successorTabId: tabs[1].id})
         }
     }
 }

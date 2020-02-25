@@ -3,10 +3,9 @@ import ContextMenuManager from '../context_menu.js'
 
 export default class ContextualIdentityContainer extends AbstractTabContainer {
     constructor(window, config, contextualIdentity, element, sessionStorage) {
-        super(window, element)
+        super(window, element, config)
         this.contextualIdentity = contextualIdentity
         this.id = contextualIdentity.cookieStoreId
-        this._config = config
         this._sessionStorage = sessionStorage
     }
 
