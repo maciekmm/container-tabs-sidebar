@@ -120,7 +120,7 @@
         "message": "Skrót klawiszowy"
     },
     "options_shortcut_description": {
-        "message": "Skrót klawiszowy by otworzyć panel boczny"
+        "message": "Skrót klawiszowy by otworzyć panel boczny <a href='https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/commands#Key_combinations'>(format)</a>"
     },
     "options_css_description": {
         "message": "Wstrzyknij dodatkowe style"
