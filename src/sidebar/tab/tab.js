@@ -30,7 +30,7 @@ export default class ContainerTab {
 
         this.element.setAttribute('draggable', true)
         this.element.addEventListener('contextmenu', (e) => {
-            if(typeof browser.menus.overrideContext == 'function') {
+            if (typeof browser.menus.overrideContext == 'function') {
                 browser.menus.overrideContext({
                     context: 'tab',
                     tabId: this.id
@@ -94,10 +94,10 @@ export default class ContainerTab {
         this.element.addEventListener('dragover', (e) => {
             e.preventDefault()
             const [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('tab/move').split('/')
-            if ((this.tab.cookieStoreId != contextualIdentity && !this.tab.pinned) || !e.currentTarget.hasAttribute("data-tab-id")) {
-                e.dataTransfer.dropEffect = 'none'
-                return
-            }
+            // if ((this.tab.cookieStoreId != contextualIdentity && !this.tab.pinned) || !e.currentTarget.hasAttribute("data-tab-id")) {
+            //     e.dataTransfer.dropEffect = 'none'
+            //     return
+            // }
             e.stopPropagation()
             e.dataTransfer.dropEffect = 'move'
             e.currentTarget.classList.add('container-tab-dragged-over')
@@ -120,7 +120,7 @@ export default class ContainerTab {
             document.body.classList.remove('tab-dragged')
         })
 
-        this.element.addEventListener('drop', (e) => {
+        this.element.addEventListener('drop', async (e) => {
             if (!e.dataTransfer.types.includes('tab/move')) {
                 return
             }
@@ -129,40 +129,38 @@ export default class ContainerTab {
             pinned = pinned != 'false'
 
             //                                                  allow moving anything to pinned container
-            if ((this.tab.cookieStoreId != contextualIdentity && !this.tab.pinned)) {
-                e.dataTransfer.dropEffect = 'none'
-                return
+            if (this.tab.cookieStoreId === contextualIdentity) {
+                e.stopPropagation()
+                // return
             }
-            e.stopPropagation()
 
             e.target.classList.remove('container-tab-dragged-over')
 
-            browser.tabs.get(tabId).then(tab => {
-                // if we move tab upwards the tab will be placed before, if we move it after it will be placed correctly,
-                // we need to compensate for that
-                let compensation = tab.index > this.tab.index ? 1 : 0;
-                //   moving from pinned to not  || moving from not pinned to pinned
-                if ((!this.tab.pinned && pinned) || (this.tab.pinned && !pinned)) {
-                    // we need to update the pinned flag as we are moving tabs between pinned and standard containers
-                    browser.tabs.update(tabId, {
-                        pinned: !pinned
-                    }).then((tab) => {
-                        browser.tabs.get(this.tab.id).then((droppedOn) => { // as we pin a tab indexes get shifted by one, thus we need to get new index
-                            if(tab.index == this.tab.index + 1) return
-    browser.tabs.move(tabId, {
-                                windowId: this._window.id,
-                                index: droppedOn.index + compensation
-                            })
+            let tab = await browser.tabs.get(tabId)
+            // if we move tab upwards the tab will be placed before, if we move it after it will be placed correctly,
+            // we need to compensate for that
+            let compensation = tab.index > this.tab.index ? 1 : 0;
+            //   moving from pinned to not  || moving from not pinned to pinned
+            if ((!this.tab.pinned && pinned) || (this.tab.pinned && !pinned)) {
+                // we need to update the pinned flag as we are moving tabs between pinned and standard containers
+                browser.tabs.update(tabId, {
+                    pinned: !pinned
+                }).then((tab) => {
+                    browser.tabs.get(this.tab.id).then((droppedOn) => { // as we pin a tab indexes get shifted by one, thus we need to get new index
+                        if (tab.index == this.tab.index + 1) return
+                        browser.tabs.move(tabId, {
+                            windowId: this._window.id,
+                            index: droppedOn.index + compensation
                         })
                     })
-                } else {
-                    // just reorder tabs as the pinned status does not change (action within container)
-                    browser.tabs.move(tabId, {
-                        windowId: this._window.id,
-                        index: this.tab.index + compensation
-                    })
-                }
-            })
+                })
+            } else {
+                // just reorder tabs as the pinned status does not change (action within container)
+                await browser.tabs.move(tabId, {
+                    windowId: this._window.id,
+                    index: this.tab.index + compensation
+                })
+            }
         })
 
     }
@@ -197,7 +195,7 @@ export default class ContainerTab {
             })
         })
         this.element.appendChild(this.elements.audible)
-        
+
         this.elements.close = document.createElement('span')
         this.elements.close.className = 'container-tab-close'
         this.elements.close.innerText = '✕'
@@ -270,9 +268,9 @@ export default class ContainerTab {
             favIconUrl = FAVICON_LOADING
         } else if (this.tab.favIconUrl) {
             favIconUrl = this.tab.favIconUrl
-        } 
+        }
         if (favIconUrl !== this.elements.favicon.src) {
-            if(favIconUrl !== FAVICON_FALLBACK) {
+            if (favIconUrl !== FAVICON_FALLBACK) {
                 this.elements.favicon.classList.remove(FAVICON_FALLBACK_CLASS)
             } else {
                 this.elements.favicon.classList.add(FAVICON_FALLBACK_CLASS)

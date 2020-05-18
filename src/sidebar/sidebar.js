@@ -12,6 +12,8 @@ import PinnedTabsContainer from './containers/pinned.js'
 import ContextualIdentityContainer from './containers/contextual.js'
 import {init as initContainerContextMenu} from './contextmenu/container.js'
 import {init as initTabContextMenu} from './contextmenu/tab.js'
+import TemporaryContainer from './containers/temporary.js'
+import {isTemporaryContainer, isInstalled} from './interop/temporary_containers.js'
 
 export const ContainerTabsSidebar = {
     containers: new Map(),
@@ -24,7 +26,14 @@ export const ContainerTabsSidebar = {
         this.config = config
         this.sessionStorage = sessionStorage
         this.window = window
-        this.pinnedTabs = new PinnedTabsContainer(window, document.getElementById('pinned-tabs'), config),
+        this.pinnedTabs = new PinnedTabsContainer(window, document.getElementById('pinned-tabs'), config)
+
+        const containersList = document.getElementById('containers')
+        this.elements.containersList = containersList
+
+        this.temporaryContainer = new TemporaryContainer(window, config, this.getSessionStorage('temporary_container'))
+        this.temporaryContainer.init()
+        this.elements.containersList.appendChild(this.temporaryContainer.element)
 
         loadAppearance(config)
 
@@ -36,14 +45,9 @@ export const ContainerTabsSidebar = {
             }
         })
 
-        browser.contextualIdentities.onRemoved.addListener((evt) => {
-            this.removeContextualIdentity(evt.contextualIdentity.cookieStoreId)
-        })
+        browser.contextualIdentities.onRemoved.addListener(evt => this.removeContextualIdentity(evt.contextualIdentity.cookieStoreId))
 
-        browser.contextualIdentities.onCreated.addListener((evt) => {
-            this.addContextualIdentity(evt.contextualIdentity)
-        })
-
+        browser.contextualIdentities.onCreated.addListener(evt => this.addContextualIdentity(evt.contextualIdentity))
 
         if(typeof browser.menus.overrideContext == 'function') {
             initContainerContextMenu()
@@ -51,9 +55,6 @@ export const ContainerTabsSidebar = {
         } else {
             ContextMenuManager.init()
         }
-
-        const containersList = document.getElementById('containers')
-        this.elements.containersList = containersList
 
         browser.contextualIdentities.query({}).then((res) => {
             // Incognito does not support containers
@@ -77,7 +78,11 @@ export const ContainerTabsSidebar = {
      * Removes a container from DOM, does not remove it from a browser
      * @param {integer} cookieStoreId - contextual identity id
      */
-    removeContextualIdentity(cookieStoreId) {
+    async removeContextualIdentity(cookieStoreId) {
+        if(await isTemporaryContainer(cookieStoreId)) {
+            this.temporaryContainer.detachContextualIdentity(cookieStoreId)
+            return;
+        }
         if(!this.containers.has(cookieStoreId)) return
         const container = this.containers.get(cookieStoreId)
         this.containers.delete(container)
@@ -88,34 +93,36 @@ export const ContainerTabsSidebar = {
      * Adds contextual identity to DOM
      * @param {integer}
      */
-    addContextualIdentity(contextualIdentity) {
+    async addContextualIdentity(contextualIdentity) {
+        if(await isTemporaryContainer(contextualIdentity.cookieStoreId)) {
+            this.temporaryContainer.attachContextualIdentity(contextualIdentity.cookieStoreId)
+            return;
+        }
         const ctxId = this.createContainer(contextualIdentity)
-        this.elements.containersList.appendChild(ctxId.element)
+        this.elements.containersList.insertBefore(ctxId.element, this.temporaryContainer.element)
     },
 
     render(containers) {
         const containersList = this.elements.containersList
         for (let firefoxContainer of containers) {
-            const ctxId = this.createContainer(firefoxContainer)
-            containersList.appendChild(ctxId.element)
+            this.addContextualIdentity(firefoxContainer)
         }
     },
 
     createContainer(ctx) {
-        const containerParent = document.createElement('li')
-        containerParent.classList.add('container')
-        containerParent.id = 'container-tabs-' + ctx.cookieStoreId
-        containerParent.setAttribute('data-container-id', ctx.cookieStoreId)
-
-        if(!this.sessionStorage[ctx.cookieStoreId]) {
-            this.sessionStorage[ctx.cookieStoreId] = {}
-        }
-
-        const container = new ContextualIdentityContainer(this.window, this.config, ctx, containerParent, this.sessionStorage[ctx.cookieStoreId])
-        container.init(ctx)
+        const sessionStorage = this.getSessionStorage(ctx.cookieStoreId)
+        const container = new ContextualIdentityContainer(this.window, this.config, ctx, sessionStorage)
+        container.init()
         this.containers.set(ctx.cookieStoreId, container)
         return container
     },
+
+    getSessionStorage(id) {
+        if(!this.sessionStorage[id]) {
+            this.sessionStorage[id] = {}
+        }
+        return this.sessionStorage[id]
+    }
 }
 
 async function init(){

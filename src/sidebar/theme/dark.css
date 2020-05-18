@@ -25,3 +25,7 @@
 .container-tab-action--mute {
     filter: grayscale(1) invert(100%);
 }
+
+.container-icon[src$=".png"] {
+    filter: invert();
+}

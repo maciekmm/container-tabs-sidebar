@@ -39,7 +39,7 @@ export default class PinnedTabsContainer extends AbstractTabContainer {
             if (!e.dataTransfer.types.includes('tab/move')) {
                 return
             }
-            const [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('tab/move').split('/')
+            // const [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('tab/move').split('/')
             e.dataTransfer.dropEffect = 'move'
             e.currentTarget.classList.add('container-dragged-over')
             return false
@@ -59,16 +59,19 @@ export default class PinnedTabsContainer extends AbstractTabContainer {
         }
     }
 
-    render(updateTabs) {
+    async render(updateTabs) {
         super.render(updateTabs)
         if (updateTabs) {
-            browser.tabs.query({
+            let tabs = await browser.tabs.query({
                 currentWindow: true,
                 pinned: true
-            }).then((res) => {
-                this.renderTabs(this.element, res)
-                this.render(false)
             })
+            this.renderTabs(this.element, tabs)
+            this.render(false)
         }
+    }
+
+    supportsCookieStore(cookieStoreId) {
+        return true
     }
 }

@@ -104,7 +104,7 @@ export default class AbstractTabContainer {
         this.render(false)
     }
 
-    render(updateTabs) {
+    async render(updateTabs) {
         this.element.setAttribute('data-tabs-count', this.tabs.size)
     }
 
@@ -139,4 +139,6 @@ export default class AbstractTabContainer {
             browser.tabs.update(tabs[0].id, {successorTabId: tabs[1].id})
         }
     }
+
+    supportsCookieStore(cookieStoreId) {}
 }
