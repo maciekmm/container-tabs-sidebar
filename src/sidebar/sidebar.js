@@ -114,6 +114,7 @@ export const ContainerTabsSidebar = {
         const container = new ContextualIdentityContainer(this.window, this.config, ctx, sessionStorage)
         container.init()
         this.containers.set(ctx.cookieStoreId, container)
+        container.element.setAttribute("data-container-id", ctx.cookieStoreId)
         return container
     },
 

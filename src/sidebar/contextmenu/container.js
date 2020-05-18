@@ -27,6 +27,9 @@ async function getContainerTabsFromInfo(info) {
         return null
     }
     let cookieStoreId = containerElement.getAttribute('data-container-id')
+    if(!cookieStoreId) {
+        return null
+    }
     let window = await browser.windows.getCurrent()
     return await browser.tabs.query({
         cookieStoreId: cookieStoreId,
