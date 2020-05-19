@@ -180,11 +180,11 @@ export default class VerticalContainer extends AbstractTabContainer {
     }
 
     async render(updateTabs, callback) {
-        super.render(updateTabs)
         if (updateTabs) {
             let tabs = await this._queryTabs()
             this.renderTabs(this.elements.tabsContainer, tabs)
         }
+        await super.render(updateTabs)
         // styling (border according to container config)
         const containerHeader = this.elements.containerHeader
 
