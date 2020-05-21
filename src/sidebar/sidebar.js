@@ -37,14 +37,6 @@ export const ContainerTabsSidebar = {
 
         loadAppearance(config)
 
-        // containers
-        browser.contextualIdentities.onUpdated.addListener((evt) => {
-            const container = this.containers.get(evt.contextualIdentity.cookieStoreId)
-            if (container) {
-                container.refresh(evt.contextualIdentity)
-            }
-        })
-
         browser.contextualIdentities.onRemoved.addListener(evt => this.removeContextualIdentity(evt.contextualIdentity.cookieStoreId))
 
         browser.contextualIdentities.onCreated.addListener(evt => this.addContextualIdentity(evt.contextualIdentity))
