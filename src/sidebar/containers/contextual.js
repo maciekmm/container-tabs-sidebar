@@ -53,4 +53,9 @@ export default class ContextualIdentityContainer extends VerticalContainer {
     supportsCookieStore(cookieStoreId) {
         return this.id === cookieStoreId
     }
+
+    async updateContextualIdentity(contextualIdentity) {
+        this.contextualIdentity = contextualIdentity
+        await this.render(false)
+    }
 }

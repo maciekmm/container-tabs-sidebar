@@ -49,6 +49,8 @@ export const ContainerTabsSidebar = {
 
         browser.contextualIdentities.onCreated.addListener(evt => this.addContextualIdentity(evt.contextualIdentity))
 
+        browser.contextualIdentities.onUpdated.addListener(evt => this.updateContextualIdentity(evt.contextualIdentity))
+
         if(typeof browser.menus.overrideContext == 'function') {
             initContainerContextMenu()
             initTabContextMenu()
@@ -79,10 +81,8 @@ export const ContainerTabsSidebar = {
      * @param {integer} cookieStoreId - contextual identity id
      */
     async removeContextualIdentity(cookieStoreId) {
-        if(await isTemporaryContainer(cookieStoreId)) {
-            this.temporaryContainer.detachContextualIdentity(cookieStoreId)
-            return;
-        }
+        this.temporaryContainer.detachContextualIdentity(cookieStoreId)
+
         if(!this.containers.has(cookieStoreId)) return
         const container = this.containers.get(cookieStoreId)
         this.containers.delete(container)
@@ -100,6 +100,21 @@ export const ContainerTabsSidebar = {
         }
         const ctxId = this.createContainer(contextualIdentity)
         this.elements.containersList.insertBefore(ctxId.element, this.temporaryContainer.element)
+    },
+
+    async updateContextualIdentity(contextualIdentity) {
+        const isInTemporary = this.temporaryContainer.supportsCookieStore(contextualIdentity.cookieStoreId)
+        const isTemporary = await isTemporaryContainer(contextualIdentity.cookieStoreId)
+
+        if(isInTemporary && !isTemporary) {
+            this.temporaryContainer.detachContextualIdentity(contextualIdentity.cookieStoreId)
+            this.addContextualIdentity(contextualIdentity)
+        } else if(!isInTemporary && isTemporary) {
+            this.removeContextualIdentity(contextualIdentity.cookieStoreId)
+            this.temporaryContainer.attachContextualIdentity(contextualIdentity.cookieStoreId)
+        } else if(!isTemporary) {
+            this.containers.get(contextualIdentity.cookieStoreId).updateContextualIdentity(contextualIdentity)
+        } 
     },
 
     render(containers) {

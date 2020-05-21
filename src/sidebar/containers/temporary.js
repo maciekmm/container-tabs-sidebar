@@ -13,8 +13,11 @@ export default class TemporaryContainer extends VerticalContainer {
     }
 
     detachContextualIdentity(cookieStoreId) {
-        this.cookieStoreIds.splice(cookieStoreId)
-        this.render(true)
+        let idx = this.cookieStoreIds.indexOf(cookieStoreId)
+        this.cookieStoreIds.splice(idx, 1)
+        if(idx !== -1) {
+            this.render(true)
+        }
     }
 
     async _actionNewTab(options = {}) {
