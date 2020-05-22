@@ -91,6 +91,14 @@ export default class VerticalContainer extends AbstractTabContainer {
                     })
                 }
             } else {
+                let getDropTab = (target) => {
+                    let current = target
+                    while(current !== this.element && !current.classList.contains('container-tab')) {
+                        current = target.parentElement
+                    }
+                    return current.getAttribute('data-tab-id')
+                }
+
                 let tab = await browser.tabs.get(tabId)
                 // moving tabs between containers
                 let tabInfo = {
@@ -98,13 +106,17 @@ export default class VerticalContainer extends AbstractTabContainer {
                     openInReaderMode: tab.isInReaderMode,
                     cookieStoreId: this.id
                 }
+
+                let dropTabId = getDropTab(e.target)
+                if(dropTabId) {
+                    let dropTab = await browser.tabs.get(parseInt(dropTabId))
+                    tabInfo['index'] = dropTab.index + 1
+                }
                 // firefox treats about:newtab as privileged url, but not setting the url allows us to create that page
                 if (tab.url !== 'about:newtab') {
                     tabInfo.url = tab.url
                 }
-                console.log("3")
                 await this._actionNewTab(tabInfo)
-                console.log("4")
                 browser.tabs.remove(tabId)
                 // contextual identity changed
             } 
