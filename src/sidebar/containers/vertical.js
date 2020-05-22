@@ -143,6 +143,7 @@ export default class VerticalContainer extends AbstractTabContainer {
                 renderedTab.scrollIntoView()
             }
         })
+        this.collapsed = false
     }
 
     _handleTabPinned(tabId, change, tab) {
@@ -154,7 +155,6 @@ export default class VerticalContainer extends AbstractTabContainer {
     }
 
     async _actionNewTab() {
-        this.collapsed = false
     }
 
     set collapsed(val) {
