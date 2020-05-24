@@ -6,7 +6,6 @@ export default class AbstractTabContainer {
         this.element = element
         this._window = window
         this.tabs = new Map()
-        // this.lastActive = -1
     }
 
     init() {

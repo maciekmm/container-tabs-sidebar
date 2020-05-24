@@ -46,14 +46,9 @@ export default class ContainerTab {
 
         this.element.addEventListener('dragover', (e) => {
             e.preventDefault()
-            const [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('tab/move').split('/')
-            // if ((this.tab.cookieStoreId != contextualIdentity && !this.tab.pinned) || !e.currentTarget.hasAttribute("data-tab-id")) {
-            //     e.dataTransfer.dropEffect = 'none'
-            //     return
-            // }
             e.stopPropagation()
             e.dataTransfer.dropEffect = 'move'
-            e.currentTarget.classList.add('container-tab-dragged-over')
+            this.elements['link'].classList.add('container-tab-dragged-over')
             return false
         })
 
@@ -61,15 +56,14 @@ export default class ContainerTab {
             if (!e.dataTransfer.types.includes('tab/move')) {
                 return
             }
-            if (!e.target || !e.target.classList) return
-            e.target.classList.remove('container-tab-dragged-over')
+            this.elements['link'].classList.remove('container-tab-dragged-over')
         })
 
         this.element.addEventListener('dragend', (e) => {
             if (!e.dataTransfer.types.includes('tab/move')) {
                 return
             }
-            e.target.classList.remove('container-tab-dragged-over')
+            this.elements['link'].classList.remove('container-tab-dragged-over')
             document.body.classList.remove('tab-dragged')
         })
 
