@@ -66,50 +66,6 @@ export default class ContainerTab {
             this.elements['link'].classList.remove('container-tab-dragged-over')
             document.body.classList.remove('tab-dragged')
         })
-
-        this.element.addEventListener('drop', async (e) => {
-            if (!e.dataTransfer.types.includes('tab/move')) {
-                return
-            }
-            let [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('tab/move').split('/')
-            tabId = parseInt(tabId);
-            pinned = pinned != 'false'
-
-            //                                                  allow moving anything to pinned container
-            if (this.tab.cookieStoreId === contextualIdentity) {
-                e.stopPropagation()
-                // return
-            }
-
-            e.target.classList.remove('container-tab-dragged-over')
-
-            let tab = await browser.tabs.get(tabId)
-            // if we move tab upwards the tab will be placed before, if we move it after it will be placed correctly,
-            // we need to compensate for that
-            let compensation = tab.index > this.tab.index ? 1 : 0;
-            //   moving from pinned to not  || moving from not pinned to pinned
-            if ((!this.tab.pinned && pinned) || (this.tab.pinned && !pinned)) {
-                // we need to update the pinned flag as we are moving tabs between pinned and standard containers
-                browser.tabs.update(tabId, {
-                    pinned: !pinned
-                }).then((tab) => {
-                    browser.tabs.get(this.tab.id).then((droppedOn) => { // as we pin a tab indexes get shifted by one, thus we need to get new index
-                        if (tab.index == this.tab.index + 1) return
-                        browser.tabs.move(tabId, {
-                            windowId: this._window.id,
-                            index: droppedOn.index + compensation
-                        })
-                    })
-                })
-            } else {
-                // just reorder tabs as the pinned status does not change (action within container)
-                await browser.tabs.move(tabId, {
-                    windowId: this._window.id,
-                    index: this.tab.index + compensation
-                })
-            }
-        })
-
     }
 
     destroy() {

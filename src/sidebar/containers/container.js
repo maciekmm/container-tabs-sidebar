@@ -58,7 +58,51 @@ export default class AbstractTabContainer {
             e.currentTarget.classList.remove('container-dragged-over')
         })
 
+        this.element.addEventListener('dragover', (e) => {
+            e.preventDefault()
+            if (!e.dataTransfer.types.includes('tab/move')) {
+                return
+            }
+            e.dataTransfer.dropEffect = 'move'
+            this.element.classList.add('container-dragged-over')
+            return false
+        })
+
+        this.element.addEventListener('drop', async e => {
+            e.preventDefault()
+            e.stopPropagation()
+            this.element.classList.remove('container-dragged-over')
+            if (!e.dataTransfer.types.includes('tab/move')) {
+                return
+            }
+            let [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('tab/move').split('/')
+            tabId = parseInt(tabId);
+            pinned = pinned !== 'false'
+
+            let index = -1
+
+            let dropTabId = this._getDropTab(e.target)
+            if (dropTabId) {
+                let dropTab = await browser.tabs.get(parseInt(dropTabId))
+                index = dropTab.index + 1
+            } else if (this.tabs.size > 0) {
+                index = (await browser.tabs.get(this.tabs.values().next().value.tab.id)).index
+            }
+            await this._handleDrop(tabId, pinned, contextualIdentity, index)
+        })
+
         this.render(true)
+    }
+
+    async _handleDrop(tabId, pinned, tabCtxId, index) {
+    }
+
+    _getDropTab(target) {
+        let current = target
+        while (!!current && current !== this.element && !current.classList.contains('container-tab')) {
+            current = current.parentElement
+        }
+        return current.getAttribute('data-tab-id')
     }
 
     _handleTabActivated(activeInfo) {

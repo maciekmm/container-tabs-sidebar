@@ -34,84 +34,40 @@ export default class VerticalContainer extends AbstractTabContainer {
         }))
 
         this.element.addEventListener('drop', async (e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            if (!e.dataTransfer.types.includes('tab/move')) {
-                return
-            }
-            let [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('tab/move').split('/')
-            tabId = parseInt(tabId);
-            pinned = pinned !== 'false'
-
-            if (this.supportsCookieStore(contextualIdentity)) {
-                e.currentTarget.classList.remove('container-dragged-over')
-                let index = -1
-                if (this.tabs.size > 0) {
-                    index = this.tabs.values().next().value.tab.index
-                }
-
-                //if moved from pinned container
-                if (pinned) {
-                    browser.tabs.update(tabId, {
-                        pinned: false,
-                    }).then(() => {
-                        browser.tabs.move(tabId, {
-                            windowId: this._window.id,
-                            index: index // move to the front
-                        })
-                    })
-                } else {
-                    browser.tabs.move(tabId, {
-                        windowId: this._window.id,
-                        index: index // move to the end
-                    })
-                }
-            } else {
-                let getDropTab = (target) => {
-                    let current = target
-                    while (!!current && current !== this.element && !current.classList.contains('container-tab')) {
-                        current = current.parentElement
-                    }
-                    return current.getAttribute('data-tab-id')
-                }
-
-                let tab = await browser.tabs.get(tabId)
-                // moving tabs between containers
-                let tabInfo = {
-                    // pinned: tab.pinned,
-                    openInReaderMode: tab.isInReaderMode,
-                    cookieStoreId: this.id
-                }
-
-                let dropTabId = getDropTab(e.target)
-                if (dropTabId) {
-                    let dropTab = await browser.tabs.get(parseInt(dropTabId))
-                    tabInfo['index'] = dropTab.index
-                }
-                // firefox treats about:newtab as privileged url, but not setting the url allows us to create that page
-                if (tab.url !== 'about:newtab') {
-                    tabInfo.url = tab.url
-                }
-                await this._actionNewTab(tabInfo)
-                browser.tabs.remove(tabId)
-                // contextual identity changed
-            }
         })
+    }
 
-        this.element.addEventListener('dragover', (e) => {
-            e.preventDefault()
-            if (!e.dataTransfer.types.includes('tab/move')) {
-                return
+    async _handleDrop(tabId, pinned, tabCtxId, index) {
+        if (this.supportsCookieStore(tabCtxId)) {
+            if (pinned) {
+                await browser.tabs.update(tabId, {
+                    pinned: false,
+                })
             }
-            const [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('tab/move').split('/')
-            if (!this.supportsCookieStore(contextualIdentity)) {
-                e.dataTransfer.dropEffect = 'move'
-                return
+            browser.tabs.move(tabId, {
+                windowId: this._window.id,
+                index: index
+            })
+        } else {
+            let tab = await browser.tabs.get(tabId)
+            // moving tabs between containers
+            let tabInfo = {
+                // pinned: tab.pinned,
+                openInReaderMode: tab.isInReaderMode,
+                cookieStoreId: this.id,
             }
-            e.dataTransfer.dropEffect = 'move'
-            e.currentTarget.classList.add('container-dragged-over')
-            return false
-        })
+
+            if (index !== -1) {
+                tabInfo['index'] = index
+            }
+
+            // firefox treats about:newtab as privileged url, but not setting the url allows us to create that page
+            if (tab.url !== 'about:newtab') {
+                tabInfo.url = tab.url
+            }
+            await this._actionNewTab(tabInfo)
+            await browser.tabs.remove(tabId)
+        }
     }
 
     _handleTabActivated(change) {
@@ -142,7 +98,7 @@ export default class VerticalContainer extends AbstractTabContainer {
         }
     }
 
-    async _actionNewTab() {
+    async _actionNewTab(options) {
     }
 
     set collapsed(val) {
