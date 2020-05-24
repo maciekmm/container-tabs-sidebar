@@ -43,12 +43,8 @@ export const ContainerTabsSidebar = {
 
         browser.contextualIdentities.onUpdated.addListener(evt => this.updateContextualIdentity(evt.contextualIdentity))
 
-        if(typeof browser.menus.overrideContext == 'function') {
-            initContainerContextMenu()
-            initTabContextMenu()
-        } else {
-            ContextMenuManager.init()
-        }
+        initContainerContextMenu()
+        initTabContextMenu()
 
         browser.contextualIdentities.query({}).then((res) => {
             // Incognito does not support containers

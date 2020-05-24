@@ -1,4 +1,3 @@
-import ContextMenuManager from '../context_menu.js'
 const ICON_AUDIBLE = 'chrome://global/skin/media/audioUnmutedButton.svg'
 const ICON_MUTED = 'chrome://global/skin/media/audioMutedButton.svg'
 const FAVICON_LOADING = 'chrome://global/skin/icons/loading.png'
@@ -33,60 +32,10 @@ export default class ContainerTab {
         })
 
         this.element.setAttribute('draggable', true)
-        this.element.addEventListener('contextmenu', (e) => {
-            if (typeof browser.menus.overrideContext == 'function') {
-                browser.menus.overrideContext({
-                    context: 'tab',
-                    tabId: this.id
-                })
-                return
-            }
-            e.preventDefault()
-            {
-                if (ContextMenuManager.contextMenu) {
-                    ContextMenuManager.hide()
-                    return
-                }
-
-                const contextMenu = new ContextMenu(this)
-
-                contextMenu.addOption('sidebar_menu_reloadTab', () => {
-                    browser.tabs.reload(this.id)
-                })
-
-                contextMenu.addOption((this.tab.mutedInfo && this.tab.mutedInfo.muted) ? 'sidebar_menu_unmuteTab' : 'sidebar_menu_muteTab', () => {
-                    browser.tabs.update(this.id, {
-                        muted: !(this.tab.mutedInfo && this.tab.mutedInfo.muted)
-                    })
-                })
-
-                contextMenu.addOption(this.tab.pinned ? 'sidebar_menu_unpinTab' : 'sidebar_menu_pinTab', () => {
-                    browser.tabs.update(this.id, {
-                        pinned: !this.tab.pinned
-                    })
-                })
-
-                contextMenu.addOption('sidebar_menu_duplicateTab', () => {
-                    browser.tabs.duplicate(this.id)
-                })
-
-                contextMenu.addOption('sidebar_menu_moveTabToNewWindow', () => {
-                    browser.windows.create({
-                        tabId: this.id
-                    })
-                })
-
-                contextMenu.addOption('sidebar_menu_closeOtherTabs', () => {
-                    this._container.closeOthers(this.id)
-                })
-
-                contextMenu.addOption('sidebar_menu_closeTab', () => {
-                    browser.tabs.remove(this.id)
-                })
-
-                ContextMenuManager.show(contextMenu, e.clientX, e.clientY)
-            }
-        })
+        this.element.addEventListener('contextmenu', (e) => browser.menus.overrideContext({
+            context: 'tab',
+            tabId: this.id
+        }))
 
         this.element.addEventListener('dragstart', (e) => {
             e.dataTransfer.effectAllowed = 'move';
@@ -212,7 +161,7 @@ export default class ContainerTab {
         // use mousedown because click does not fire for middle button
         // we would have to have an 'a' element in order for it to work
         this.element.addEventListener('mousedown', (e) => {
-            if(e.which !== 2) return; // middle mouse
+            if (e.which !== 2) return; // middle mouse
             this._removeCloseClick(e)
         })
 

@@ -1,5 +1,4 @@
 import AbstractTabContainer from './container.js'
-import ContextMenuManager from '../context_menu.js'
 
 function _createRootElement() {
     return document.getElementById("vertical-container-template").content.cloneNode(true).querySelector("li")
@@ -30,33 +29,9 @@ export default class VerticalContainer extends AbstractTabContainer {
         })
         this.elements.containerHeader.addEventListener('click', () => this.collapsed = !this.collapsed)
 
-        this.elements.containerHeader.addEventListener('contextmenu', (e) => {
-            if (typeof browser.menus.overrideContext == 'function') {
-                browser.menus.overrideContext({
-                    showDefaults: false
-                })
-                return
-            }
-            e.preventDefault()
-            if (ContextMenuManager.contextMenu) {
-                ContextMenuManager.hide()
-                return
-            }
-
-            const contextMenu = new ContextMenu(this)
-
-            contextMenu.addOption('sidebar_menu_reloadAll', () => {
-                Array.from(this.tabs.keys()).forEach((tabId) => {
-                    browser.tabs.reload(tabId)
-                })
-            })
-
-            contextMenu.addOption('sidebar_menu_closeAll', () => {
-                browser.tabs.remove(Array.from(this.tabs.keys()))
-            })
-
-            ContextMenuManager.show(contextMenu, e.clientX, e.clientY)
-        })
+        this.elements.containerHeader.addEventListener('contextmenu', (e) => browser.menus.overrideContext({
+            showDefaults: false
+        }))
 
         this.element.addEventListener('drop', async (e) => {
             e.preventDefault()
@@ -68,7 +43,7 @@ export default class VerticalContainer extends AbstractTabContainer {
             tabId = parseInt(tabId);
             pinned = pinned !== 'false'
 
-            if(this.supportsCookieStore(contextualIdentity)) {
+            if (this.supportsCookieStore(contextualIdentity)) {
                 e.currentTarget.classList.remove('container-dragged-over')
                 let index = -1
                 if (this.tabs.size > 0) {
@@ -94,7 +69,7 @@ export default class VerticalContainer extends AbstractTabContainer {
             } else {
                 let getDropTab = (target) => {
                     let current = target
-                    while(!!current && current !== this.element && !current.classList.contains('container-tab')) {
+                    while (!!current && current !== this.element && !current.classList.contains('container-tab')) {
                         current = current.parentElement
                     }
                     return current.getAttribute('data-tab-id')
@@ -109,7 +84,7 @@ export default class VerticalContainer extends AbstractTabContainer {
                 }
 
                 let dropTabId = getDropTab(e.target)
-                if(dropTabId) {
+                if (dropTabId) {
                     let dropTab = await browser.tabs.get(parseInt(dropTabId))
                     tabInfo['index'] = dropTab.index
                 }
@@ -120,7 +95,7 @@ export default class VerticalContainer extends AbstractTabContainer {
                 await this._actionNewTab(tabInfo)
                 browser.tabs.remove(tabId)
                 // contextual identity changed
-            } 
+            }
         })
 
         this.element.addEventListener('dragover', (e) => {
