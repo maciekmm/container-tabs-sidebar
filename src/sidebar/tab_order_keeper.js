@@ -1,7 +1,7 @@
 var tid;
 function scheduleSortTabs() {
     if(!!tid) clearTimeout(tid)
-    tid = setTimeout(sortTabs, 2000)
+    tid = setTimeout(sortTabs, 100)
 }
 
 async function getDesiredTabsOrder() {
