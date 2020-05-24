@@ -8,7 +8,7 @@ A firefox addon that shows currently opened tabs in a sidebar grouped by a conta
 
 In order to use this addon it's recommended to have firefox version >=59 installed. It might work with versions >=54, but there were no tests done with that version. You can download the latest firefox from [firefox.com](https://www.mozilla.org/en-US/firefox/new/)
 
-### Installing from [addons.mozilla.org](https://addons.mozilla.org/)
+### Installing from [addons.mozilla.org](https://addons.mozilla.org/en-US/firefox/addon/container-tabs-sidebar/?src=github)
 
 1. Visit [Container Tabs Sidebar on mozilla.org](https://addons.mozilla.org/en-US/firefox/addon/container-tabs-sidebar/?src=github)
 2. Click Add to Firefox button
