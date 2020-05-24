@@ -1,22 +1,22 @@
 const SIDEBAR_URL_PATTERN = `moz-extension://${location.host}/*`
 export const DEFAULT_MENU_ITEM_OPTIONS = {
     viewTypes: ["sidebar"],
-    documentUrlPatterns: [SIDEBAR_URL_PATTERN]
+    documentUrlPatterns: [SIDEBAR_URL_PATTERN],
 }
 const optionHandlers = new Map()
 
 export function addOption(options, clickHandler, openHandler) {
-    if (!('id' in options)) {
-        throw new Error('item options should include id field')
+    if (!("id" in options)) {
+        throw new Error("item options should include id field")
     }
     let item = {
         ...DEFAULT_MENU_ITEM_OPTIONS,
-        ...options
+        ...options,
     }
     optionHandlers.set(item.id, {
         contexts: options.contexts,
         click: clickHandler,
-        open: openHandler
+        open: openHandler,
     })
     browser.menus.create(item)
 }
@@ -29,8 +29,8 @@ function includesAny(arr, incl) {
     }
     return false
 }
-var lastMenuInstanceId = 0;
-var nextMenuInstanceId = 1;
+var lastMenuInstanceId = 0
+var nextMenuInstanceId = 1
 
 async function init() {
     await browser.menus.removeAll()
@@ -42,12 +42,12 @@ async function init() {
     })
 
     browser.menus.onShown.addListener(async (info, tab) => {
-        if (info.viewType != 'sidebar') {
+        if (info.viewType != "sidebar") {
             return
         }
 
-        var menuInstanceId = nextMenuInstanceId++;
-        lastMenuInstanceId = menuInstanceId;
+        var menuInstanceId = nextMenuInstanceId++
+        lastMenuInstanceId = menuInstanceId
 
         if (menuInstanceId !== lastMenuInstanceId) {
             return
@@ -60,7 +60,7 @@ async function init() {
                 continue
             }
 
-            if (!menuItem || !(typeof menuItem.open == 'function')) {
+            if (!menuItem || !(typeof menuItem.open == "function")) {
                 continue
             }
             let update = await menuItem.open(info, tab)
@@ -73,10 +73,10 @@ async function init() {
     })
 
     browser.menus.onHidden.addListener(async (info, tab) => {
-        lastMenuInstanceId = 0;
+        lastMenuInstanceId = 0
     })
 }
 
-if(typeof browser.menus.overrideContext == 'function') {
+if (typeof browser.menus.overrideContext == "function") {
     init()
 }

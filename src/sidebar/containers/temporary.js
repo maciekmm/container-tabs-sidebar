@@ -1,5 +1,8 @@
-import VerticalContainer from './vertical.js'
-import {openTabInTemporaryContainer, isInstalled} from '../interop/temporary_containers.js'
+import VerticalContainer from "./vertical.js"
+import {
+    openTabInTemporaryContainer,
+    isInstalled,
+} from "../interop/temporary_containers.js"
 
 export default class TemporaryContainer extends VerticalContainer {
     constructor(window, config, sessionStorage) {
@@ -15,38 +18,40 @@ export default class TemporaryContainer extends VerticalContainer {
     detachContextualIdentity(cookieStoreId) {
         let idx = this.cookieStoreIds.indexOf(cookieStoreId)
         this.cookieStoreIds.splice(idx, 1)
-        if(idx !== -1) {
+        if (idx !== -1) {
             this.render(true)
         }
     }
 
     async _actionNewTab(options = {}) {
         await super._actionNewTab(options)
-        await openTabInTemporaryContainer(options.url || '')
+        await openTabInTemporaryContainer(options.url || "")
     }
 
     async _queryTabs() {
         let tabs = await browser.tabs.query({
             currentWindow: true,
-            pinned: false
+            pinned: false,
         })
-        return tabs.filter(tab => this.cookieStoreIds.indexOf(tab.cookieStoreId) != -1)
+        return tabs.filter(
+            (tab) => this.cookieStoreIds.indexOf(tab.cookieStoreId) != -1
+        )
     }
 
     get _faviconURL() {
-        return `/assets/temporary-containers.png`;
+        return `/assets/temporary-containers.png`
     }
 
     get title() {
-        return `Temporary containers`;
+        return `Temporary containers`
     }
 
     async render(renderTabs, callback) {
-        if(this.cookieStoreIds.length === 0 && !(await isInstalled())) {
-            this.element.style.display = 'none'
+        if (this.cookieStoreIds.length === 0 && !(await isInstalled())) {
+            this.element.style.display = "none"
             return
         }
-        this.element.style.display = 'initial'
+        this.element.style.display = "initial"
         super.render(renderTabs, callback)
     }
 

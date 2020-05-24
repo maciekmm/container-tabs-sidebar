@@ -1,4 +1,4 @@
-import VerticalContainer from './vertical.js'
+import VerticalContainer from "./vertical.js"
 
 export default class ContextualIdentityContainer extends VerticalContainer {
     constructor(window, config, contextualIdentity, sessionStorage) {
@@ -20,7 +20,7 @@ export default class ContextualIdentityContainer extends VerticalContainer {
         await super._actionNewTab(options)
         await browser.tabs.create({
             ...options,
-            cookieStoreId: this.id
+            cookieStoreId: this.id,
         })
     }
 
@@ -33,12 +33,12 @@ export default class ContextualIdentityContainer extends VerticalContainer {
         return await browser.tabs.query({
             currentWindow: true,
             cookieStoreId: this.id,
-            pinned: false
+            pinned: false,
         })
     }
 
     get _faviconURL() {
-        return `/assets/contextual-identities/${this.contextualIdentity.icon}.svg#${this.contextualIdentity.color}`;
+        return `/assets/contextual-identities/${this.contextualIdentity.icon}.svg#${this.contextualIdentity.color}`
     }
 
     get title() {
@@ -49,7 +49,7 @@ export default class ContextualIdentityContainer extends VerticalContainer {
         this.elements.containerHeader.style.borderLeftColor = this.contextualIdentity.colorCode
         super.render(renderTabs, callback)
     }
-    
+
     supportsCookieStore(cookieStoreId) {
         return this.id === cookieStoreId
     }

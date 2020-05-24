@@ -1,4 +1,4 @@
-import ContainerTab from '../tab/tab.js'
+import ContainerTab from "../tab/tab.js"
 
 export default class AbstractTabContainer {
     constructor(window, element, config) {
@@ -42,42 +42,44 @@ export default class AbstractTabContainer {
         })
 
         browser.tabs.onUpdated.addListener((tabId, change, tab) => {
-            if('pinned' in change) { 
+            if ("pinned" in change) {
                 this._handleTabPinned(tabId, change, tab)
             }
         })
 
         // Dragging
-        this.element.addEventListener('dragleave', (e) => {
+        this.element.addEventListener("dragleave", (e) => {
             if (!e.currentTarget || !e.currentTarget.classList) return
-            e.currentTarget.classList.remove('container-dragged-over')
+            e.currentTarget.classList.remove("container-dragged-over")
         })
 
-        this.element.addEventListener('dragend', (e) => {
+        this.element.addEventListener("dragend", (e) => {
             if (!e.currentTarget || !e.currentTarget.classList) return
-            e.currentTarget.classList.remove('container-dragged-over')
+            e.currentTarget.classList.remove("container-dragged-over")
         })
 
-        this.element.addEventListener('dragover', (e) => {
+        this.element.addEventListener("dragover", (e) => {
             e.preventDefault()
-            if (!e.dataTransfer.types.includes('tab/move')) {
+            if (!e.dataTransfer.types.includes("tab/move")) {
                 return
             }
-            e.dataTransfer.dropEffect = 'move'
-            this.element.classList.add('container-dragged-over')
+            e.dataTransfer.dropEffect = "move"
+            this.element.classList.add("container-dragged-over")
             return false
         })
 
-        this.element.addEventListener('drop', async e => {
+        this.element.addEventListener("drop", async (e) => {
             e.preventDefault()
             e.stopPropagation()
-            this.element.classList.remove('container-dragged-over')
-            if (!e.dataTransfer.types.includes('tab/move')) {
+            this.element.classList.remove("container-dragged-over")
+            if (!e.dataTransfer.types.includes("tab/move")) {
                 return
             }
-            let [tabId, contextualIdentity, pinned] = e.dataTransfer.getData('tab/move').split('/')
-            tabId = parseInt(tabId);
-            pinned = pinned !== 'false'
+            let [tabId, contextualIdentity, pinned] = e.dataTransfer
+                .getData("tab/move")
+                .split("/")
+            tabId = parseInt(tabId)
+            pinned = pinned !== "false"
 
             let index = -1
 
@@ -87,7 +89,11 @@ export default class AbstractTabContainer {
                 let dropTab = await browser.tabs.get(parseInt(dropTabId))
                 index = dropTab.index + 1
             } else if (this.tabs.size > 0) {
-                index = (await browser.tabs.get(this.tabs.values().next().value.tab.id)).index
+                index = (
+                    await browser.tabs.get(
+                        this.tabs.values().next().value.tab.id
+                    )
+                ).index
             }
             await this._handleDrop(tab, pinned, contextualIdentity, index)
         })
@@ -95,12 +101,11 @@ export default class AbstractTabContainer {
         this.render(true)
     }
 
-    async _handleDrop(tab, pinned, tabCtxId, index) {
-    }
+    async _handleDrop(tab, pinned, tabCtxId, index) {}
 
     _getDropTab(target) {
-        let tab = target.closest('.container-tab')
-        return tab ? tab.getAttribute('data-tab-id') : null
+        let tab = target.closest(".container-tab")
+        return tab ? tab.getAttribute("data-tab-id") : null
     }
 
     _handleTabActivated(activeInfo) {
@@ -127,12 +132,14 @@ export default class AbstractTabContainer {
      * @param {integer} tabId to not remove from this container
      */
     closeOthers(tabId) {
-        browser.tabs.remove(Array.from(this.tabs.keys()).filter(key => key != tabId))
+        browser.tabs.remove(
+            Array.from(this.tabs.keys()).filter((key) => key != tabId)
+        )
     }
 
     /**
      * Removes a tab from DOM, does not remove it from a browser
-     * @param {integer} tabId 
+     * @param {integer} tabId
      */
     removeTab(tabId) {
         if (!this.tabs.has(tabId)) return
@@ -144,7 +151,7 @@ export default class AbstractTabContainer {
     }
 
     async render(updateTabs) {
-        this.element.setAttribute('data-tabs-count', this.tabs.size)
+        this.element.setAttribute("data-tabs-count", this.tabs.size)
     }
 
     renderTabs(tabContainer, tabs) {
@@ -164,10 +171,10 @@ export default class AbstractTabContainer {
             tabContainer.appendChild(tab.element)
         }
         // when closing a tab, focus one above
-        if (!!this._config['focus_tabs_in_order'] && tabs.length > 1) { 
-            browser.tabs.moveInSuccession(tabs.map(tab=>tab.id).reverse())
+        if (!!this._config["focus_tabs_in_order"] && tabs.length > 1) {
+            browser.tabs.moveInSuccession(tabs.map((tab) => tab.id).reverse())
             // if closing the first one, focus the second one
-            browser.tabs.update(tabs[0].id, {successorTabId: tabs[1].id})
+            browser.tabs.update(tabs[0].id, { successorTabId: tabs[1].id })
         }
     }
 

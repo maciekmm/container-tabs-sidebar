@@ -1,11 +1,13 @@
-import AbstractTabContainer from './container.js'
+import AbstractTabContainer from "./container.js"
 
 function _createRootElement() {
-    return document.getElementById("vertical-container-template").content.cloneNode(true).querySelector("li")
+    return document
+        .getElementById("vertical-container-template")
+        .content.cloneNode(true)
+        .querySelector("li")
 }
 
 export default class VerticalContainer extends AbstractTabContainer {
-
     constructor(window, config, sessionStorage) {
         super(window, _createRootElement(), config)
         this._sessionStorage = sessionStorage
@@ -23,15 +25,20 @@ export default class VerticalContainer extends AbstractTabContainer {
             tabsContainer: this.element.querySelector(".container-tabs"),
         }
         super.init()
-        this.elements.newTab.addEventListener('click', (evt) => {
+        this.elements.newTab.addEventListener("click", (evt) => {
             evt.stopPropagation()
             this._actionNewTab()
         })
-        this.elements.containerHeader.addEventListener('click', () => this.collapsed = !this.collapsed)
+        this.elements.containerHeader.addEventListener(
+            "click",
+            () => (this.collapsed = !this.collapsed)
+        )
 
-        this.elements.containerHeader.addEventListener('contextmenu', (e) => browser.menus.overrideContext({
-            showDefaults: false
-        }))
+        this.elements.containerHeader.addEventListener("contextmenu", (e) =>
+            browser.menus.overrideContext({
+                showDefaults: false,
+            })
+        )
     }
 
     async _handleDrop(tab, pinned, tabCtxId, index) {
@@ -47,7 +54,7 @@ export default class VerticalContainer extends AbstractTabContainer {
             }
             browser.tabs.move(tabId, {
                 windowId: this._window.id,
-                index: index 
+                index: index,
             })
         } else {
             let tab = await browser.tabs.get(tabId)
@@ -59,11 +66,11 @@ export default class VerticalContainer extends AbstractTabContainer {
             }
 
             if (index !== -1) {
-                tabInfo['index'] = index
+                tabInfo["index"] = index
             }
 
             // firefox treats about:newtab as privileged url, but not setting the url allows us to create that page
-            if (tab.url !== 'about:newtab') {
+            if (tab.url !== "about:newtab") {
                 tabInfo.url = tab.url
             }
             await this._actionNewTab(tabInfo)
@@ -74,7 +81,7 @@ export default class VerticalContainer extends AbstractTabContainer {
     _handleTabActivated(change) {
         if (this.tabs.has(change.tabId)) {
             this.collapsed = false
-        } else if (!!this._config['collapse_container']) {
+        } else if (!!this._config["collapse_container"]) {
             this.collapsed = true
         }
         super._handleTabActivated(change)
@@ -99,29 +106,28 @@ export default class VerticalContainer extends AbstractTabContainer {
         }
     }
 
-    async _actionNewTab(options) {
-    }
+    async _actionNewTab(options) {}
 
     set collapsed(val) {
-        if (this._sessionStorage['collapsed'] === val) return
-        this._sessionStorage['collapsed'] = val
+        if (this._sessionStorage["collapsed"] === val) return
+        this._sessionStorage["collapsed"] = val
         this.render(false)
     }
 
     get collapsed() {
-        return this._sessionStorage['collapsed']
+        return this._sessionStorage["collapsed"]
     }
 
     async _queryTabs() {
-        throw '_queryTabs() not implemented';
+        throw "_queryTabs() not implemented"
     }
 
     get _faviconURL() {
-        return ``;
+        return ``
     }
 
     get title() {
-        throw 'get title() not implemented';
+        throw "get title() not implemented"
     }
 
     async render(updateTabs, callback) {
@@ -145,11 +151,11 @@ export default class VerticalContainer extends AbstractTabContainer {
         this.elements.tabCount.innerText = this.tabs.size
 
         // collapse
-        this.elements.collapse.innerText = (this.collapsed ? '▴' : '▾')
+        this.elements.collapse.innerText = this.collapsed ? "▴" : "▾"
         if (this.collapsed) {
-            this.element.classList.add('collapsed')
+            this.element.classList.add("collapsed")
         } else {
-            this.element.classList.remove('collapsed')
+            this.element.classList.remove("collapsed")
         }
 
         if (callback) {
