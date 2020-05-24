@@ -36,8 +36,7 @@
     "husky": "^4.2.5",
     "lint-staged": "^10.2.6",
     "prettier": "^2.0.5",
-    "web-ext": "^3.2.1",
-    "yargs-parser": "^18.1.3"
+    "web-ext": "^4.2.0"
   },
   "husky": {
     "hooks": {
@@ -45,6 +44,6 @@
     }
   },
   "lint-staged": {
-		"*.js": "eslint ./src --cache --fix"
-	}
+    "*.js": "eslint ./src --cache --fix"
+  }
 }
