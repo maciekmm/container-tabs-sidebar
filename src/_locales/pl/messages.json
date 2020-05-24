@@ -116,6 +116,12 @@
     "options_focusTabsInOrder_description": {
         "message": "Zamknięcie obecnej karty włączy kartę wyżej w kontenerze"
     },
+    "options_cycleTabsInOrder": {
+        "message": "Przełączaj karty według kolejności na panelu bocznym"
+    },
+    "options_cycleTabsInOrder_description": {
+        "message": "Dodatek ułoży karty w przeglądarce tak aby odpowiadały kolejności panelu bocznego."
+    },
     "options_shortcut": {
         "message": "Skrót klawiszowy"
     },

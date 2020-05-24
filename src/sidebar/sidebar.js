@@ -13,7 +13,8 @@ import ContextualIdentityContainer from './containers/contextual.js'
 import {init as initContainerContextMenu} from './contextmenu/container.js'
 import {init as initTabContextMenu} from './contextmenu/tab.js'
 import TemporaryContainer from './containers/temporary.js'
-import {isTemporaryContainer, isInstalled} from './interop/temporary_containers.js'
+import {isTemporaryContainer} from './interop/temporary_containers.js'
+import {enable as enableTabOrderKeeping} from './tab_order_keeper.js'
 
 export const ContainerTabsSidebar = {
     containers: new Map(),
@@ -45,6 +46,10 @@ export const ContainerTabsSidebar = {
 
         initContainerContextMenu()
         initTabContextMenu()
+
+        if(!!this.config['cycle_tabs_in_order']) {
+            enableTabOrderKeeping()
+        }
 
         browser.contextualIdentities.query({}).then((res) => {
             // Incognito does not support containers
@@ -106,7 +111,6 @@ export const ContainerTabsSidebar = {
     },
 
     render(containers) {
-        const containersList = this.elements.containersList
         for (let firefoxContainer of containers) {
             this.addContextualIdentity(firefoxContainer)
         }

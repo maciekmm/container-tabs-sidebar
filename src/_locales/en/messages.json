@@ -116,6 +116,12 @@
     "options_focusTabsInOrder_description": {
         "message": "Closing current tab will focus the one above"
     },
+    "options_cycleTabsInOrder": {
+        "message": "Cycle tabs in view order"
+    },
+    "options_cycleTabsInOrder_description": {
+        "message": "Will sort firefox tabs to reflect the view order in the sidebar"
+    },
     "options_css_description": {
         "message": "Inject custom CSS for customisation"
     },
