@@ -63,8 +63,6 @@ export default class AbstractTabContainer {
     }
 
     _handleTabActivated(activeInfo) {
-        // browser.tabs.moveInSuccession([activeInfo.tabId], this.lastActive)
-        // this.lastActive = activeInfo.tabId
         this.tabs.forEach((tab, tabId) => {
             if (tabId == activeInfo.tabId) {
                 tab.activate()
@@ -100,7 +98,7 @@ export default class AbstractTabContainer {
         const tab = this.tabs.get(tabId)
         tab.destroy()
         this.tabs.delete(tabId)
-        tab.element.parentNode.parentNode.removeChild(tab.element.parentNode)
+        tab.element.parentNode.removeChild(tab.element)
         this.render(false)
     }
 
@@ -119,18 +117,10 @@ export default class AbstractTabContainer {
         this.tabs.clear()
 
         for (let firefoxTab of tabs) {
-            const parent = document.createElement('li')
-            const tabElement = document.createElement('a')
-            tabElement.classList.add('container-tab')
-            tabElement.setAttribute('data-tab-id', firefoxTab.id)
-            tabElement.setAttribute('data-ci-id', firefoxTab.cookieStoreId)
-
-            const tab = new ContainerTab(this._window, this, firefoxTab, tabElement)
+            const tab = new ContainerTab(this._window, this, firefoxTab)
             this.tabs.set(tab.id, tab)
             tab.init()
-
-            parent.appendChild(tabElement)
-            tabContainer.appendChild(parent)
+            tabContainer.appendChild(tab.element)
         }
         // when closing a tab, focus one above
         if (!!this._config['focus_tabs_in_order'] && tabs.length > 1) { 

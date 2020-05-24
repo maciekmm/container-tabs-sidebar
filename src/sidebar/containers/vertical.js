@@ -60,6 +60,7 @@ export default class VerticalContainer extends AbstractTabContainer {
 
         this.element.addEventListener('drop', async (e) => {
             e.preventDefault()
+            e.stopPropagation()
             if (!e.dataTransfer.types.includes('tab/move')) {
                 return
             }
@@ -93,8 +94,8 @@ export default class VerticalContainer extends AbstractTabContainer {
             } else {
                 let getDropTab = (target) => {
                     let current = target
-                    while(current !== this.element && !current.classList.contains('container-tab')) {
-                        current = target.parentElement
+                    while(!!current && current !== this.element && !current.classList.contains('container-tab')) {
+                        current = current.parentElement
                     }
                     return current.getAttribute('data-tab-id')
                 }
@@ -110,7 +111,7 @@ export default class VerticalContainer extends AbstractTabContainer {
                 let dropTabId = getDropTab(e.target)
                 if(dropTabId) {
                     let dropTab = await browser.tabs.get(parseInt(dropTabId))
-                    tabInfo['index'] = dropTab.index + 1
+                    tabInfo['index'] = dropTab.index
                 }
                 // firefox treats about:newtab as privileged url, but not setting the url allows us to create that page
                 if (tab.url !== 'about:newtab') {
