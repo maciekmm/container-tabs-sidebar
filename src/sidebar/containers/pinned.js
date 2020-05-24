@@ -2,13 +2,13 @@ import AbstractTabContainer from './container.js'
 
 export default class PinnedTabsContainer extends AbstractTabContainer {
 
-    async _handleDrop(tabId, pinned, tabCtxId, index) {
+    async _handleDrop(tab, pinned, tabCtxId, index) {
         if (!pinned) {
-            await browser.tabs.update(tabId, {
+            await browser.tabs.update(tab.id, {
                 pinned: true,
             })
         }
-        browser.tabs.move(tabId, {
+        browser.tabs.move(tab.id, {
             windowId: this._window.id,
             index: index
         })

@@ -82,27 +82,25 @@ export default class AbstractTabContainer {
             let index = -1
 
             let dropTabId = this._getDropTab(e.target)
+            let tab = await browser.tabs.get(tabId)
             if (dropTabId) {
                 let dropTab = await browser.tabs.get(parseInt(dropTabId))
                 index = dropTab.index + 1
             } else if (this.tabs.size > 0) {
                 index = (await browser.tabs.get(this.tabs.values().next().value.tab.id)).index
             }
-            await this._handleDrop(tabId, pinned, contextualIdentity, index)
+            await this._handleDrop(tab, pinned, contextualIdentity, index)
         })
 
         this.render(true)
     }
 
-    async _handleDrop(tabId, pinned, tabCtxId, index) {
+    async _handleDrop(tab, pinned, tabCtxId, index) {
     }
 
     _getDropTab(target) {
-        let current = target
-        while (!!current && current !== this.element && !current.classList.contains('container-tab')) {
-            current = current.parentElement
-        }
-        return current.getAttribute('data-tab-id')
+        let tab = target.closest('.container-tab')
+        return tab ? tab.getAttribute('data-tab-id') : null
     }
 
     _handleTabActivated(activeInfo) {

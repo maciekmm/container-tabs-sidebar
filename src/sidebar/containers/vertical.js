@@ -34,20 +34,20 @@ export default class VerticalContainer extends AbstractTabContainer {
         }))
     }
 
-    async _handleDrop(tabId, pinned, tabCtxId, index) {
+    async _handleDrop(tab, pinned, tabCtxId, index) {
+        let tabId = tab.id
         if (this.supportsCookieStore(tabCtxId)) {
-            let idxShift = 0
             if (pinned) {
                 let updated = await browser.tabs.update(tabId, {
                     pinned: false,
                 })
-                if(updated.index < index) {
-                    idxShift = -1
-                }
+                index += updated.index < index ? 0 : 1
+            } else {
+                index += tab.index < index ? -1 : 0
             }
             browser.tabs.move(tabId, {
                 windowId: this._window.id,
-                index: index + idxShift
+                index: index 
             })
         } else {
             let tab = await browser.tabs.get(tabId)
