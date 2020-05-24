@@ -32,21 +32,22 @@ export default class VerticalContainer extends AbstractTabContainer {
         this.elements.containerHeader.addEventListener('contextmenu', (e) => browser.menus.overrideContext({
             showDefaults: false
         }))
-
-        this.element.addEventListener('drop', async (e) => {
-        })
     }
 
     async _handleDrop(tabId, pinned, tabCtxId, index) {
         if (this.supportsCookieStore(tabCtxId)) {
+            let idxShift = 0
             if (pinned) {
-                await browser.tabs.update(tabId, {
+                let updated = await browser.tabs.update(tabId, {
                     pinned: false,
                 })
+                if(updated.index < index) {
+                    idxShift = -1
+                }
             }
             browser.tabs.move(tabId, {
                 windowId: this._window.id,
-                index: index
+                index: index + idxShift
             })
         } else {
             let tab = await browser.tabs.get(tabId)
