@@ -116,7 +116,6 @@ export default class AbstractTabContainer {
                 tab.deactivate()
             }
         })
-        this.lastActive = activeInfo.tabId
     }
 
     _handleTabCreated(newTab) {

@@ -92,10 +92,12 @@ export default class VerticalContainer extends AbstractTabContainer {
         this.render(true, () => {
             const renderedTab = this.tabs.get(newTab.id)
             if (renderedTab) {
+                if (newTab.active) {
+                    this.collapsed = false
+                }
                 renderedTab.scrollIntoView()
             }
         })
-        this.collapsed = false
     }
 
     _handleTabPinned(tabId, change, tab) {
