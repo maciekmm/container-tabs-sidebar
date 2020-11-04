@@ -125,7 +125,7 @@ export default class VerticalContainer extends AbstractTabContainer {
     }
 
     get _faviconURL() {
-        return ``
+        return this.contextualIdentity.iconUrl
     }
 
     get title() {
@@ -142,7 +142,6 @@ export default class VerticalContainer extends AbstractTabContainer {
         const containerHeader = this.elements.containerHeader
 
         // favicon
-        // this.elements.icon.src = this.contextualIdentity.iconUrl
         this.elements.icon.src = this._faviconURL
 
         // title

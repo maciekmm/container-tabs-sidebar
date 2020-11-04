@@ -93,6 +93,7 @@ li {
     min-width: 25px;
     padding: 0 calc(var(--padding) / 2);
     margin: 0;
+    -moz-context-properties: fill;
     /* filter: grayscale(1); */
 }
 

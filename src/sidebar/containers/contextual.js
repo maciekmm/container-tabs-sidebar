@@ -37,16 +37,13 @@ export default class ContextualIdentityContainer extends VerticalContainer {
         })
     }
 
-    get _faviconURL() {
-        return `/assets/contextual-identities/${this.contextualIdentity.icon}.svg#${this.contextualIdentity.color}`
-    }
-
     get title() {
         return this.contextualIdentity.name
     }
 
     async render(renderTabs, callback) {
         this.elements.containerHeader.style.borderLeftColor = this.contextualIdentity.colorCode
+        this.elements.icon.style.fill = this.contextualIdentity.colorCode
         super.render(renderTabs, callback)
     }
 
