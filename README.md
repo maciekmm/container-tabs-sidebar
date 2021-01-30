@@ -33,8 +33,9 @@ Action button for opening the sidebar should be implemented in future releases.
 
 ## Appearance modifications
 
-Quote from [Customize with userChrome.css on developer.mozilla.org](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Tutorial/Modifying_the_Default_Skin#Customize_with_userChrome.css)
->If you place a file called 'userChrome.css' in a directory called 'chrome' inside your user profile directory, you can override settings without changing the archives themselves. This directory should be created when you create a profile and some examples placed there. The file 'userContent.css' customizes Web pages, whereas 'userChrome.css' customizes chrome files.
+Summary of  [How to Create a userChrome.css File on userchrome.org](https://www.userchrome.org/how-create-userchrome-css.html)
+1. Create a file called 'userChrome.css' in a directory called 'chrome' inside your user profile directory
+1. Add the below data to the file
 
 **Warning:** Starting with Firefox 69 you have to enable *toolkit.legacyUserProfileCustomizations.stylesheets* in *about:config* in order to use modifications listed below.
 
@@ -50,7 +51,9 @@ In order to hide sidebar header you need to append the `userChrome.css` with the
 }
 ```
 
-Note that the namespace directive only has to appear once in that file.
+**Note:** the namespace directive only has to appear once in that file.
+
+**Note:** with Firefox 72 and on, the "@namespace" is unneeded. See [this discussion thread](https://bugzilla.mozilla.org/show_bug.cgi?id=1605208) for details.
 
 |Before|After|
 |----|---|
@@ -68,5 +71,15 @@ In order to hide tab bar you need to append the `userChrome.css` with the follow
 }
 ```
 
-Note that the namespace directive only has to appear once in that file.
+**Note:** the namespace directive only has to appear once in that file.
 
+**Note:** with Firefox 72 and on, the "@namespace" is unneeded. See [this discussion thread](https://bugzilla.mozilla.org/show_bug.cgi?id=1605208) for details.
+
+```css
+/* for Firefox 72 and beyond */
+/* credit to stapuft at https://github.com/piroor/treestyletab/issues/2207#issuecomment-478288590 */
+
+#tabbrowser-tabs {
+  visibility: collapse !important;
+}
+```
