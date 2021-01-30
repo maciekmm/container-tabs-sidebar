@@ -1,12 +1,12 @@
 # Container Tabs Sidebar
 
-A firefox addon that shows currently opened tabs in a sidebar grouped by a container.
+A firefox addon that shows currently opened tabs in a sidebar grouped by a privacy container.
 
 ![Promotional screenshot](./assets/screenshot.png)
 
 ## How to use
 
-In order to use this addon it's recommended to have firefox version >=59 installed. It might work with versions >=54, but there were no tests done with that version. You can download the latest firefox from [firefox.com](https://www.mozilla.org/en-US/firefox/new/)
+In order to use this addon it's recommended to have firefox version >=59 installed. It might work with a version as low as 54, but there were no tests done with these builds. You can download the latest firefox from [firefox.com](https://www.mozilla.org/en-US/firefox/new/)
 
 ### Installing from [addons.mozilla.org](https://addons.mozilla.org/en-US/firefox/addon/container-tabs-sidebar/?src=github)
 
@@ -16,20 +16,21 @@ In order to use this addon it's recommended to have firefox version >=59 install
 ### Manually installing the addon for development purposes
 
 #### Debugging via npm:
-1. If you have npm installed, you can execute the following command: `npm run dev` a new firefox window should open.
+1. If you have `npm` installed, you can execute the following command: `npm run dev`. A Firefox window should open.
 
 #### Installing as temporary add-on
-1. Clone or download a zip of this repository
-3. Otherwise open `about:debugging`
-4. Click _Load Temporary Add-on_
-5. Select manifest.json inside `src` directory
-5. The addon should load
+1. Clone or download a zip of this repository.
+3. Navigate to `about:debugging`.
+4. Click _Load Temporary Add-on_.
+5. Select manifest.json inside `src` directory.
 
 ### Opening the sidebar
 
 In order to open the sidebar click __F2__ button on your keyboard. If it doesn't work then open any sidebar (eg. using __Ctrl+b__), and change the sidebar via dropdown menu.
 
-Action button for opening the sidebar should be implemented in future releases.
+### Customizing containers
+
+In order to add/remove containers navigate to `about:preferences#containers`.
 
 ## Appearance modifications
 
@@ -39,29 +40,33 @@ Summary of  [How to Create a userChrome.css File on userchrome.org](https://www.
 
 **Warning:** Starting with Firefox 69 you have to enable *toolkit.legacyUserProfileCustomizations.stylesheets* in *about:config* in order to use modifications listed below.
 
-### Hiding sidebar header
+**Note:** For Firefox <72 you also need a `@namespace` directive at the beginning of the file. 
 
-In order to hide sidebar header you need to append the `userChrome.css` with the following code:
+**Note:** the `@namespace` directive only has to appear once in that file.
 
 ```css
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+```
 
+See [this discussion thread](https://bugzilla.mozilla.org/show_bug.cgi?id=1605208) for details.
+
+### Hiding the Sidebar Header
+
+In order to hide the sidebar header you need to append to the `userChrome.css` file the following code:
+
+```css
 #sidebar-box[sidebarcommand^="containertabs"] #sidebar-header {
 	display: none;
 }
 ```
 
-**Note:** the namespace directive only has to appear once in that file.
-
-**Note:** with Firefox 72 and on, the "@namespace" is unneeded. See [this discussion thread](https://bugzilla.mozilla.org/show_bug.cgi?id=1605208) for details.
-
 |Before|After|
 |----|---|
 |![Before hiding](./assets/before-header.png) | ![After hiding](./assets/after-header.png)
 
-### Hiding tab bar
+### Hiding the Tab Bar
 
-In order to hide tab bar you need to append the `userChrome.css` with the following code:
+In order to hide the Tab Bar you need to append to the `userChrome.css` the following code:
 
 ```css
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
@@ -71,9 +76,6 @@ In order to hide tab bar you need to append the `userChrome.css` with the follow
 }
 ```
 
-**Note:** the namespace directive only has to appear once in that file.
-
-**Note:** with Firefox 72 and on, the "@namespace" is unneeded. See [this discussion thread](https://bugzilla.mozilla.org/show_bug.cgi?id=1605208) for details.
 
 ```css
 /* for Firefox 72 and beyond */
