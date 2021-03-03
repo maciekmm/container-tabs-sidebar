@@ -85,3 +85,16 @@ In order to hide the Tab Bar you need to append to the `userChrome.css` the foll
   visibility: collapse !important;
 }
 ```
+
+
+### Change Icon into Black from White
+This userChrome.css rule will make the icon become black on Toolbar, Sidebar, and Pop up menu
+
+![Black Icon for white Template](./assets/black-icon.png)
+```css
+#sidebar-box[sidebarcommand^="containertabs"] #sidebar-header #sidebar-icon,
+#sidebarMenu-popup #button_containertabssidebar_maciekmm_net-sidebar-action .toolbarbutton-icon,
+#nav-bar-customization-target #containertabssidebar_maciekmm_net-browser-action .toolbarbutton-icon {
+  filter: invert(100%);
+}
+```
