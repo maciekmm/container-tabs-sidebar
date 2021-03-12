@@ -1,0 +1,137 @@
+{
+    "description": {
+        "message": "Toon uw tabbladen in de zijbalk, gegroepeerd in privacy-containers"
+    },
+    "browserAction_title": {
+        "message": "ContainerTabsSidebar openen"
+    },
+    "containerIncognito": {
+        "message": "Privé"
+    },
+    "containerDefault": {
+        "message": "Standaard"
+    },
+    "sidebar_show": {
+        "message": "Zijbalk tonen"
+    },
+    "sidebar_dragToPin": {
+        "message": "Sleep een tabblad hierheen om het vast te maken!"
+    },
+    "sidebar_menu_closeAll": {
+        "message": "&Alles sluiten"
+    },
+    "sidebar_menu_reloadAll": {
+        "message": "Alles he&rladen"
+    },
+    "sidebar_menu_reloadTab": {
+        "message": "Tabblad he&rladen"
+    },
+    "sidebar_menu_muteTab": {
+        "message": "Tabblad de&mpen"
+    },
+    "sidebar_menu_unmuteTab": {
+        "message": "Tabblad ont&dempen"
+    },
+    "sidebar_menu_pinTab": {
+        "message": "Tabblad &vastmaken"
+    },
+    "sidebar_menu_unpinTab": {
+        "message": "Tab&blad losmaken"
+    },
+    "sidebar_menu_duplicateTab": {
+        "message": "Tabbla&d klonen"
+    },
+    "sidebar_menu_moveTabToNewWindow": {
+        "message": "Tabblad verplaatsen naar nieu&w venster"
+    },
+    "sidebar_menu_closeOtherTabs": {
+        "message": "Andere t&abbladen sluiten"
+    },
+    "sidebar_menu_closeTabsAbove": {
+        "message": "T&abbladen hierboven sluiten"
+    },
+    "sidebar_menu_closeTabsBelow": {
+        "message": "Ta&bbladen hieronder sluiten"
+    },
+    "sidebar_menu_closeTab": {
+        "message": "&Tabblad sluiten"
+    },
+    "sidebar_menu_reopenInContainer": {
+        "message": "H&eropenen in container"
+    },
+    "sidebar_menu_reopenInContainer_noContainer": {
+        "message": "Geen container"
+    },
+    "sidebar_menu_undoClosedTab": {
+        "message": "Recentste tabbla&d heropenen"
+    },
+    "options": {
+        "message": "Opties"
+    },
+    "options_title": {
+        "message": "Container Tabs Sidebar-opties"
+    },
+    "options_containerConfiguration": {
+        "message": "Typ <i>about:preferences</i> in de adresbalk om containers in te kunnen stellen."
+    },
+    "options_theme": {
+        "message": "Thema"
+    },
+    "options_theme_description": {
+        "message": "Pas het kleurenschema aan"
+    },
+    "options_theme_dark": {
+        "message": "Donker"
+    },
+    "options_theme_light": {
+        "message": "Licht"
+    },
+    "options_wrapTabTitles": {
+        "message": "Tabbladnamen afbreken"
+    },
+    "options_wrapTabTitles_description": {
+        "message": "Toon de gehele tabbladnaam, verspreid over meerdere regels"
+    },
+    "options_collapseContainers": {
+        "message": "Containers inklappen na wijzigen van tabblad" 
+    },
+    "options_collapseContainers_description": {
+        "message": "Toon alleen de actieve container"
+    },
+    "options_hideEmptyContainers": {
+        "message": "Lege containers verbergen"
+    },
+    "options_hideEmptyContainers_description": {
+        "message": "Verberg containers zonder tabbladen"
+    },
+    "options_hideEmptyPinned": {
+        "message": "Kop 'Vastgemaakte tabbladen' verbergen"
+    },
+    "options_hideEmptyPinned_description": {
+        "message": "De kop wordt pas getoond bij het verslepen van tabbladen"
+    },
+    "options_focusTabsInOrder": {
+        "message": "Tabbladen focussen in containervolgorde"
+    },
+    "options_focusTabsInOrder_description": {
+        "message": "Sluit het het huidige tabblad om die erboven te focussen"
+    },
+    "options_cycleTabsInOrder": {
+        "message": "Tabbladen sorteren op weergavemodus"
+    },
+    "options_cycleTabsInOrder_description": {
+        "message": "Sorteer Firefox-tabbladen op basis van de weergavemodus in de zijbalk"
+    },
+    "options_css_description": {
+        "message": "Pas aangepaste css toe om uitgebreidere aanpassingen te maken"
+    },
+    "options_shortcut": {
+        "message": "Sneltoets"
+    },
+    "options_shortcut_description": {
+        "message": "Sneltoets voor het openen van de zijbalk <a href='https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/commands#Key_combinations'>(opmaak)</a>"
+    },
+    "options_save": {
+        "message": "Opslaan"
+    }
+}
