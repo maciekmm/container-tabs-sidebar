@@ -19,7 +19,7 @@ function addReopenInContainerOption(container) {
     }
     if (container.icon) {
         itemOptions.icons = {
-            "16": `/assets/contextual-identities/${container.icon}.svg#${container.color}`,
+            16: `/assets/contextual-identities/${container.icon}.svg#${container.color}`,
         }
     }
     addTabOption(

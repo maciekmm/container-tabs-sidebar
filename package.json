@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint ./src && web-ext lint --source-dir ./src",
-    "build": "npm test && cd src && web-ext build --overwrite-dest",
+    "build": "cd src && web-ext build --overwrite-dest",
     "package": "rm -rf src/web-ext-artifacts && npm run build && mv src/web-ext-artifacts/container_tabs_sidebar-*.zip addon.xpi",
     "dev": "web-ext run --source-dir ./src",
     "dev:tc": "web-ext run --source-dir ./src -p TemporaryContainers"
