@@ -3,3 +3,4 @@ web-ext-artifacts
 addon.xpi
 .eslintcache
 .idea/
+.husky/

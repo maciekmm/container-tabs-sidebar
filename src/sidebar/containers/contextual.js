@@ -42,7 +42,8 @@ export default class ContextualIdentityContainer extends VerticalContainer {
     }
 
     async render(renderTabs, callback) {
-        this.elements.containerHeader.style.borderLeftColor = this.contextualIdentity.colorCode
+        this.elements.containerHeader.style.borderLeftColor =
+            this.contextualIdentity.colorCode
         this.elements.icon.style.fill = this.contextualIdentity.colorCode
         super.render(renderTabs, callback)
     }

@@ -9,21 +9,21 @@ function scheduleSortTabs() {
 async function getDesiredTabsOrder() {
     let tabs = await browser.tabs.query({ currentWindow: true, pinned: false })
     let contextualIdentities = await Promise.all(
-        (await browser.contextualIdentities.query({})).map(
-            async (ctx, index) => {
-                const cookieStoreId = ctx.cookieStoreId
-                // temporary containers are treated visually as a single container but report different cookieStoreIds
-                // this will treat them as a single one
-                const desiredOrder = (await isTemporaryContainer(cookieStoreId))
-                    ? Number.MAX_SAFE_INTEGER
-                    : index + 1
+        (
+            await browser.contextualIdentities.query({})
+        ).map(async (ctx, index) => {
+            const cookieStoreId = ctx.cookieStoreId
+            // temporary containers are treated visually as a single container but report different cookieStoreIds
+            // this will treat them as a single one
+            const desiredOrder = (await isTemporaryContainer(cookieStoreId))
+                ? Number.MAX_SAFE_INTEGER
+                : index + 1
 
-                return {
-                    cookieStoreId: cookieStoreId,
-                    order: desiredOrder,
-                }
+            return {
+                cookieStoreId: cookieStoreId,
+                order: desiredOrder,
             }
-        )
+        })
     )
 
     let getDesiredContextualIdentityPosition = (cookieStoreId) => {
