@@ -70,7 +70,7 @@ export default class AbstractTabContainer {
 
         this.element.addEventListener("drop", async (e) => {
             e.preventDefault()
-            e.stopPropagation()
+            e.stopImmediatePropagation()
             this.element.classList.remove("container-dragged-over")
             if (!e.dataTransfer.types.includes("tab/move")) {
                 return
