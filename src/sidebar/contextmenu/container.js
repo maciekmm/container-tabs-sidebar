@@ -1,59 +1,56 @@
 import { addOption } from "./base.js"
 
-function addContainerOption(options, handler) {
-    addOption(
-        {
-            contexts: ["page"],
-            ...options,
-        },
-        async (info) => {
-            handler(await getContainerTabsFromInfo(info))
-        },
-        async (info) => {
-            let tabs = await getContainerTabsFromInfo(info)
-            return {
-                visible: !!tabs,
-                enabled: !!tabs && tabs.length > 0,
+export async function init(sidebar) {
+    function addContainerOption(options, handler) {
+        addOption(
+            {
+                contexts: ["page"],
+                ...options,
+            },
+            async (info) => {
+                handler(await getTabIdsFromInfo(info))
+            },
+            async (info) => {
+                const tabs = await getTabIdsFromInfo(info)
+                return {
+                    visible: !!tabs,
+                    enabled: !!tabs && tabs.length > 0,
+                }
             }
+        )
+    }
+
+    async function getTabIdsFromInfo(info) {
+        let element = browser.menus.getTargetElement(info.targetElementId)
+        if (!element) {
+            return null
         }
-    )
-}
 
-async function getContainerTabsFromInfo(info) {
-    let element = browser.menus.getTargetElement(info.targetElementId)
-    if (!element) {
-        return null
-    }
-    let containerElement = element.closest(".container")
-    if (!containerElement) {
-        return null
-    }
-    let cookieStoreId = containerElement.getAttribute("data-container-id")
-    if (!cookieStoreId) {
-        return null
-    }
-    let window = await browser.windows.getCurrent()
-    return await browser.tabs.query({
-        cookieStoreId: cookieStoreId,
-        windowId: window.id,
-        pinned: false,
-    })
-}
+        let containerElement = element.closest(".container")
+        if (!containerElement) {
+            return null
+        }
 
-function isOnContainer(info) {
-    let element = browser.menus.getTargetElement(info.targetElementId)
-    let containerElement = element.closest(".container")
-    return !!containerElement
-}
+        let cookieStoreId = containerElement.getAttribute("data-container-id")
+        if (!cookieStoreId) {
+            return null
+        }
 
-export async function init() {
+        const container = sidebar.getContainerByCookieStoreId(cookieStoreId)
+        if (!container) {
+            return null
+        }
+
+        return container.getBrowserTabs().map((tab) => tab.id)
+    }
+
     addContainerOption(
         {
             id: "reload-all",
             title: browser.i18n.getMessage("sidebar_menu_reloadAll"),
         },
-        async (tabs) => {
-            tabs.forEach((tab) => browser.tabs.reload(tab.id))
+        async (tabIds) => {
+            tabIds.forEach((tabId) => browser.tabs.reload(tabId))
         }
     )
 
@@ -62,8 +59,8 @@ export async function init() {
             id: "close-all",
             title: browser.i18n.getMessage("sidebar_menu_closeAll"),
         },
-        async (tabs) => {
-            browser.tabs.remove(tabs.map((tab) => tab.id))
+        async (tabIds) => {
+            browser.tabs.remove(tabIds)
         }
     )
 }

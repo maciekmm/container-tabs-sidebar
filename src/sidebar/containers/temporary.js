@@ -5,8 +5,8 @@ import {
 } from "../interop/temporary_containers.js"
 
 export default class TemporaryContainer extends VerticalContainer {
-    constructor(window, config, sessionStorage) {
-        super(window, config, sessionStorage)
+    constructor(id, window, config, sessionStorage) {
+        super(id, window, config, sessionStorage)
         this.cookieStoreIds = []
     }
 

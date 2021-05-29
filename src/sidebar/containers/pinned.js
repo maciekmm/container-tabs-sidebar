@@ -1,6 +1,10 @@
 import AbstractTabContainer from "./container.js"
 
 export default class PinnedTabsContainer extends AbstractTabContainer {
+    constructor(id, window, config, sessionStore, element) {
+        super(id, window, config, element)
+    }
+
     async _handleDrop(tab, pinned, tabCtxId, index) {
         if (!pinned) {
             await browser.tabs.update(tab.id, {

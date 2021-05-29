@@ -1,10 +1,9 @@
 import VerticalContainer from "./vertical.js"
 
 export default class ContextualIdentityContainer extends VerticalContainer {
-    constructor(window, config, contextualIdentity, sessionStorage) {
-        super(window, config, sessionStorage)
+    constructor(id, window, config, sessionStorage, contextualIdentity) {
+        super(id, window, config, sessionStorage)
         this.contextualIdentity = contextualIdentity
-        this.id = contextualIdentity.cookieStoreId
     }
 
     init() {

@@ -8,8 +8,8 @@ function _createRootElement() {
 }
 
 export default class VerticalContainer extends AbstractTabContainer {
-    constructor(window, config, sessionStorage) {
-        super(window, _createRootElement(), config)
+    constructor(id, window, config, sessionStorage) {
+        super(id, window, config, _createRootElement())
         this._sessionStorage = sessionStorage
     }
 

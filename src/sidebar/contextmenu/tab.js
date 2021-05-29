@@ -96,7 +96,7 @@ async function initReopenInContainer() {
     })
 }
 
-export async function init() {
+export async function init(sidebar) {
     addTabOption(
         {
             id: "reload-tab",
@@ -174,23 +174,22 @@ export async function init() {
             title: browser.i18n.getMessage("sidebar_menu_closeTabsAbove"),
         },
         async (tab) => {
-            let tabs = (
-                await browser.tabs.query({
-                    cookieStoreId: tab.cookieStoreId,
-                    windowId: tab.windowId,
-                    pinned: false,
-                })
-            ).filter((t) => t.index < tab.index)
+            const container = sidebar.getContainerByCookieStoreId(
+                tab.cookieStoreId
+            )
+            const tabs = container
+                .getBrowserTabs()
+                .filter((t) => t.index < tab.index)
             await browser.tabs.remove(tabs.map((t) => t.id))
         },
         async (info, tab) => {
-            let tabs = (
-                await browser.tabs.query({
-                    cookieStoreId: tab.cookieStoreId,
-                    windowId: tab.windowId,
-                    pinned: false,
-                })
-            ).filter((t) => t.index < tab.index)
+            const container = sidebar.getContainerByCookieStoreId(
+                tab.cookieStoreId
+            )
+            const tabs = container
+                .getBrowserTabs()
+                .filter((t) => t.index < tab.index)
+
             return {
                 enabled: tabs.length > 0,
                 visible: !tab.pinned,
@@ -204,23 +203,22 @@ export async function init() {
             title: browser.i18n.getMessage("sidebar_menu_closeTabsBelow"),
         },
         async (tab) => {
-            let tabs = (
-                await browser.tabs.query({
-                    cookieStoreId: tab.cookieStoreId,
-                    windowId: tab.windowId,
-                    pinned: false,
-                })
-            ).filter((t) => t.index > tab.index)
+            const container = sidebar.getContainerByCookieStoreId(
+                tab.cookieStoreId
+            )
+            const tabs = container
+                .getBrowserTabs()
+                .filter((t) => t.index > tab.index)
             await browser.tabs.remove(tabs.map((t) => t.id))
         },
         async (info, tab) => {
-            let tabs = (
-                await browser.tabs.query({
-                    cookieStoreId: tab.cookieStoreId,
-                    windowId: tab.windowId,
-                    pinned: false,
-                })
-            ).filter((t) => t.index > tab.index)
+            const container = sidebar.getContainerByCookieStoreId(
+                tab.cookieStoreId
+            )
+            const tabs = container
+                .getBrowserTabs()
+                .filter((t) => t.index > tab.index)
+
             return {
                 enabled: tabs.length > 0,
                 visible: !tab.pinned,
@@ -234,21 +232,22 @@ export async function init() {
             title: browser.i18n.getMessage("sidebar_menu_closeOtherTabs"),
         },
         async (tab) => {
-            let tabs = await browser.tabs.query({
-                cookieStoreId: tab.cookieStoreId,
-                windowId: tab.windowId,
-                pinned: false,
-            })
-            browser.tabs.remove(
-                Array.from(tabs.map((t) => t.id)).filter((key) => key != tab.id)
+            const container = sidebar.getContainerByCookieStoreId(
+                tab.cookieStoreId
             )
+            const tabs = container
+                .getBrowserTabs()
+                .filter((t) => t.id !== tab.id)
+            await browser.tabs.remove(tabs.map((t) => t.id))
         },
         async (info, tab) => {
-            let tabs = await browser.tabs.query({
-                cookieStoreId: tab.cookieStoreId,
-                windowId: tab.windowId,
-                pinned: false,
-            })
+            const container = sidebar.getContainerByCookieStoreId(
+                tab.cookieStoreId
+            )
+            const tabs = container
+                .getBrowserTabs()
+                .filter((t) => t.id !== tab.id)
+
             return {
                 enabled: tabs.length > 1,
                 visible: !tab.pinned,

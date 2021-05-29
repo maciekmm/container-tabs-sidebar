@@ -1,4 +1,8 @@
-import { INTERNAL_MESSAGING_PORT_NAME } from "../constants.js"
+import {
+    INTERNAL_MESSAGING_PORT_NAME,
+    TEMPORARY_CONTAINER_COOKIE_STORE_ID,
+    PINNED_CONTAINER_COOKIE_STORE_ID,
+} from "../constants.js"
 import { getConfig, getSessionStorage } from "../settings.js"
 import { loadAppearance } from "./theme/appearance.js"
 import PinnedTabsContainer from "./containers/pinned.js"
@@ -20,27 +24,32 @@ export const ContainerTabsSidebar = {
         this.config = config
         this.sessionStorage = sessionStorage
         this.window = window
-        this.pinnedTabs = new PinnedTabsContainer(
-            window,
-            document.getElementById("pinned-tabs"),
-            config
-        )
-
         const containersList = document.getElementById("containers")
         this.elements.containersList = containersList
 
-        this.temporaryContainer = new TemporaryContainer(
-            window,
-            config,
-            this.getSessionStorage("temporary_container")
+        loadAppearance(config)
+        initContainerContextMenu(this)
+        initTabContextMenu(this)
+
+        // Setup Special Containers
+        this.pinnedTabs = this.createContainer(
+            PinnedTabsContainer,
+            PINNED_CONTAINER_COOKIE_STORE_ID,
+            document.getElementById("pinned-tabs")
         )
-        this.temporaryContainer.init()
+
+        this.temporaryContainer = this.createContainer(
+            TemporaryContainer,
+            TEMPORARY_CONTAINER_COOKIE_STORE_ID
+        )
         this.elements.containersList.appendChild(
             this.temporaryContainer.element
         )
 
-        loadAppearance(config)
+        this._initContextualIdentities()
+    },
 
+    _initContextualIdentities() {
         browser.contextualIdentities.onRemoved.addListener((evt) =>
             this.removeContextualIdentity(evt.contextualIdentity.cookieStoreId)
         )
@@ -52,9 +61,6 @@ export const ContainerTabsSidebar = {
         browser.contextualIdentities.onUpdated.addListener((evt) =>
             this.updateContextualIdentity(evt.contextualIdentity)
         )
-
-        initContainerContextMenu()
-        initTabContextMenu()
 
         if (!!this.config["cycle_tabs_in_order"]) {
             enableTabOrderKeeping()
@@ -95,7 +101,7 @@ export const ContainerTabsSidebar = {
 
         if (!this.containers.has(cookieStoreId)) return
         const container = this.containers.get(cookieStoreId)
-        this.containers.delete(container)
+        this.containers.delete(cookieStoreId)
         container.element.parentNode.removeChild(container.element)
     },
 
@@ -110,9 +116,13 @@ export const ContainerTabsSidebar = {
             )
             return
         }
-        const ctxId = this.createContainer(contextualIdentity)
+        const ctsContainer = this.createContainer(
+            ContextualIdentityContainer,
+            contextualIdentity.cookieStoreId,
+            contextualIdentity
+        )
         this.elements.containersList.insertBefore(
-            ctxId.element,
+            ctsContainer.element,
             this.temporaryContainer.element
         )
     },
@@ -148,17 +158,17 @@ export const ContainerTabsSidebar = {
         }
     },
 
-    createContainer(ctx) {
-        const sessionStorage = this.getSessionStorage(ctx.cookieStoreId)
-        const container = new ContextualIdentityContainer(
+    createContainer(containerClass, containerId, ...args) {
+        const sessionStorage = this.getSessionStorage(containerId)
+        const container = new containerClass(
+            containerId,
             this.window,
             this.config,
-            ctx,
-            sessionStorage
+            sessionStorage,
+            ...args
         )
         container.init()
-        this.containers.set(ctx.cookieStoreId, container)
-        container.element.setAttribute("data-container-id", ctx.cookieStoreId)
+        this.containers.set(containerId, container)
         return container
     },
 
@@ -167,6 +177,17 @@ export const ContainerTabsSidebar = {
             this.sessionStorage[id] = {}
         }
         return this.sessionStorage[id]
+    },
+
+    getContainerByCookieStoreId(cookieStoreId) {
+        const isTemporaryContainer =
+            this.temporaryContainer.supportsCookieStore(cookieStoreId)
+
+        if (isTemporaryContainer) {
+            return this.temporaryContainer
+        }
+
+        return this.containers.get(cookieStoreId)
     },
 }
 

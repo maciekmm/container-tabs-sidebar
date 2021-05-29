@@ -1,7 +1,8 @@
 import ContainerTab from "../tab/tab.js"
 
 export default class AbstractTabContainer {
-    constructor(window, element, config) {
+    constructor(id, window, config, element) {
+        this.id = id
         this._config = config
         this.element = element
         this._window = window
@@ -150,6 +151,7 @@ export default class AbstractTabContainer {
     }
 
     async render(updateTabs) {
+        this.element.setAttribute("data-container-id", this.id)
         this.element.setAttribute("data-tabs-count", this.tabs.size)
     }
 
@@ -178,4 +180,8 @@ export default class AbstractTabContainer {
     }
 
     supportsCookieStore(cookieStoreId) {}
+
+    getBrowserTabs() {
+        return Array.from(this.tabs.values()).map((tab) => tab.tab)
+    }
 }
