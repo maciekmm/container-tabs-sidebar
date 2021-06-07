@@ -1,6 +1,6 @@
-const ICON_AUDIBLE = "chrome://global/skin/media/audioUnmutedButton.svg"
-const ICON_MUTED = "chrome://global/skin/media/audioMutedButton.svg"
-const FAVICON_LOADING = "chrome://global/skin/icons/loading.png"
+const ICON_AUDIBLE = "../assets/audio.svg"
+const ICON_MUTED = "../assets/audio-muted.svg"
+const FAVICON_LOADING = "../assets/throbber.png"
 const FAVICON_FALLBACK = "../assets/no-favicon.svg"
 const FAVICON_FALLBACK_CLASS = "favicon-fallback"
 
