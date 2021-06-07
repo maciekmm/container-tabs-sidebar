@@ -40,6 +40,10 @@ export default class ContextualIdentityContainer extends VerticalContainer {
         return this.contextualIdentity.name
     }
 
+    get _faviconURL() {
+        return `/assets/contextual-identities/${this.contextualIdentity.icon}.svg#${this.contextualIdentity.color}`
+    }
+
     async render(renderTabs, callback) {
         this.elements.containerHeader.style.borderLeftColor =
             this.contextualIdentity.colorCode
