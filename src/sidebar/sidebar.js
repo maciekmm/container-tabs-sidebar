@@ -68,16 +68,16 @@ export const ContainerTabsSidebar = {
 
         browser.contextualIdentities.query({}).then((res) => {
             // Incognito does not support containers
-            if (window.incognito) {
+            if (browser.extension.inIncognitoContext) {
                 res.length = 0
             }
             this.render([
                 {
-                    cookieStoreId: !!window.incognito
+                    cookieStoreId: browser.extension.inIncognitoContext
                         ? "firefox-private"
                         : "firefox-default",
                     name: browser.i18n.getMessage(
-                        window.incognito
+                        browser.extension.inIncognitoContext
                             ? "containerIncognito"
                             : "containerDefault"
                     ),

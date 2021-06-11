@@ -57,7 +57,7 @@ async function updateContextualIdentities() {
     let window = await browser.windows.getCurrent()
 
     containers.unshift({
-        cookieStoreId: !!window.incognito
+        cookieStoreId: browser.extension.inIncognitoContext
             ? "firefox-private"
             : "firefox-default",
         icon: "briefcase",
