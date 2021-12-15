@@ -128,10 +128,8 @@ export default class ContainerTab {
             })
         })
 
-        // use mousedown because click does not fire for middle button
-        // we would have to have an 'a' element in order for it to work
-        this.element.addEventListener("mousedown", (e) => {
-            if (e.which !== 2) return // middle mouse
+        this.element.addEventListener("auxclick", (e) => {
+            if (e.button !== 1) return
             this._removeCloseClick(e)
         })
 
