@@ -29,9 +29,8 @@ export default class VerticalContainer extends AbstractTabContainer {
             evt.stopPropagation()
             this._actionNewTab()
         })
-        this.elements.containerHeader.addEventListener(
-            "click",
-            () => (this.collapsed = !this.collapsed)
+        this.elements.containerHeader.addEventListener("click", () =>
+            this.collapsed(!this.collapsed())
         )
 
         this.elements.containerHeader.addEventListener("contextmenu", (e) =>
@@ -78,26 +77,25 @@ export default class VerticalContainer extends AbstractTabContainer {
         }
     }
 
-    _handleTabActivated(change) {
+    async _handleTabActivated(change) {
         if (this.tabs.has(change.tabId)) {
-            this.collapsed = false
+            await this.collapsed(false)
         } else if (!!this._config["collapse_container"]) {
-            this.collapsed = true
+            await this.collapsed(true)
         }
         super._handleTabActivated(change)
     }
 
-    _handleTabCreated(newTab) {
+    async _handleTabCreated(newTab) {
         if (newTab.windowId !== this._window.id) return
-        this.render(true, () => {
-            const renderedTab = this.tabs.get(newTab.id)
-            if (renderedTab) {
-                if (newTab.active) {
-                    this.collapsed = false
-                }
-                renderedTab.scrollIntoView()
+        await this.render(true)
+        const renderedTab = this.tabs.get(newTab.id)
+        if (renderedTab) {
+            if (newTab.active) {
+                await this.collapsed(false)
             }
-        })
+            renderedTab.scrollIntoView()
+        }
     }
 
     _handleTabPinned(tabId, change, tab) {
@@ -110,14 +108,14 @@ export default class VerticalContainer extends AbstractTabContainer {
 
     async _actionNewTab(options) {}
 
-    set collapsed(val) {
+    collapsed(val) {
+        if (typeof val === "undefined") {
+            return this._sessionStorage["collapsed"]
+        }
+
         if (this._sessionStorage["collapsed"] === val) return
         this._sessionStorage["collapsed"] = val
-        this.render(false)
-    }
-
-    get collapsed() {
-        return this._sessionStorage["collapsed"]
+        return this.render(false)
     }
 
     async _queryTabs() {
@@ -132,7 +130,7 @@ export default class VerticalContainer extends AbstractTabContainer {
         throw "get title() not implemented"
     }
 
-    async render(updateTabs, callback) {
+    async render(updateTabs) {
         if (updateTabs) {
             let tabs = await this._queryTabs()
             this.renderTabs(this.elements.tabsContainer, tabs)
@@ -152,15 +150,12 @@ export default class VerticalContainer extends AbstractTabContainer {
         this.elements.tabCount.innerText = this.tabs.size
 
         // collapse
-        this.elements.collapse.innerText = this.collapsed ? "▴" : "▾"
-        if (this.collapsed) {
+        const collapsed = this.collapsed()
+        this.elements.collapse.innerText = collapsed ? "▴" : "▾"
+        if (collapsed) {
             this.element.classList.add("collapsed")
         } else {
             this.element.classList.remove("collapsed")
-        }
-
-        if (callback) {
-            callback()
         }
     }
 }
