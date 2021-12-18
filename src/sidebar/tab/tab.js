@@ -166,7 +166,7 @@ export default class ContainerTab {
      */
     scrollIntoView() {
         const box = this.element.getBoundingClientRect()
-        if (box.bottom < 0 || box.top > window.innerHeight) {
+        if (box.top < 0 || box.bottom > window.innerHeight) {
             this.element.scrollIntoView({
                 block: "end",
                 behavior: "auto",
