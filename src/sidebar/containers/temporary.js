@@ -46,13 +46,13 @@ export default class TemporaryContainer extends VerticalContainer {
         return `Temporary containers`
     }
 
-    async render(renderTabs, callback) {
+    async render(renderTabs) {
         if (this.cookieStoreIds.length === 0 && !(await isInstalled())) {
             this.element.style.display = "none"
             return
         }
         this.element.style.display = "initial"
-        super.render(renderTabs, callback)
+        return await super.render(renderTabs)
     }
 
     supportsCookieStore(cookieStoreId) {

@@ -44,11 +44,11 @@ export default class ContextualIdentityContainer extends VerticalContainer {
         return `/assets/contextual-identities/${this.contextualIdentity.icon}.svg#${this.contextualIdentity.color}`
     }
 
-    async render(renderTabs, callback) {
+    async render(renderTabs) {
         this.elements.containerHeader.style.borderLeftColor =
             this.contextualIdentity.colorCode
         this.elements.icon.style.fill = this.contextualIdentity.colorCode
-        super.render(renderTabs, callback)
+        return await super.render(renderTabs)
     }
 
     supportsCookieStore(cookieStoreId) {
