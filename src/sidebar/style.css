@@ -52,7 +52,7 @@ body.hide-empty-pinned:not(.tab-dragged) #pinned-tabs[data-tabs-count="0"] {
 
 #pinned-tabs .container-tab {
     flex-basis: 20x;
-    border-bottom: 3px solid var(--color-default-container);
+    border-top: 3px solid var(--color-default-container);
 }
 
 main {
