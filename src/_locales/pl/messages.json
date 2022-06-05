@@ -83,6 +83,9 @@
     "options_theme_dark": {
         "message": "Ciemna"
     },
+    "options_theme_grey": {
+        "message": "Szary"
+    },
     "options_theme_light": {
         "message": "Jasna"
     },

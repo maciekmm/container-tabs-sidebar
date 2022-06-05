@@ -1,0 +1,100 @@
+:root {
+    --font-size: 12px;
+    --color-hover: #2E2E2E;
+    --color-focus: #424242;
+    --color-text: #eee;
+    --color-accent: #555;
+    --color-background: #333;
+    --color-tab-background: #333;
+    --color-container-background: #2B2D30;
+    --color-default-container: #fff;
+    --color-container-border: #222;
+    --color-close: #ccc;
+    --color-icon: #eee;
+}
+.container-header {
+    font-size: 10px;
+    border-left-width: 0.4em;
+}
+.container-header .container-icon {
+    display: none;
+}
+.container-header .container-title {
+    text-transform: uppercase;
+    margin-left: 0.8em;
+    color: #999;
+    padding: 8px 0px;
+}
+.container-header:last-of-type {
+    border-color: green;
+}
+li.container:last-of-type .container-title {
+    visibility: hidden;
+    position: relative;
+}
+li.container:last-of-type .container-title:after {
+    visibility: visible;
+    position: absolute;
+    left: 0;
+    content: "tmp";
+}
+.container-tab-count {
+    padding-left: 0;
+    margin-left: auto;
+    color: #ccc;
+}
+.container-tab-count::before, .container-tab-count::after {
+    content: '';
+}
+.container-actions {
+    margin-left: 0.3em;
+    margin-right: 0.3em;
+}
+.container-actions .container-action {
+    margin: 0;
+    padding: 5px;
+    font-size: 14px;
+}
+.container-tabs {
+    width: 100%;
+    display: block;
+    padding-inline-start: 0;
+}
+.container-tabs .favicon {
+    margin-right: 0.5em;
+    order: 0;
+}
+.container-tab-title {
+    text-transform: lowercase;
+    flex-basis: 100%;
+    color: #999;
+    padding: 5px 0px;
+    order: 2;
+}
+.tab-active .container-tab-title {
+    text-transform: none;
+    color: #fff;
+}
+.container-tab-action--mute {
+    height: 12px;
+    margin: auto 0;
+    filter: grayscale(1) invert(100%);
+    order: 1;
+}
+.tab-pinned .container-tab-action--mute:hover {
+    filter: grayscale(1) invert(0);
+    background: rgba(255,255,255,0.9) !important;
+    opacity: 1;
+}
+:not(.tab-pinned) .container-tab-action--mute:hover {
+    background: rgba(0, 0, 0,0.1);
+}
+.container-tab-close {
+    padding: 0em 0.2em;
+    margin-left: 0.3em;
+    font-size: 14px;
+    order: 3;
+}
+.container-icon[src$=".png"] {
+    filter: invert();
+}

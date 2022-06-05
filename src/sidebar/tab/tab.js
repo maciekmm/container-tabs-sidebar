@@ -137,7 +137,7 @@ export default class ContainerTab {
             browser.contextualIdentities
                 .get(this.tab.cookieStoreId)
                 .then((ci) => {
-                    this.elements["link"].style.borderBottomColor = ci.colorCode
+                    this.elements["link"].style.borderColor = ci.colorCode
                 })
         }
     }
