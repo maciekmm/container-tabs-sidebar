@@ -81,7 +81,7 @@ In order to hide the Tab Bar you need to append to the `userChrome.css` the foll
 /* for Firefox 72 and beyond */
 /* credit to stapuft at https://github.com/piroor/treestyletab/issues/2207#issuecomment-478288590 */
 
-#tabbrowser-tabs {
+#tabbrowser-tabs, #TabsToolbar {
   visibility: collapse !important;
 }
 ```
