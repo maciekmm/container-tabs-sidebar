@@ -30,10 +30,10 @@
       "description": "__MSG_sidebar_show__"
     }
   },
-  "applications": {
+  "browser_specific_settings": {
     "gecko": {
       "id": "containertabssidebar@maciekmm.net",
-      "strict_min_version": "64.0"
+      "strict_min_version": "65.0"
     }
   },
   "icons": {
