@@ -54,7 +54,6 @@ async function updateContextualIdentities() {
     contextualIdentities.clear()
 
     let containers = await browser.contextualIdentities.query({})
-    let window = await browser.windows.getCurrent()
 
     containers.unshift({
         cookieStoreId: browser.extension.inIncognitoContext
@@ -89,14 +88,26 @@ async function initReopenInContainer() {
         updateContextualIdentities
     )
     await updateContextualIdentities()
-
-    browser.menus.create({
-        ...DEFAULT_MENU_ITEM_OPTIONS,
-        type: "separator",
-    })
 }
 
 export async function init(sidebar) {
+    addTabOption(
+        {
+            id: "new-tab",
+            title: browser.i18n.getMessage("sidebar_menu_newTab"),
+        },
+        (tab) => browser.tabs.create({
+            cookieStoreId: tab.cookieStoreId,
+        })
+    )
+
+    addTabOption(
+        {
+            id: "new-tab-separator",
+            type: "separator"
+        }
+    )
+
     addTabOption(
         {
             id: "reload-tab",
@@ -150,17 +161,49 @@ export async function init(sidebar) {
         (tab) => browser.tabs.duplicate(tab.id)
     )
 
-    browser.menus.create({
-        ...DEFAULT_MENU_ITEM_OPTIONS,
-        type: "separator",
-    })
+    addTabOption(
+        {
+            id: "duplicate-tab-separator",
+            type: "separator"
+        }
+    )
 
-    await initReopenInContainer()
+    addTabOption(
+        {
+            id: "move-to",
+            title: browser.i18n.getMessage("sidebar_menu_moveTabTo")
+        }
+    )
+
+    addTabOption(
+        {
+            id: "move-to-start",
+            title: browser.i18n.getMessage("sidebar_menu_moveTabToStart"),
+            parentId: "move-to"
+        },
+        (tab) =>
+            browser.tabs.move(tab.id, {
+                index: 0,
+            })
+    )
+
+    addTabOption(
+        {
+            id: "move-to-end",
+            title: browser.i18n.getMessage("sidebar_menu_moveTabToEnd"),
+            parentId: "move-to"
+        },
+        (tab) =>
+            browser.tabs.move(tab.id, {
+                index: -1,
+            })
+    )
 
     addTabOption(
         {
             id: "move-to-new-window",
             title: browser.i18n.getMessage("sidebar_menu_moveTabToNewWindow"),
+            parentId: "move-to"
         },
         (tab) =>
             browser.windows.create({
@@ -168,9 +211,34 @@ export async function init(sidebar) {
             })
     )
 
+    await initReopenInContainer()
+
+    addTabOption(
+        {
+            id: "open-in-new-separator",
+            type: "separator"
+        }
+    )
+
+    addTabOption(
+        {
+            id: "close-tab",
+            title: browser.i18n.getMessage("sidebar_menu_closeTab"),
+        },
+        (tab) => browser.tabs.remove(tab.id)
+    )
+
+    addTabOption(
+        {
+            id: "close-multiple-tabs",
+            title: browser.i18n.getMessage("sidebar_menu_closeMultipleTabs"),
+        }
+    )
+
     addTabOption(
         {
             id: "close-tabs-above",
+            parentId: "close-multiple-tabs",
             title: browser.i18n.getMessage("sidebar_menu_closeTabsAbove"),
         },
         async (tab) => {
@@ -200,6 +268,7 @@ export async function init(sidebar) {
     addTabOption(
         {
             id: "close-tabs-below",
+            parentId: "close-multiple-tabs",
             title: browser.i18n.getMessage("sidebar_menu_closeTabsBelow"),
         },
         async (tab) => {
@@ -229,6 +298,7 @@ export async function init(sidebar) {
     addTabOption(
         {
             id: "close-others",
+            parentId: "close-multiple-tabs",
             title: browser.i18n.getMessage("sidebar_menu_closeOtherTabs"),
         },
         async (tab) => {
@@ -278,13 +348,5 @@ export async function init(sidebar) {
                 enabled: !!sessions.length && !!sessions[0].tab,
             }
         }
-    )
-
-    addTabOption(
-        {
-            id: "close-tab",
-            title: browser.i18n.getMessage("sidebar_menu_closeTab"),
-        },
-        (tab) => browser.tabs.remove(tab.id)
     )
 }

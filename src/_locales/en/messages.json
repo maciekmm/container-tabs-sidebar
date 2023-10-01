@@ -24,46 +24,61 @@
         "message": "&Reload all"
     },
     "sidebar_menu_reloadTab": {
-        "message": "&Reload tab"
+        "message": "&Reload Tab"
     },
     "sidebar_menu_muteTab": {
-        "message": "&Mute tab"
+        "message": "&Mute Tab"
     },
     "sidebar_menu_unmuteTab": {
-        "message": "Un&mute tab"
+        "message": "Un&mute Tab"
+    },
+    "sidebar_menu_newTab": {
+        "message": "Ne&w Tab"
     },
     "sidebar_menu_pinTab": {
-        "message": "&Pin tab"
+        "message": "&Pin Tab"
     },
     "sidebar_menu_unpinTab": {
-        "message": "Un&pin tab"
+        "message": "Un&pin Tab"
     },
     "sidebar_menu_duplicateTab": {
-        "message": "&Duplicate tab"
+        "message": "&Duplicate Tab"
+    },
+    "sidebar_menu_moveTabToStart": {
+        "message": "Move to &Start"
+    },
+    "sidebar_menu_moveTabToEnd": {
+        "message": "Move to &End"
     },
     "sidebar_menu_moveTabToNewWindow": {
-        "message": "Move tab to new &window"
+        "message": "Move to New &Window"
+    },
+    "sidebar_menu_moveTabTo": {
+        "message": "Mo&ve Tab"
+    },
+    "sidebar_menu_closeMultipleTabs": {
+        "message": "Close &Multiple Tabs"
     },
     "sidebar_menu_closeOtherTabs": {
-        "message": "Cl&ose other tabs"
+        "message": "Cl&ose Other Tabs"
     },
     "sidebar_menu_closeTabsAbove": {
-        "message": "Close tabs &above"
+        "message": "Close Tabs &Above"
     },
     "sidebar_menu_closeTabsBelow": {
-        "message": "Close tabs &below"
+        "message": "Close Tabs &Below"
     },
     "sidebar_menu_closeTab": {
-        "message": "&Close tab"
+        "message": "&Close Tab"
     },
     "sidebar_menu_reopenInContainer": {
-        "message": "R&eopen in container"
+        "message": "Op&en in New Container Type"
     },
     "sidebar_menu_reopenInContainer_noContainer": {
         "message": "No container"
     },
     "sidebar_menu_undoClosedTab": {
-        "message": "&Undo close tab"
+        "message": "&Undo Close Tab"
     },
     "options": {
         "message": "Options"
