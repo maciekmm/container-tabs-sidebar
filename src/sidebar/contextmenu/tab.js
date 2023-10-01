@@ -96,17 +96,16 @@ export async function init(sidebar) {
             id: "new-tab",
             title: browser.i18n.getMessage("sidebar_menu_newTab"),
         },
-        (tab) => browser.tabs.create({
-            cookieStoreId: tab.cookieStoreId,
-        })
+        (tab) =>
+            browser.tabs.create({
+                cookieStoreId: tab.cookieStoreId,
+            })
     )
 
-    addTabOption(
-        {
-            id: "new-tab-separator",
-            type: "separator"
-        }
-    )
+    addTabOption({
+        id: "new-tab-separator",
+        type: "separator",
+    })
 
     addTabOption(
         {
@@ -161,25 +160,21 @@ export async function init(sidebar) {
         (tab) => browser.tabs.duplicate(tab.id)
     )
 
-    addTabOption(
-        {
-            id: "duplicate-tab-separator",
-            type: "separator"
-        }
-    )
+    addTabOption({
+        id: "duplicate-tab-separator",
+        type: "separator",
+    })
 
-    addTabOption(
-        {
-            id: "move-to",
-            title: browser.i18n.getMessage("sidebar_menu_moveTabTo")
-        }
-    )
+    addTabOption({
+        id: "move-to",
+        title: browser.i18n.getMessage("sidebar_menu_moveTabTo"),
+    })
 
     addTabOption(
         {
             id: "move-to-start",
             title: browser.i18n.getMessage("sidebar_menu_moveTabToStart"),
-            parentId: "move-to"
+            parentId: "move-to",
         },
         (tab) =>
             browser.tabs.move(tab.id, {
@@ -191,7 +186,7 @@ export async function init(sidebar) {
         {
             id: "move-to-end",
             title: browser.i18n.getMessage("sidebar_menu_moveTabToEnd"),
-            parentId: "move-to"
+            parentId: "move-to",
         },
         (tab) =>
             browser.tabs.move(tab.id, {
@@ -203,7 +198,7 @@ export async function init(sidebar) {
         {
             id: "move-to-new-window",
             title: browser.i18n.getMessage("sidebar_menu_moveTabToNewWindow"),
-            parentId: "move-to"
+            parentId: "move-to",
         },
         (tab) =>
             browser.windows.create({
@@ -213,12 +208,10 @@ export async function init(sidebar) {
 
     await initReopenInContainer()
 
-    addTabOption(
-        {
-            id: "open-in-new-separator",
-            type: "separator"
-        }
-    )
+    addTabOption({
+        id: "open-in-new-separator",
+        type: "separator",
+    })
 
     addTabOption(
         {
@@ -228,12 +221,10 @@ export async function init(sidebar) {
         (tab) => browser.tabs.remove(tab.id)
     )
 
-    addTabOption(
-        {
-            id: "close-multiple-tabs",
-            title: browser.i18n.getMessage("sidebar_menu_closeMultipleTabs"),
-        }
-    )
+    addTabOption({
+        id: "close-multiple-tabs",
+        title: browser.i18n.getMessage("sidebar_menu_closeMultipleTabs"),
+    })
 
     addTabOption(
         {
