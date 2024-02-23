@@ -216,7 +216,7 @@ body:not(.wrap-titles) .container-tab-title, .container-title {
 }
 
 :not(.tab-pinned).container-tab-dragged-over,
-.container-dragged-over .container-header {
+.container-dragged-over .container-header, .container-identity-dragged-over {
     border-bottom: 1px solid var(--color-text) !important;
 }
 
@@ -227,6 +227,7 @@ body:not(.wrap-titles) .container-tab-title, .container-title {
 #pinned-tabs.container-dragged-over {
     border-left: 1px solid var(--color-text);
 }
+
 
 .tab-pinned .container-tab-action--mute {
     position: absolute;

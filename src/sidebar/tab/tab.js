@@ -62,6 +62,9 @@ export default class ContainerTab {
         })
 
         this.element.addEventListener("dragover", (e) => {
+            if (!e.dataTransfer.types.includes("tab/move")) {
+                return
+            }
             e.preventDefault()
             e.stopPropagation()
             e.dataTransfer.dropEffect = "move"
@@ -70,16 +73,10 @@ export default class ContainerTab {
         })
 
         this.element.addEventListener("dragleave", (e) => {
-            if (!e.dataTransfer.types.includes("tab/move")) {
-                return
-            }
             this.elements["link"].classList.remove("container-tab-dragged-over")
         })
 
         this.element.addEventListener("dragend", (e) => {
-            if (!e.dataTransfer.types.includes("tab/move")) {
-                return
-            }
             this.elements["link"].classList.remove("container-tab-dragged-over")
             document.body.classList.remove("tab-dragged")
         })
