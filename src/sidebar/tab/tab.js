@@ -192,7 +192,9 @@ export default class ContainerTab {
 
         let link = this.elements["link"]
 
-        link.href = this.tab.url
+        if (!this.tab.url.startsWith("about:")) {
+            link.href = this.tab.url
+        }
         this.elements.title.innerText = this.tab.title //+ ` - (${this.tab.index})`
         link.title = this.tab.title
 
