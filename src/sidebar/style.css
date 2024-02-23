@@ -170,8 +170,7 @@ body:not(.wrap-titles) .container-tab-title, .container-title {
 }
 
 .tab-active,
-.tab-active:hover,
-.context-menu-element:hover {
+.tab-active:hover {
     background: var(--color-focus)
 }
 
@@ -239,41 +238,6 @@ body:not(.wrap-titles) .container-tab-title, .container-title {
 
 .tab-pinned :not(.favicon):not(.container-tab-action--mute) {
     display: none !important;
-}
-
-/* Context Menus */
-#context-menu {
-    position: absolute;
-    background: var(--color-background);
-    display: flex;
-    flex-direction: column;
-    padding: 0;
-    border: 1px solid var(--color-container-background);
-    color: var(--color-text);
-}
-
-#context-menu li {
-    width: 100%;
-    display: block;
-    padding: 5px 10px;
-    border-bottom: 1px solid var(--color-container-border);
-}
-
-.context-menu-element:hover {
-    cursor: pointer;
-}
-
-#context-menu:empty {
-    display: none;
-}
-
-#context-menu-overlay {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100vw;
-    height: 100vh;
-    pointer-events: none;
 }
 
 .hide-empty [data-tabs-count="0"] {
