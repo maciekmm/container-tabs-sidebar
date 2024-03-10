@@ -60,22 +60,22 @@ export default class AbstractTabContainer {
         })
 
         this.element.addEventListener("dragover", (e) => {
-            e.preventDefault()
             if (!e.dataTransfer.types.includes("tab/move")) {
                 return
             }
+            e.preventDefault()
             e.dataTransfer.dropEffect = "move"
             this.element.classList.add("container-dragged-over")
             return false
         })
 
         this.element.addEventListener("drop", async (e) => {
-            e.preventDefault()
-            e.stopImmediatePropagation()
-            this.element.classList.remove("container-dragged-over")
             if (!e.dataTransfer.types.includes("tab/move")) {
                 return
             }
+            e.preventDefault()
+            e.stopImmediatePropagation()
+            this.element.classList.remove("container-dragged-over")
             let [tabId, contextualIdentity, pinned] = e.dataTransfer
                 .getData("tab/move")
                 .split("/")

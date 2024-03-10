@@ -11,6 +11,10 @@ import { init as initContainerContextMenu } from "./contextmenu/container.js"
 import { init as initTabContextMenu } from "./contextmenu/tab.js"
 import TemporaryContainer from "./containers/temporary.js"
 import { isTemporaryContainer } from "./interop/temporary_containers.js"
+import {
+    IS_CONTAINER_MOVING_ENABLED,
+    CONTAINER_MOVED_EVENT,
+} from "./interop/container_moving.js"
 import { enable as enableTabOrderKeeping } from "./tab_order_keeper.js"
 
 export const ContainerTabsSidebar = {
@@ -90,6 +94,23 @@ export const ContainerTabsSidebar = {
             ])
             this.pinnedTabs.init()
         })
+
+        if (IS_CONTAINER_MOVING_ENABLED) {
+            this.elements.containersList.addEventListener(
+                CONTAINER_MOVED_EVENT,
+                (e) => {
+                    const moved = this.containers.get(
+                        e.detail.contextualIdentity
+                    )
+                    const movedAfter = this.containers.get(e.detail.after)
+                    moved.element.parentNode.removeChild(moved.element)
+                    this.elements.containersList.insertBefore(
+                        moved.element,
+                        movedAfter.element.nextSibling
+                    )
+                }
+            )
+        }
     },
 
     /**
