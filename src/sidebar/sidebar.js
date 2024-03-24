@@ -1,5 +1,4 @@
 import {
-    INTERNAL_MESSAGING_PORT_NAME,
     TEMPORARY_CONTAINER_COOKIE_STORE_ID,
     PINNED_CONTAINER_COOKIE_STORE_ID,
 } from "../constants.js"
@@ -115,7 +114,7 @@ export const ContainerTabsSidebar = {
 
     /**
      * Removes a container from DOM, does not remove it from a browser
-     * @param {integer} cookieStoreId - contextual identity id
+     * @param {string} cookieStoreId - contextual identity id
      */
     async removeContextualIdentity(cookieStoreId) {
         this.temporaryContainer.detachContextualIdentity(cookieStoreId)
@@ -128,7 +127,7 @@ export const ContainerTabsSidebar = {
 
     /**
      * Adds contextual identity to DOM
-     * @param {integer}
+     * @param {string} contextualIdentity
      */
     async addContextualIdentity(contextualIdentity) {
         if (await isTemporaryContainer(contextualIdentity.cookieStoreId)) {
@@ -217,14 +216,6 @@ async function init() {
     let config = await getConfig()
     let sessionStorage = await getSessionStorage(window)
     ContainerTabsSidebar.init(window, config, sessionStorage)
-
-    // for tracking sidebar open state
-    browser.runtime
-        .connect({ name: INTERNAL_MESSAGING_PORT_NAME })
-        .postMessage({
-            windowId: window.id,
-            opened: true,
-        })
 }
 
 browser.storage.onChanged.addListener(() => {

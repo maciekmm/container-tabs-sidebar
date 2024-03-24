@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/maciekmm/container-tabs-sidebar#readme",
   "devDependencies": {
+    "@types/firefox-webext-browser": "^120.0.3",
     "addons-linter": "^6.14.0",
     "eslint": "^8.0.0",
     "eslint-config-prettier": "^8.3.0",
