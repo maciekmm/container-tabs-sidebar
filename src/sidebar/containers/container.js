@@ -25,7 +25,7 @@ export default class AbstractTabContainer {
             if (removeInfo.isWindowClosing) return
             if (removeInfo.windowId !== this._window.id) return
             if (!this.tabs.has(tabId)) return
-            this.removeTab(tabId)
+            this.render(true)
         })
 
         browser.tabs.onMoved.addListener((tabId) => {
@@ -34,12 +34,14 @@ export default class AbstractTabContainer {
         })
 
         browser.tabs.onAttached.addListener((tabId, attachInfo) => {
-            if (attachInfo.newWindowId !== this._window.id) {
-                if (!this.tabs.has(tabId)) return
-                this.removeTab(tabId)
-            } else {
-                this.render(true)
+            if (
+                attachInfo.newWindowId !== this._window.id &&
+                !this.tabs.has(tabId)
+            ) {
+                // ignore if move happened between different windows
+                return
             }
+            this.render(true)
         })
 
         browser.tabs.onUpdated.addListener((tabId, change, tab) => {
@@ -135,19 +137,6 @@ export default class AbstractTabContainer {
         browser.tabs.remove(
             Array.from(this.tabs.keys()).filter((key) => key != tabId)
         )
-    }
-
-    /**
-     * Removes a tab from DOM, does not remove it from a browser
-     * @param {integer} tabId
-     */
-    removeTab(tabId) {
-        if (!this.tabs.has(tabId)) return
-        const tab = this.tabs.get(tabId)
-        tab.destroy()
-        this.tabs.delete(tabId)
-        tab.element.parentNode.removeChild(tab.element)
-        this.render(false)
     }
 
     async render(updateTabs) {

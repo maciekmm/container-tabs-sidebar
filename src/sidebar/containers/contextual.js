@@ -113,11 +113,6 @@ export default class ContextualIdentityContainer extends VerticalContainer {
         })
     }
 
-    refresh(contextualIdentity) {
-        this.contextualIdentity = contextualIdentity
-        this.render(false)
-    }
-
     async _queryTabs() {
         return await browser.tabs.query({
             currentWindow: true,
