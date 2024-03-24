@@ -170,7 +170,9 @@ body:not(.wrap-titles) .container-tab-title, .container-title {
 }
 
 .tab-active,
-.tab-active:hover {
+.tab-active:hover,
+.tab-highlighted,
+.tab-highlighted:hover {
     background: var(--color-focus)
 }
 

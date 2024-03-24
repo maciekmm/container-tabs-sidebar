@@ -72,8 +72,8 @@ export default class VerticalContainer extends AbstractTabContainer {
             if (tab.url !== "about:newtab") {
                 tabInfo.url = tab.url
             }
-            await this._actionNewTab(tabInfo)
             await browser.tabs.remove(tabId)
+            await this._actionNewTab(tabInfo)
         }
     }
 
@@ -99,11 +99,7 @@ export default class VerticalContainer extends AbstractTabContainer {
     }
 
     _handleTabPinned(tabId, change, tab) {
-        if (tab.pinned) {
-            this.removeTab(tabId)
-        } else {
-            this.render(true)
-        }
+        this.render(true)
     }
 
     async _actionNewTab(options) {}

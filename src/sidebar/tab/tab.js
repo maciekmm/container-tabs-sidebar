@@ -43,6 +43,17 @@ export default class ContainerTab {
             }
         )
 
+        browser.tabs.onHighlighted.addListener((event) => {
+            if (event.windowId !== this._window.id) {
+                return
+            }
+            const newHighlighted = event.tabIds.indexOf(this.id) !== -1
+            if (newHighlighted !== this.tab.highlighted) {
+                this.tab.highlighted = newHighlighted
+                this.render()
+            }
+        })
+
         this.element.setAttribute("draggable", true)
         this.element.addEventListener("contextmenu", (e) =>
             browser.menus.overrideContext({
@@ -115,14 +126,34 @@ export default class ContainerTab {
             this._removeCloseClick.bind(this)
         )
 
-        this.element.addEventListener("click", (e) => {
+        this.element.addEventListener("click", async (e) => {
             // prevent reloading tab
             e.preventDefault()
             e.stopPropagation()
             if (e.button !== 0) return
-            browser.tabs.update(this.id, {
-                active: true,
-            })
+            if (!!e.ctrlKey && !this.tab.active) {
+                const highlighted = await browser.tabs.query({
+                    windowId: this._window.id,
+                    highlighted: true,
+                })
+                const tabsToSelect = [...highlighted.map((tab) => tab.index)]
+                const currentIndex = await browser.tabs.get(this.id)
+                const index = tabsToSelect.indexOf(currentIndex.index)
+                if (index === -1) {
+                    tabsToSelect.push(currentIndex.index)
+                } else {
+                    tabsToSelect.splice(index, 1)
+                }
+                await browser.tabs.highlight({
+                    windowId: this._window.id,
+                    populate: false,
+                    tabs: tabsToSelect,
+                })
+            } else {
+                await browser.tabs.update(this.id, {
+                    active: true,
+                })
+            }
         })
 
         this.element.addEventListener("auxclick", (e) => {
@@ -199,6 +230,11 @@ export default class ContainerTab {
             link.classList.add("tab-active")
         } else {
             link.classList.remove("tab-active")
+        }
+        if (!!this.tab.highlighted) {
+            link.classList.add("tab-highlighted")
+        } else {
+            link.classList.remove("tab-highlighted")
         }
         if (this.tab.pinned) {
             link.classList.add("tab-pinned")
