@@ -33,7 +33,7 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "containertabssidebar@maciekmm.net",
-      "strict_min_version": "65.0"
+      "strict_min_version": "73.0"
     }
   },
   "icons": {
