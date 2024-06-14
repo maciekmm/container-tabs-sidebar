@@ -8,6 +8,8 @@
     --color-container-background: #ffffff;
     --color-container-border: #e3e4e6;
     --color-tab-background: #ececec;
+    --color-input-border: #e3e4e6;
+    --color-input-background: #fff;
     --color-close: var(--color-icon);
     --color-icon: rgba(24, 25, 26, 0.35);
 }

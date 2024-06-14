@@ -7,6 +7,8 @@
     --color-default-container: #fff;
     --color-container-background: #111;
     --color-container-border: #222;
+    --color-input-background: #111;
+    --color-input-border: #222;
     --color-tab-background: #222;
     --color-close: #ccc;
     --color-icon: #eee;
@@ -29,3 +31,4 @@
 .container-icon[src$=".png"] {
     filter: invert();
 }
+

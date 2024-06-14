@@ -15,6 +15,18 @@ a, a:link, a:visited {
     text-decoration: none;
 }
 
+.search-container {
+    padding: 5px;
+}
+.search-input {
+    display: block;
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--color-input-border);
+    background: var(--color-input-background);
+    color: var(--color-text);
+}
+
 #pinned-tabs {
     display: flex;
     flex-wrap: wrap;

@@ -50,6 +50,7 @@ export const ContainerTabsSidebar = {
         )
 
         this._initContextualIdentities()
+        this._initSearch()
     },
 
     _initContextualIdentities() {
@@ -110,6 +111,53 @@ export const ContainerTabsSidebar = {
                 }
             )
         }
+    },
+
+    async _initSearch() {
+        const searchInput = document.querySelector('.search-input');
+        const searchFilterStyle = document.querySelector('style#search-filter-style')
+        let cidQueryPromise = Promise.resolve();
+        let tabQueryPromise = Promise.resolve();
+        searchInput.addEventListener('input', async () => {
+            const searchQuery = searchInput.value.toLowerCase().trim();
+            if (searchQuery.length === 0) {
+                searchFilterStyle.textContent = ''
+                return
+            }
+            cidQueryPromise = cidQueryPromise.then(() => browser.contextualIdentities.query({}))
+            tabQueryPromise = tabQueryPromise.then(() => browser.tabs.query({}))
+            const allIdentities = await cidQueryPromise
+            const allTabs = await tabQueryPromise
+            const matchingIdentities = allIdentities.filter(cid => {
+                return cid.name.toLowerCase().indexOf(searchQuery) >= 0
+            })
+            const matchingTabs = allTabs.filter(tab => {
+                return (tab.title.toLowerCase().indexOf(searchQuery) >= 0) ||
+                    (tab.url.toLowerCase().indexOf(searchQuery) >= 0)
+            })
+            const cookieStoreIds = new Set()
+            const tabIds = new Set()
+            matchingIdentities.forEach(cid => {
+                cookieStoreIds.add(cid.cookieStoreId)
+            });
+            matchingTabs.forEach(tab => {
+                cookieStoreIds.add(tab.cookieStoreId)
+                tabIds.add(tab.id)
+            });
+            const containerSelector = [...cookieStoreIds]
+                .map(id => `#containers .container[data-container-id="${id}"]`)
+                .join(', ')
+            const tabSelector = [...tabIds]
+                .map(id => `#containers .container-tab[data-tab-id="${id}"]`)
+                .join(', ')
+            searchFilterStyle.textContent = `
+            #containers .container { display: none; }
+            #containers .container-tab { display: none; }
+            ${containerSelector} { display: block; }
+            ${tabSelector} { display: flex; }
+            `
+        })
+        searchInput.focus()
     },
 
     /**
