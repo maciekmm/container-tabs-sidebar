@@ -9,6 +9,8 @@
     --color-container-background: #2B2D30;
     --color-default-container: #fff;
     --color-container-border: #222;
+    --color-input-background: #424242;
+    --color-input-border: #222;
     --color-close: #ccc;
     --color-icon: #eee;
 }
