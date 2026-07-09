@@ -23,22 +23,18 @@ export default class PinnedTabsContainer extends AbstractTabContainer {
     }
 
     _handleTabPinned(tabId, change, tab) {
-        if (!tab.pinned) {
-            this.removeTab(tabId)
-        } else {
-            this.render(true)
-        }
+        this.render(true)
     }
 
     async render(updateTabs) {
-        super.render(updateTabs)
+        await super.render(updateTabs)
         if (updateTabs) {
             let tabs = await browser.tabs.query({
                 currentWindow: true,
                 pinned: true,
             })
             this.renderTabs(this.element, tabs)
-            this.render(false)
+            await this.render(false)
         }
     }
 
